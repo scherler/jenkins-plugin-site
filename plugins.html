@@ -1,0 +1,779 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500,900,700,700italic' rel='stylesheet' type='text/css' />
+  <link href='css/style.css' rel='stylesheet' type='text/css' />
+  
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+  
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css" />
+  
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+  
+  
+</head>
+<body>
+https://updates.jenkins-ci.org/current/update-center.json
+
+
+
+<script>
+var updateCenter = {loaded:false};
+updateCenter.post = function(data,b,c){
+  
+  updateCenter.loaded = true;
+  
+  function cleanObj(obj){
+    obj.title = $.trim(obj.title.replace('Jenkins ','').replace('Plugin',''));
+    return obj;
+  }
+  
+  var pluginsObj = data.plugins;
+  var plugins = Object.keys(pluginsObj).map(
+      function (key) {
+        return cleanObj(pluginsObj[key]);
+      }); 
+  updateCenter.pluginsObj = pluginsObj;
+  updateCenter.plugins = plugins;
+  
+  return updateCenter;
+};
+
+
+
+
+
+
+
+
+///////////////////////////
+// custom renderers
+
+
+
+function dependencyRenderer(cell,row,col){
+  var $div = $('<div class="depends" />');
+  if($.isArray(cell.value))    
+    $.each(cell.value,function(i,dep){
+      var $item = $('<span class="depend" />');
+      var $title = $('<span class="title" />').text(dep.name).appendTo($item);
+      var $v = $('<span class="version" />').text(dep.version).appendTo($item);
+      $item.appendTo($div);
+    });
+  
+  return $div;
+}
+
+function maintainerRenderer(cell,row,col){
+  var $div = $('<div class="maintainers" />');
+  if($.isArray(cell.value))    
+    $.each(cell.value,function(i,val){
+      var $item = $('<span class="name" />')
+        .text(val.name || val.developerId || val.email)
+        .appendTo($div);
+    });
+  
+  return $div;
+}
+
+function fromNowRenderer(cell,row,col){
+  var $div = $('<div class="date" />')
+    .text(moment(cell.value).fromNow());
+
+  return $div;
+}
+
+function titleRenderer(cell,row,col){
+  cell.value = cell.value || cell.title;
+  var val = cell.value.replace('Plug-in','').replace('Plug-In','').replace('_Plugin','').replace('-Plugin','').replace('-plugin','').replace('Plugin','').replace('plugin','').replace('Jenkins','');
+  var $a = $('<a/>')
+    .attr('href',row.items.wiki)
+    .text(val);
+
+  return $a;
+}
+
+
+function titleGrouper(cell,row,col){
+  var group = {
+      id:row.id || row.items['gav'],
+      title:row.title || cell,
+      value:cell,
+      rows:[] 
+  };
+  
+  return group;
+}
+
+$(function() {
+  
+  
+  $.fn.cjpGrid = function(data,config){
+
+    // important properties...
+    var config = config || {
+      cols:[
+            {id:'title',title:'Title',renderer:titleRenderer, grouper:titleGrouper},
+            {id:'excerpt',title:'Description'},
+            {id:'buildDate',title:'Created',renderer:fromNowRenderer},
+            {id:'dependencies',title:'Dependencies',renderer:dependencyRenderer},
+            {id:'developers',title:'Maintainers',renderer:maintainerRenderer}
+            ],
+      groups:[]
+    }
+    // each col has the following options:
+    //
+    // id: logical name for the attribute, also assigned as a css class (defaults to the title)
+    // title: the display title for the attribute label or column header (defaults to the id)
+    // className: to be applied to each cell in the column
+    // path: the reference path to the property data from the json source (assumed to be the id if not specified)
+    // labelRenderer: a function that returns the $elem to be displayed in the header
+    // renderer: a function that returns the $elem to be displayed in each column or result set
+    // sorter: a function that returns the logical value by which the attribute should be sorted or grouped (presumed to be the value)
+    // grouper: a function that return the logical value by which the attribute should be grouped (presumed to match the sorter)
+    // defaultValue: what goes in cells or properties that are not specified by the data
+    
+    // if not specified columns will be infered using the property name as the id.
+    
+    var cols = config.cols;
+    var groups = config.groups;
+    var colIdMap = []; 
+    var pathMap = [];
+    
+    // important table elements I will want to grab easily...
+    var $this = this
+      .addClass('bootstrap3')
+      .addClass('grid-box');
+    
+    var $colgroup;
+    var $thead;
+    var $headers;
+    var $tbodies;
+    var $box;
+    var $toolbar = $this.children('.toolbar-box');
+    var $grouper;
+    var $sorter;
+    var $filter;   
+
+    
+    
+    
+    ///////////////////////////////////////////
+    //
+    // Internal methods and properties...
+    //    
+    //////////////////////////////////////////
+ 
+    function _init(data,config){
+      _setCols(config);
+      _draw(data);
+    }      
+    
+    function _draw(data){
+      _drawBox();
+      _drawGroups(data);
+      _drawHeaders();
+      _drawToolbar();        
+    }
+
+    // often, I will be unsure of what format a sent element will take, so I will always transform it into a uniform object...
+    function _makeObj(stringOrObjOrArr,key){
+      var obj = stringOrObjOrArr;
+      if(typeof obj === 'string' || typeof obj === 'number') {
+      
+        // Here is the format for my all prupose object...
+        obj = {
+            id:key || obj, 
+            title:obj || key, 
+            value:obj,
+            path:obj,
+            type:'string'
+          };
+        
+      }
+      else if($.isArray(obj)){
+        obj = {
+            type:'array', 
+            items:obj
+          };
+      }
+      else if($.isPlainObject(obj)){
+        if((typeof obj.id === 'string' ||typeof obj.id === 'nmber' ) && typeof obj.items === 'object' && typeof obj.type === 'string')
+          obj = $.extend(obj, {
+            id:obj.id||obj.name,
+            title:obj.title || obj.name || obj.id,
+            type:'object'
+          });
+        else
+          obj = {
+            type:'objects',
+            items:obj,
+            id:key || ''
+          };
+      }
+        
+      return obj;
+      
+    }
+    
+    function _setCols(config){
+      cols = config.cols;
+      groups = config.groups;
+      colIdMap = [];
+      $.each(cols,function(i,col){
+        if(typeof col === 'string' || typeof col === 'number' ) colIdMap.push(col);
+        else{
+          colIdMap.push(col.id);
+          pathMap.push(col.path); 
+        }        
+      });
+    }    
+    
+    function _getCol(key,isPath){
+      if(!key)
+        return false;
+      if(isPath){
+        return cols[pathMap.indexOf(key)] || false;
+      }
+      else{
+        return cols[colIdMap.indexOf(key)] || false;
+      }
+    }
+    
+    // For zero config, this will generate headers from rows of objects...
+    function _generateCols(row,reset){
+      if(reset){
+        cols = [];
+        colIdMap = [];
+      }
+      if(typeof row === 'string'){
+        if(colIdMap.indexOf(row) !== -1) return false;
+        colIdMap.push(row);
+        cols.push($.extend(
+            _makeObj(row), {lostNFound:true,className:'lost-n-found'}
+          )
+        );
+      }
+      else
+        $.each(row,function(key,cell){
+          var col = _makeObj(cell.id || cell.name || key);
+          if(colIdMap.indexOf(col.id) < 0){
+            colIdMap.push(col.id);
+            cols.push(col);
+          }
+        });      
+      groups = cols;
+    }
+    
+    // For handling cells in a variety of data formats...
+    function _makeCellObj(cell,col,key){
+      var newCell = cell;
+      var newCol =col;
+      
+      // check if the value is a complex object or array...
+      if($.isArray(cell) && cell.length < 1) cell = '';
+      if(!$.isPlainObject(cell))
+        newCell = {
+          id:key||cell,
+          path:key||cell,
+          value:cell,
+          displayValue:cell
+        }
+      if($.isArray(cell) && cell.length > 0){
+        if(typeof cell[0] === 'string'){
+          newCell.displayValue=cell.join();
+          newCell.type = 'strings';
+        }
+        else{
+          newCell.displayValue=cell.length+' items';
+          newCell.type = 'objects';
+        }
+      }
+      
+      // If it is a string, check to see what kind of string it might be...
+      var newVal = newCell.value;
+      if(typeof newVal === 'string'){
+        newCell.type = 'string';
+        
+        //check for date...
+        var date = moment(newVal);
+        if(date.isValid()){
+         // newCell.value = date;
+          newCell.type = 'date';
+        }
+        
+        //check for email...
+        else if (newVal.indexOf('@') > 1 && newVal.indexOf('.') > 3)
+          newCell.type = 'email';
+        
+        //check for url...
+        else if (newVal.indexOf('www.') === 0 || newVal.indexOf('http://') === 0 || newVal.indexOf('https://') === 0){
+          newCell.type = 'url';
+          newCell.displayValue = ['<a href="',newVal,'" target="_blank">',newVal.replace('http://','').replace('https://',''),'</a>'].join('');
+        }
+      }
+      if(typeof col === 'string')
+        newCol = {
+          id:col,
+          path:col
+      }
+      
+      $.extend(newCell,newCol); 
+      
+      return newCell;
+    }
+    
+    //////////////////////////////////////
+    // INTERNAL DRAW ELEMENT METHODS....
+    /////////////////////////////////////
+
+    // draw helpers...
+    function _getDomType(childElemName){
+      var viewType = 'table';
+      
+      if(viewType === 'table'){
+        if(childElemName === 'root') return '<table/>';
+        else if (childElemName === 'group') return '<tbody/>';
+        else if (childElemName === 'row') return '<tr/>';
+      }
+      
+      
+    }
+    
+    
+    // default renderers...
+    function _arrayRenderer(type,cell,row,col){
+      var $cell = _baseRenderer(type,cell,row,col);
+      return $cell;
+    }
+    
+    function _dateRenderer(type,cell,row,col){
+      var $cell = _baseRenderer(type,cell,row,col);
+      return $cell;
+    }
+    
+    function _htmlRenderer(type,cell,row,col){
+      var $cell = _baseRenderer(type,cell,row,col);
+      return $cell;
+    }
+    function _linkRenderer(type,cell,row,col){
+      var $cell = _baseRenderer(type,cell,row,col);
+      return $cell;
+    }
+    function _baseRenderer(type,cell,row,col,customRenderer){
+      var $cell = 
+        $(type)
+          .attr('data-cell-id',cell.id)
+          .attr('data-cell-path',cell.path)
+          .attr('data-cell-value',cell.value)
+          .addClass(cell.className)
+          .addClass(cell.id)
+          .addClass('attr');
+      
+      if($.isFunction(customRenderer))
+        $cell.append($(customRenderer(cell,row,col)));
+      else
+        $cell.html(cell.displayValue);  
+      
+      return $cell;      
+    }
+    
+    
+    // draw cell...
+    function _drawCell(key,cell,type,row){ 
+      cell = cell || {};
+      type = type || '<td/>';
+      return _baseRenderer(type,cell,row,_getCol(key),cell.renderer);
+    }
+    
+    // draw row...
+    function _drawRow(key,row,type){
+      
+      //TODO: This is a mess to figure out which DOM items to use...
+      type = type || '<tr/>';
+      var childType = '<td/>';
+      if(type === '<div/>') childType = '<div/>';
+      else if(type === '<ul/>') childType = '<li/>';
+      
+      var $row = $(type);      
+      var rowObj = _makeObj(row,key);
+      var cells = rowObj.items;
+      
+      if(colIdMap.length === 0)
+        _generateCols(row);
+      
+      var $cells = Array.apply(null, Array(colIdMap.length)).map(String.prototype.valueOf,childType); //new Array(colIdMap.length);/
+      var cellCount = 0;
+      if(cells.length > 0 || $.isPlainObject(cells)){        
+        $.each(cells,function(key,cell){
+          
+          var posCol = cols[cellCount];
+          if(colIdMap.indexOf(key) === -1){
+            _generateCols(key);
+            $cells[cellCount] = _drawCell(key,posCol,childType,rowObj);
+          } 
+          
+          var colObj = _getCol(key);
+          var cellObj = _makeCellObj(cell,colObj,key);
+          var pathObj = _getCol(key,true);
+          
+
+          
+          if($cells[colIdMap.indexOf(key)])
+            $cells[colIdMap.indexOf(key)] = _drawCell(key,cellObj,childType,rowObj);
+          else 
+            $cells.push(_drawCell(key,cellObj,childType));
+          
+          if(pathObj){
+            pathCellObj = $.extend({},colObj,cellObj,pathObj);
+            $cells[cellCount] = _drawCell(key,pathCellObj,childType,rowObj);
+          }
+          
+          cellCount++;        
+
+        });
+        
+      }
+      
+      $row
+        .attr('data-row-id',rowObj.id)
+        .addClass(rowObj.className)
+        .addClass(rowObj.id)
+        .addClass('item')
+        .append($cells);
+
+    
+    
+      return $row;
+    
+    }
+    
+    // draw groups...
+    function _drawGroups(groups, type){      
+      groups = groups || [];
+      
+      ///////////////////////////////////////////
+      // TODO: This crap tells me what dom strcuture to use, but I need to clean this up...
+      //
+      type = type || '<tbody/>';
+      var childTag = '<tr/>';
+      var titleTag = 'tr';
+      if($tbodies.prop("tagName") === 'UL'){
+        type = '<li/>';
+        childTag = '<ul/>';
+        titleTag = 'div';
+      }
+      if($tbodies.prop("tagName") === 'DIV'){
+        type = '<div/>';
+        childTag = '<div/>';
+        titleTag = 'div';
+      }
+      //
+      ////////////////////
+
+      
+      // remove old elements...
+      if($tbodies && $tbodies !== 0) $tbodies.remove();
+      
+      // draw the group...
+      function drawGroup(i,groupObj){
+        group = groupObj || group;
+        
+        // Each group will have a label...
+        var $label = $('<' + titleTag + ' class="group-header"/>');
+        var $labelLink = (group.id)?
+          $([
+             '<a href="">',
+             '<span class="title">',(group.title || group.id),'</span>',
+             '<span class="description">',group.description,'</span>',
+             '</a>'
+           ].join('')).appendTo($label)
+           :{};        
+
+        // Each group will be a $tbody...
+        var $tbody = $('<tbody/>')
+          .attr('data-group-id',group.id)
+          .addClass(group.className)
+          .addClass(group.id)
+          .addClass('group')
+          .append($label);
+        
+        if(group.rows) $.each(group.rows,function(i,row){
+          var $row = _drawRow(i,row,childTag).appendTo($tbody);
+        });
+        
+        $tbody.appendTo($box);
+        
+        return $tbody;
+      }
+      
+      var rows = [];
+      
+      //Check to see if data is actually in a group format...
+      if(!($.isArray(groups) && ($.isArray(groups[0]) || groups[0].rows))){
+        // if the data is not in a group format, mark the data so I know...
+        groups = [{rows:groups,notGrouped:true}];
+        
+        
+      } 
+      
+      $.each(groups,drawGroup);
+      $tbodies = $box.children('.group');
+    }
+    
+    // draw headers...    
+    function _drawHeaders(localCols){
+      cols = localCols || cols;
+      
+      var renderer = cols.labelRenderer ||
+      function(col){
+        var $th = $('<th/>')
+          .attr('data-col-id',col.id)
+          .attr('data-col-path',col.path)
+          .addClass(col.className)
+          .addClass(col.id);
+        $('<a/>').attr('href',('#sortby='+col.id)).text(col.title).appendTo($th);
+      
+        return $th;
+      }
+      
+      // draw the headers and setup cell drawing...      
+      $.each(cols,function(i,col){ 
+        if(typeof col === 'string'){
+          col = {
+              id:col,
+              title:col
+          }
+        }
+        var title = col.title || col.name || col.id;
+        var id = col.id || col.name || col.title;
+        var newCol = $.extend({id:id,title:title},col)
+        var $th = renderer(newCol);
+        $th.appendTo($headers);
+        
+        var $col = $('<col/>')
+          .width(col.width)
+          .addClass(id)
+          .addClass(col.className)
+          .appendTo($colgroup);
+      });    
+    }
+    
+    // draw table box...
+    function _drawBox(type){
+      type = type || '<table/>';
+      $frame = $('<div class="frame" />')
+      $box = $(type).addClass('cjp-inner-grid');
+      
+      if(type === '<table/>'){
+        $box.addClass('table');
+        $colgroup = $('<colgroup />').appendTo($box);
+        $headers = $('<tr class="__cols__"></tr>');
+        $thead = $('<thead/>').append($headers).appendTo($box);
+        $tbodies = $('<tbody/>').appendTo($box);
+      }
+      else if (type === '<ul/>'){
+        $box.addClass('list');
+        $tbodies = $('<ul class="body"/>').append('<li/>').appendTo($box);
+      }
+      $frame.append($box);
+      $this.append($frame);
+    }
+    
+    // draw toolbar...
+    function _drawToolbar(localConfig){
+      config = localConfig || config;
+      // create place for hovers to work...
+      if($('#hover-space').length < 1) $('body').append('<div id="cbp-hover-space" class="bootstrap3" />');
+      
+      // reset toolbar if necissary...
+      if($toolbar !== 0) $toolbar.remove();
+      
+      // control will have a grouper and a sorter control...
+      $grouper = _drawPulldowns(groups,'Group');
+      $sorter = _drawPulldowns(cols,'Sort');
+      $filter = _drawFilterControl();
+
+      $toolbar = $(['<div class="toolbar-box"><div class="toolbar">',
+         '<div class="hidden table-hovers"></div>',
+         '<nav class="navbar navbar-default navbar-condensed nav-condensed attached" ><div class="container-fluid __form__">',
+           '<ul class="nav navbar-nav navbar-right __pulldowns__">',
+            '</ul>',
+         '</div></nav></div></div>'].join(''));
+      
+      $toolbar.find('.__form__').append($filter);
+      $toolbar.find('.__pulldowns__').append($grouper).append($sorter);
+      
+      $this.prepend($toolbar);
+    }
+    
+    // draw pulldowns...
+    function _drawPulldowns(options,config_title){
+      options = options || [];
+      var id = (typeof config_title ==='string')? 
+          config_title.toLowerCase().replace(/\ /g,'-') 
+          : config_title.id;
+      var title = (typeof config_title ==='string')? 
+          config_title
+          : config_title.title;
+      //both will use the same HTML wrapper...
+      var $pullDownWrapper = $('<li class="dropdown" />')
+        .attr('data-action',id)
+        .append($(['<a href="#" class="dropdown btn-sm" data-toggle="dropdown" role="button" aria-expanded="false">',title,'<span class="caret"></span></a>'].join('')));
+      
+      var $ul = $('<ul class="dropdown-menu" role="menu"/>')
+        .append($(['<li data-effect="none"><a class="btn-sm" href="#',id,'=__none__">None</a></li>'].join(''))  )
+        .appendTo($pullDownWrapper);
+      
+      // ...and the options will also use the same format...
+      function optionRenderer(i,opt){
+        //if(i===0) $ul.empty();
+        var o = (typeof opt === 'string')?{id:opt}:opt;
+        var $Html = $(['<li data-effect="',o.id,'"><a class="btn-sm ',o.id,'" href="#',id,'=',o.id,'">',o.title || o.id,'</a></li>'].join(''));
+        $ul.append($Html);
+      }
+       
+    
+      $.each(options,optionRenderer);
+      
+      return $pullDownWrapper;
+    }
+    
+    // draw filter...
+    function _drawFilterControl(){
+      var $form = $([
+        '<form class="nav navbar-form navbar-left">',
+          '<fieldset class="form-group">',
+            '<div class="input-group input-group-sm">',
+              '<input type="text" class="form-control input-sm" placeholder="Find plugins...">',
+              '<span class="input-group-btn"><button class="btn btn-default" type="button">Go!</button></span>',
+            '</div>',
+          '</fieldset>',
+        '</form>'
+        ].join(''));
+      
+      $form.submit(function(e){e.preventDefault()});
+      
+      $form.find('.input-group input.form-control').change(function(e){
+        // here I am....
+        e.preventDefault();
+
+        var searchString = $(this).val().toLowerCase();
+        
+        return _filterBy(searchString);
+        
+      });
+      
+      return $form;
+    }
+    
+    
+    // functional processes...
+    
+    var hashOps = {
+        group:function(group){
+
+          var col = _getCol(group);
+          var foundGroups = [];
+          var groupedRows = [];
+          
+          function makeGrouping(i,item){
+            
+            var rowObj = _makeObj(item);
+            var cellObj = _makeObj(rowObj.items[group]) || {};
+            var cellId = cellObj.id;
+            var renderer = col.grouper || defaultGrouper;
+            
+            function defaultGrouper(cell,row,col){
+              var group = {
+                id:cell,
+                title:cell,
+                value:cell,
+                rows:[]
+              }
+              
+              return group;
+            }
+            
+            var groupObj = {};
+            var groupKey =  foundGroups.indexOf(cellId);
+            if(groupKey === -1){
+              
+              // put this group reference into my index...
+              foundGroups.push(cellId);
+              
+              // make the groupObject
+              groupObj = renderer(rowObj.items[group],rowObj,cellObj);
+              groupedRows.push(groupObj);
+            }
+            else 
+              groupObj = groupedRows[groupKey];
+            
+            // make the row object and stick it into the group...              
+            var newRow = $.extend({type:'row',value:cellId},rowObj);
+            groupObj.rows.push(newRow);  
+            
+            
+          }
+          
+          $.each(data,makeGrouping);
+          
+          _drawGroups(groupedRows,config);
+        }     
+          
+    }
+    
+    $(window).on( 'hashchange', function(e) {
+      var hashArr = window.location.hash.substring(1).split('&');
+      $.each(hashArr,function(i,q){
+        var qArr = q.split('=');
+        hashOps[qArr[0]](qArr[1]);
+      })
+    });
+    
+    
+    
+    function _groupBy(string){
+      debugger;
+    }
+    
+    
+    function _filterBy(string){
+      debugger;
+    }
+    
+    
+    
+    _init(data,config);   
+    
+  };
+
+  
+  
+  var jq2_1_3 = $;
+  $.when(
+      $.getScript('https://updates.jenkins-ci.org/current/update-center.json'),
+      
+      $.Deferred(function( deferred ){
+                 $( deferred.resolve );
+            })
+  ).done(function(a,b,c){
+    console.log( "ready!" );
+    $('<div id="test" />').appendTo('body').cjpGrid(updateCenter.plugins);
+    //var grid = new $.SortableTable({},updateCenter.plugins);
+    
+  });
+});
+</script>
+
+</body>
+</html>

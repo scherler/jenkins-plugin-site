@@ -5,7 +5,7 @@ var Link = window.ReactRouter.Link
 
 
 var Dropdown = React.createClass({
-	hashTrack: function(){
+    hashTrack: function(){
 		var orgHash = window.location.hash;
 		var p = this.props;
 		var key = p.k;
@@ -44,17 +44,21 @@ var Dropdown = React.createClass({
 		var currentHashArray = window.location.hash.split(/[\&,\#]/);
 		var target = e.currentTarget;
 		var $target = $(target).addClass('active');
+		var hashValue = target.hash;
 		var hashChange = target.hash.substring(1).split('=');
 		
 		$(target).parent().children('.active').not($target).removeClass('active');
 		
-		$.each(currentHashArray,function(i,pair){
-			if(pair === '') false;
-			else if(pair.indexOf(hashChange[0]+'=' ) === 0 || pair === hashChange[0]){
-				newHashArray.push(hashChange.join('='));
-			}else
-				newHashArray.push(pair);
-		});
+		if(currentHashArray.length > 1)
+			$.each(currentHashArray,function(i,pair){
+				if(pair === '') false;
+				else if(pair.indexOf(hashChange[0]+'=' ) === 0 || pair === hashChange[0]){
+					newHashArray.push(hashChange.join('='));
+				}else
+					newHashArray.push(pair);
+			});
+		else
+		    newHashArray.push(hashValue);
 		window.location.hash = newHashArray.join('&');
 		return false;
 	},

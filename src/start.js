@@ -33,14 +33,15 @@ updateCenter.doRender = function(e,data){
             {id:'icon', title:'icon', path:'title', renderer:drawIcon},
             {id:'scope', title:'scope'},
             {id:'category', title:'category'},
-            {id:'title',title:'Title'},//,renderer:titleRenderer, grouper:titleGrouper},
+            {id:'title',title:'Title'},// ,renderer:titleRenderer,
+					// grouper:titleGrouper},
             {id:'excerpt',title:'Description'},
-            {id:'buildDate',title:'Created'},//renderer:fromNowRenderer},
-            {id:'dependencies',title:'Dependencies'},//,renderer:dependencyRenderer},
-            {id:'developers',title:'Maintainers'}//,renderer:maintainerRenderer}
+            {id:'buildDate',title:'Created'},// renderer:fromNowRenderer},
+            {id:'dependencies',title:'Dependencies'},// ,renderer:dependencyRenderer},
+            {id:'developers',title:'Maintainers'}// ,renderer:maintainerRenderer}
         ]}
 	ReactDOM.render(	
-      <GridBox data={data.margeData()} config={config} />,
+      <GridBox data={data.plugins} config={config} />,
       document.getElementById('grid-box')
     );
 };

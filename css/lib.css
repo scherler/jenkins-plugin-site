@@ -216,8 +216,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', end
   .plugin-update #plugins td .compatWarning {margin:5px 0; padding:5px; border:1px solid; color:#c00; background:#fdc}
   .plugin-update #plugins td .excerpt,
   .plugin-update #plugins td .compatWarning {max-width:600px}
-  .grid ul.tile,
-  .smart-grid ul.tile,
+  .grid .tile,
+  .smart-grid .tile,
   .plugin-update .create-item-list > .tile > .panel-body {list-style:none; padding:0; height:200px; width:200px; text-align:left; white-space:normal}
   .plugin-update .create-item-list > .panel .icn-box {font-size:80px}
   .plugin-update .create-item-list > .tile > .panel-body p {margin:10px 0; width:75%;}
@@ -333,8 +333,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', end
   .add-form #main-panel {max-width: 992px;}
   .add-form #side-panel {display:none}
   .create-item-list .panel-default {}
-  .grid ul.tile,
-  .smart-grid ul.tile,
+  .grid .tile,
+  .smart-grid .tile,
   .create-item-list .tile { float:left; margin:1px;}
   .create-item-list .tile > .panel-body { height:250px; width:250px; display:inline-block;  font-size:125%; text-shadow:0 0 5px #fff,0 0 3px #fff}
   .create-item-list .panel .title {line-height:1.25em; margin-bottom:10px; display:block; font-size:125%}
@@ -402,14 +402,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', end
   .group-header.section-tab.general {background:#dbe}
   .group-header.section-tab.general.active {background:#609; color:#fff;border-color:#103 !important;}
   .smart-grid.tbody {padding:10px 10px 40px;}
-  .grid ul.tile,
-  .smart-grid ul.tile {border:none; height:275px; border-radius:3px; font-size:.9em; position:relative; cursor:help; min-width:175px; width:24%; max-width:250px; margin:.5%; color:rgba(0,0,0,.67); box-shadow:0 1px 3px rgba(0,0,0,.5), inset 0 0 0 1px #ccc; background:#fff; padding:10px !important;}
-  .smart-grid ul.tile:hover {background:#F6FAFD; box-shadow:0 1px 3px rgba(50,100,150,.67), inset 0 0 0 1px #69b !important;}
-  .smart-grid ul.tile.slct.installed,
-  .smart-grid ul.tile.slct {box-shadow:0 1px 3px rgba(50,100,150,.67), inset 0 0 0 2px #69b !important;}
-  .smart-grid ul.tile.slct > .slct-box {background:#acd; border-color:#fff; box-shadow: 0 0px 0px 2px rgba(50,120,150,.33),inset 0 1px 3px 1px rgba(50,70,100,.3);}
-  .smart-grid ul.tile.slct > .slct-box:after {color:#fff}
-  .smart-grid ul.tile:hover li:after {box-shadow:inset -80px 0 50px -50px #F6FAFD;}
+  .grid .tile,
+  .smart-grid .tile {border:none; height:275px; border-radius:3px; font-size:.9em; position:relative; cursor:help; min-width:175px; width:24%; max-width:250px; margin:.5%; color:rgba(0,0,0,.67); box-shadow:0 1px 3px rgba(0,0,0,.5), inset 0 0 0 1px #ccc; background:#fff; padding:10px !important;}
+  .smart-grid .tile:hover {background:#F6FAFD; box-shadow:0 1px 3px rgba(50,100,150,.67), inset 0 0 0 1px #69b !important;}
+  .smart-grid .tile.slct.installed,
+  .smart-grid .tile.slct {box-shadow:0 1px 3px rgba(50,100,150,.67), inset 0 0 0 2px #69b !important;}
+  .smart-grid .tile.slct > .slct-box {background:#acd; border-color:#fff; box-shadow: 0 0px 0px 2px rgba(50,120,150,.33),inset 0 1px 3px 1px rgba(50,70,100,.3);}
+  .smart-grid .tile.slct > .slct-box:after {color:#fff}
+  .smart-grid .tile:hover li:after {box-shadow:inset -80px 0 50px -50px #F6FAFD;}
   .smart-grid .tile > .slct-box {position: absolute;
     bottom: 5px;
     right: 5px;
@@ -422,53 +422,53 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', end
     border-radius: 5px;
     font-weight: bold;
     box-shadow: 0 1px 3px, inset 0 1px 2px; cursor:pointer}
-    .smart-grid ul.tile.slct > .slct-box:hover,
+    .smart-grid .tile.slct > .slct-box:hover,
   .smart-grid .tile > .slct-box:hover {background:#bde}
   .smart-grid .tile > .slct-box:hover:after {color:#fff}
   .smart-grid .tile > .slct-box:after {content:'\2714'; color:rgba(0,0,0,.05); text-shadow:0 -1px 2px rgba(0,0,0,.1)}
-  .smart-grid ul.tile li {display:block; position:relative; overflow:hidden; margin-bottom:7px;}
-  .smart-grid ul.tile .title{ white-space:nowrap; margin-bottom:2px; font-size:140%; color:#000;}
-  .smart-grid ul.tile .maintainer {margin-bottom:10px;}
-  .smart-grid ul.tile .excerpt {line-height:1.4em; height:4em; }
-  .smart-grid ul.tile li:after {content:' '; display:block; position:absolute; height:1.25em; width:6em; box-shadow:inset -80px 0 50px -50px #fff; bottom:0; right:0; font-weight:normal }
-  .smart-grid ul.tile li:before { display:block; font-size:75%; color:rgba(0,0,0,.5)}
-  .smart-grid ul.tile .icon {display:block; border:3px solid #8ac; height:68px; width:68px; padding:4px; border-radius:5px; margin:0px auto 10px; background:#fff;}
-  .smart-grid ul.tile .icon img{max-width:100%; height:100%}
-  .smart-grid ul.tile .installs,
-  .smart-grid ul.tile .version {display:inline-block; margin-right:10px; font-size:110%; color:#000}
-  .smart-grid ul.tile .version:after {box-shadow:none; background:none; position:relative; display:inline; content:' '}
-  .smart-grid ul.tile .installs:after {box-shadow:none; background:none; position:relative; display:inline; content:' installs '; font-weight:normal; font-size:75%; color:rgba(0,0,0,.5)}
-  .smart-grid ul.tile .version:before {content:'v '; display:inline;}
-  .smart-grid ul.tile .updated:before {content:'Updated';}
-  .smart-grid ul.tile .created:before {content:'Created';}
+  .smart-grid .tile li {display:block; position:relative; overflow:hidden; margin-bottom:7px;}
+  .smart-grid .tile .title{ white-space:nowrap; margin-bottom:2px; font-size:140%; color:#000;}
+  .smart-grid .tile .maintainer {margin-bottom:10px;}
+  .smart-grid .tile .excerpt {line-height:1.4em; height:4em; }
+  .smart-grid .tile li:after {content:' '; display:block; position:absolute; height:1.25em; width:6em; box-shadow:inset -80px 0 50px -50px #fff; bottom:0; right:0; font-weight:normal }
+  .smart-grid .tile li:before { display:block; font-size:75%; color:rgba(0,0,0,.5)}
+  .smart-grid .tile .icon {display:block; border:3px solid #8ac; height:68px; width:68px; padding:4px; border-radius:5px; margin:0px auto 10px; background:#fff;}
+  .smart-grid .tile .icon img{max-width:100%; height:100%}
+  .smart-grid .tile .installs,
+  .smart-grid .tile .version {display:inline-block; margin-right:10px; font-size:110%; color:#000}
+  .smart-grid .tile .version:after {box-shadow:none; background:none; position:relative; display:inline; content:' '}
+  .smart-grid .tile .installs:after {box-shadow:none; background:none; position:relative; display:inline; content:' installs '; font-weight:normal; font-size:75%; color:rgba(0,0,0,.5)}
+  .smart-grid .tile .version:before {content:'v '; display:inline;}
+  .smart-grid .tile .updated:before {content:'Updated';}
+  .smart-grid .tile .created:before {content:'Created';}
   .form-group.rating > .value,
-  .smart-grid ul.tile .rating {font-size:0; margin:-12px 0 5px}
-  .smart-grid ul.tile .icon:after,
-  .smart-grid ul.tile .created,
-  .smart-grid ul.tile .installed {display:none !important;}
-  .smart-grid ul.tile.installed {background: #EDF5FB; box-shadow:inset 0 1px 5px rgba(0,0,0,.25), inset 0 0 0 1px #ccc;}
-  .smart-grid ul.tile.installed li:after{box-shadow:inset -80px 0 50px -50px #EDF5FB}
-  .smart-grid ul.tile.installed > .slct-box {background:#69c; border-color:#fff;}
-  .smart-grid ul.tile.installed > .slct-box:after {content:'\e64e'; font:normal 16px 'icomoon'; color:#fff;}
-  .smart-grid ul.tile.hasUpdate.slct .hasUpdate {opacity:.5}
-  .smart-grid ul.tile.installed.hasUpdate.slct > .slct-box{background:#c60}
-  .smart-grid ul.tile.installed.hasUpdate.slct > .slct-box:after {content:'\e608';}
-  .smart-grid ul.tile.hasUpdate .hasUpdate { position:absolute; top:0; right:0; border:24px solid transparent; border-top-color:#c60; border-right-color:#c60; font-size:0; overflow:visible; }
-  .smart-grid ul.tile.hasUpdate .hasUpdate:before {color:#fff; font:normal 20px 'icomoon'; content:'\e608'; position:absolute; display:block; top:-20px; right:-20px; width:20px; height:20px; text-align:center;}
-  .smart-grid ul.tile.installed .slct-box {cursor:not-allowed;}
-  .smart-grid ul.tile.installed.hasUpdate .slct-box {cursor:pointer; background:#ace}
-  .smart-grid ul.tile.installed.hasUpdate .slct-box:hover {background:#8be}
-  .smart-grid ul.tile.installed.hasUpdate .slct-box:after {content:'\e670'}
+  .smart-grid .tile .rating {font-size:0; margin:-12px 0 5px}
+  .smart-grid .tile .icon:after,
+  .smart-grid .tile .created,
+  .smart-grid .tile .installed {display:none !important;}
+  .smart-grid .tile.installed {background: #EDF5FB; box-shadow:inset 0 1px 5px rgba(0,0,0,.25), inset 0 0 0 1px #ccc;}
+  .smart-grid .tile.installed li:after{box-shadow:inset -80px 0 50px -50px #EDF5FB}
+  .smart-grid .tile.installed > .slct-box {background:#69c; border-color:#fff;}
+  .smart-grid .tile.installed > .slct-box:after {content:'\e64e'; font:normal 16px 'icomoon'; color:#fff;}
+  .smart-grid .tile.hasUpdate.slct .hasUpdate {opacity:.5}
+  .smart-grid .tile.installed.hasUpdate.slct > .slct-box{background:#c60}
+  .smart-grid .tile.installed.hasUpdate.slct > .slct-box:after {content:'\e608';}
+  .smart-grid .tile.hasUpdate .hasUpdate { position:absolute; top:0; right:0; border:24px solid transparent; border-top-color:#c60; border-right-color:#c60; font-size:0; overflow:visible; }
+  .smart-grid .tile.hasUpdate .hasUpdate:before {color:#fff; font:normal 20px 'icomoon'; content:'\e608'; position:absolute; display:block; top:-20px; right:-20px; width:20px; height:20px; text-align:center;}
+  .smart-grid .tile.installed .slct-box {cursor:not-allowed;}
+  .smart-grid .tile.installed.hasUpdate .slct-box {cursor:pointer; background:#ace}
+  .smart-grid .tile.installed.hasUpdate .slct-box:hover {background:#8be}
+  .smart-grid .tile.installed.hasUpdate .slct-box:after {content:'\e670'}
   .form-group.rating:before,
-  .smart-grid ul.tile .rating:before { font-size:21px; font-weight:bold; color: #357; display:inline;}
+  .smart-grid .tile .rating:before { font-size:21px; font-weight:bold; color: #357; display:inline;}
   .form-group.rating.rating_2:before,
-  .smart-grid ul.tile.rating_2 .rating:before {content:'\2605 \2605 \2606 \2606 \2606 ';}
+  .smart-grid .tile.rating_2 .rating:before {content:'\2605 \2605 \2606 \2606 \2606 ';}
   .form-group.rating.rating_3:before,
-  .smart-grid ul.tile.rating_3 .rating:before {content:'\2605 \2605 \2605 \2606 \2606 ';}
+  .smart-grid .tile.rating_3 .rating:before {content:'\2605 \2605 \2605 \2606 \2606 ';}
   .form-group.rating.rating_4:before,
-  .smart-grid ul.tile.rating_4 .rating:before {content:'\2605 \2605 \2605 \2605 \2606 ';}
+  .smart-grid .tile.rating_4 .rating:before {content:'\2605 \2605 \2605 \2605 \2606 ';}
   .form-group.rating.rating_5:before,
-  .smart-grid ul.tile.rating_5 .rating:before {content:'\2605 \2605 \2605 \2605 \2605 ';}
+  .smart-grid .tile.rating_5 .rating:before {content:'\2605 \2605 \2605 \2605 \2605 ';}
   .modal-dialog.available .btn.suspend,
   .modal-dialog.available .btn.uninstall,
   .modal-dialog.installed .btn.select, 
@@ -476,6 +476,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', end
   .modal-dialog.up-to-date .btn.upgrade{display:none;}
   
   .smart-grid .lost-n-found {display:none !important;}
+  .group-inner > li {position:static; display:block; list-style:none;}
 
   
   /*---------create form-------------*/

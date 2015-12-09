@@ -7,18 +7,25 @@ var GridBox = React.createClass({
   },
   setAttributes:function(){},
   onDataChange:function(newData){
-	  //return false;
-	  this.replaceState({
-          data: newData
+      console.log('-----------------------');
+      console.log(newData);
+      this.replaceState({
+	  gridData: newData
       });
   },
+  getInitialState:function(){
+      var p = this.props;
+      return {gridData:this.attachConfiguration(p.data,p.config)};
+  },
   render: function() {
-	var p = this.props;
-	var renderData = this.attachConfiguration(p.data,p.config);
+      var p = this.props;
+      var s = this.state;
+      console.log(p.data);
+      console.log(s.gridData);
     return (
       <div className="bootstrap3 cjp-grid-box smart-grid grid">
-        <GridToolbar config={p.config} data={renderData} dataChange={this.onDataChange} />
-        <GridFrame data={renderData} />
+        <GridToolbar config={p.config} data={s.gridData} dataChange={this.onDataChange} />
+        <GridFrame frameData={s.gridData} />
       </div>
     );
   }
@@ -34,7 +41,6 @@ var GridToolbar = React.createClass({
 	  var flatGrid = gridData.items;
 	  var newData = {groups:[]};
 	  var groupMap = [];
-	  
 	  function _groupFlatGrid(i,item){
 		var attr = item.data[val] || item.data[altVal] || {};	
 	    var groupVal = attr.groupVal;
@@ -46,14 +52,14 @@ var GridToolbar = React.createClass({
 	    	var mapIndex = groupMap.indexOf(newVal);
 	    	
 	    	if(mapIndex === -1){
-	    		var newAttr = $.extend({},attr,{groupVal:newVal})
-    	    	newGroup = $.extend({items:[]},newAttr);
-        	    groupMap.push(newVal);
-        	    newGroup.items.push(item);
-        	    newData.groups.push(newGroup);
-    	    }else{
-    	    	newData.groups[mapIndex].items.push(item);
-    	    }	    	
+	    	    var newAttr = $.extend({},attr,{groupVal:newVal})
+        	    newGroup = $.extend({items:[]},newAttr);
+            	    groupMap.push(newVal);
+            	    newGroup.items.push(item);
+            	    newData.groups.push(newGroup);
+	    	}else{
+        	    newData.groups[mapIndex].items.push(item);
+        	}	    	
 	    }
 
 	    if($.isArray(groupVal)){
@@ -65,10 +71,11 @@ var GridToolbar = React.createClass({
 	    
 	  }
 	  
-	  // check to see if we are in a grouped state already.... 
+	  // check to see if we are in a grouped state already....
 	  if (gridData.items){
 		  $.each(flatGrid,_groupFlatGrid);
 	  }
+	  newData.isGrouped = true;
 	  p.dataChange(newData);
   },
   render: function() {
@@ -101,8 +108,14 @@ var GridToolbar = React.createClass({
 
 var GridFrame = React.createClass({
   setAttributes:function(){},
+  getInitialState:function(){
+      return {frameData:this.props.frameData}
+  },
   render: function() {
-	var data = this.props.data;
+      
+	var data = this.props.frameData;
+	console.log('frame');
+	console.log(data);
 	var groups = [];
 	if(data.isGrouped){
 		groups = data.groups;
@@ -115,7 +128,7 @@ var GridFrame = React.createClass({
       	<ol className="grid-inner">
       	{groups.map(function(group,i){
       		
-      		return (<GridGroup data={group} key={i} />);
+      		return (<GridGroup groupData={group} key={i} />);
         
       	})}
       	</ol>
@@ -126,8 +139,11 @@ var GridFrame = React.createClass({
 
 var GridGroup = React.createClass({
   setAttributes:function(){},
+  getInitialState:function(){
+      return {data:this.props.data}
+  },  
   render: function() {
-	var data = this.props.data;
+	var data = this.props.groupData;
 	var items = data.items;
 	var itemList = (items)? 
 	  items.map(function(item, i){
@@ -135,7 +151,7 @@ var GridGroup = React.createClass({
 	  }):
 		  [];
     return (
-      <li className="group">
+      <li className="group clearfix">
       	<div className="groupTitle group-header">group title</div>
         <ol className="group-inner">
         	{itemList}
@@ -147,6 +163,9 @@ var GridGroup = React.createClass({
 
 var GridItem = React.createClass({
   setAttributes:function(){},
+  getInitialState:function(){
+      return {data:this.props.data}
+  },
   render: function() {
 	var data = this.props.data;
 	var attrs = data.attrs;
@@ -165,7 +184,10 @@ var GridItem = React.createClass({
 });
 
 var GridCell = React.createClass({
-	render: function() {
+    getInitialState:function(){
+	return {data:this.props.data}
+    },    
+    render: function() {
 	var data = this.props.data;
 	var showLabel;
 	if(data.showlabel)
@@ -179,7 +201,10 @@ var GridCell = React.createClass({
     	{showLabel}
     	<div className="htmlValue" dangerouslySetInnerHTML={{__html:data.displayVal}} />
     	</li>
-      //<li className="cell icon attr" data-cell-id="icon" data-cell-path="title" data-cell-value="Adaptive DSL"><div className="icn"><div className="icn-box double"><em className="s0">a</em><em className="s1">d</em></div></div></li>      
+      // <li className="cell icon attr" data-cell-id="icon"
+	// data-cell-path="title" data-cell-value="Adaptive DSL"><div
+	// className="icn"><div className="icn-box double"><em
+	// className="s0">a</em><em className="s1">d</em></div></div></li>
     );
   }
 });

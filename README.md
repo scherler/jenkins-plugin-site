@@ -1,4 +1,5 @@
 # Jenkins plugin site
+This is a simple rendering of the plugin list as taken from updates.jenkins-ci.org/current/update-center.json. You will need a simple hTTP server to run it, as it stands (I have been using python -m SimpleHTTPServer)
 
 ## docs:
 * [GDOC: 30 day plan](https://docs.google.com/document/d/14mP55-HQwCzlYrs2CXTW33mmg8pSPAY-Ut9CYhuurek/edit)

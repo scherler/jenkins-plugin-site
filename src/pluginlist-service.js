@@ -129,6 +129,7 @@ updateCenter.paginate = function(data, count, index) {
 	}
     }
 
+    this.all = arrayData;
     this.paginated = paginatedData;
 
     if (typeof index === 'number') {

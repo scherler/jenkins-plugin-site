@@ -20,8 +20,6 @@ var GridBox = React.createClass({
   render: function() {
       var p = this.props;
       var s = this.state;
-      console.log(p.data);
-      console.log(s.gridData);
     return (
       <div className="bootstrap3 cjp-grid-box smart-grid grid">
         <GridToolbar config={p.config} data={s.gridData} dataChange={this.onDataChange} />
@@ -122,7 +120,6 @@ var GridFrame = React.createClass({
 	}else{
 		groups.push({items:data.items});
 	}
-	
     return (
       <div className="grid-frame">
       	<ol className="grid-inner">

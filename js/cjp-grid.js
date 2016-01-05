@@ -374,8 +374,6 @@
       
       if(cells.length > 0 || $.isPlainObject(cells)){        
         $.each(cells,function(key,cell){
-          if(key === 'scm')debugger;
-          if(key === 'title')debugger;
           // Check each cell and see if it fits into a defined column...
           var colAtPos = cols[cellCount];
           var newCol = {};

@@ -41,7 +41,7 @@ updateCenter.doRender = function(e,data){
             {id:'developers',title:'Maintainers'}// ,renderer:maintainerRenderer}
         ]}
 	ReactDOM.render(	
-      <GridBox data={data.plugins} config={config} />,
+      <GridBox data={data.all} config={config} />,
       document.getElementById('grid-box')
     );
 };

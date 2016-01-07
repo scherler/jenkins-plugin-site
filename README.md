@@ -14,8 +14,15 @@ Boilerplate for kick starting a project with the following technologies:
 
 The various webpack options used have been explained in detailed as comments in the config file. Should help with understanding the nitty-gritty :)
 
+### Run with Docker
 
-### Usage
+```
+docker build -t jenkins-plugin-site .
+docker run -d -p 5000:5000 --name plugins jenkins-plugin-site
+Point to http://0.0.0.0:5000/
+```
+
+### Usage with npm
 
 ```
 npm install
@@ -23,18 +30,10 @@ npm start
 Open http://localhost:5000
 ```
 
-### Linting
+### Linting with npm
 
 ESLint with React linting options have been enabled.
 
 ```
 npm run lint
-```
-
-### Run with Docker
-
-```
-docker build -t jenkins-plugin-site .
-docker run -d -p 5000:5000 --name plugins jenkins-plugin-site
-Point to http://0.0.0.0:5000/
 ```

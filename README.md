@@ -30,3 +30,11 @@ ESLint with React linting options have been enabled.
 ```
 npm run lint
 ```
+
+### Run with Docker
+
+```
+docker build -t jenkins-plugin-site .
+docker run -d -p 5000:5000 --name plugins jenkins-plugin-site
+Point to http://0.0.0.0:5000/
+```

@@ -1,5 +1,5 @@
 {
-  "name": "react-es6-webpack-boilerplate",
+  "name": "jenkins-plugin-site",
   "version": "4.0.0",
   "description": "Boilerplate for kick starting a React Project with ES6 (Babel) and Hot reloader using Webpack.",
   "main": "index.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/vasanthk/react-es6-webpack-boilerplate.git"
+    "url": "https://github.com/scherler/jenkins-plugin-site.git"
   },
   "keywords": [
     "react",
@@ -18,12 +18,12 @@
     "babel",
     "webpack"
   ],
-  "author": "Vasanth Krishnamoorthy (http://www.vasanthk.com)",
+  "author": "CloudBees",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vasanthk/react-es6-webpack-boilerplate/issues"
+    "url": "https://github.com/gusreiber/jenkins-plugin-site/issues"
   },
-  "homepage": "https://github.com/vasanthk/react-es6-webpack-boilerplate",
+  "homepage": "https://github.com/scherler/jenkins-plugin-site",
   "dependencies": {
     "react": "^0.14.5",
     "react-dom": "^0.14.5",

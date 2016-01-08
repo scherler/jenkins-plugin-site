@@ -1,12 +1,14 @@
 {
   "name": "jenkins-plugin-site",
-  "version": "4.0.0",
+  "version": "0.0.1",
   "description": "Boilerplate for kick starting a React Project with ES6 (Babel) and Hot reloader using Webpack.",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
+    "clean": "rm npm-debug.log npm-debug.log.*",
     "build": "./node_modules/.bin/webpack --config webpack.config.production.js",
-    "lint": "./node_modules/.bin/eslint ."
+    "lint": "./node_modules/.bin/eslint .",
+    "watch": "watch -b -n 15 npm run lint"
   },
   "repository": {
     "type": "git",

@@ -1,7 +1,8 @@
 /* eslint-disable no-var, strict *///This is because of node being babel6 ready yet
-var webpack = require('webpack');
-var WebpackDevServer = require('webpack-dev-server');
-var config = require('./webpack.config');
+var
+  webpack = require('webpack'),
+  WebpackDevServer = require('webpack-dev-server'),
+  config = require('./webpack.config');
 
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
@@ -9,7 +10,7 @@ new WebpackDevServer(webpack(config), {
   historyApiFallback: true
 }).listen(5000, '0.0.0.0', function (err) {
     if (err) {
-      console.log(err);
+      console.error(err);
     }
     console.log('Listening at localhost:5000');
   });

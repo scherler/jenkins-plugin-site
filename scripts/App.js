@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
+import PluginsList from './plugins/view/PluginsList';
 
 export default class App extends Component {
   render() {
     return (
-      // Add your component markup and other subcomponent references here.
-      <h1>Hello, World!</h1>
+      <div>
+        <h1>Jenkins Plugins List</h1>
+        <PluginsList />
+      </div>
     );
   }
 }

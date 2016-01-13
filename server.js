@@ -1,4 +1,4 @@
-/* eslint-disable no-var, strict *///This is because of node being babel6 ready yet
+/* eslint-disable no-console, no-var, strict *///This is because of node being babel6 ready yet
 var
   webpack = require('webpack'),
   WebpackDevServer = require('webpack-dev-server'),

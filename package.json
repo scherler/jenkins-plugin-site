@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "clean": "rm npm-debug.log npm-debug.log.*",
+    "clean": "rm npm-debug.log.*",
     "build": "./node_modules/.bin/webpack --config webpack.config.production.js",
     "lint": "./node_modules/.bin/eslint .",
     "watch": "watch -b -n 15 npm run lint"
@@ -27,13 +27,27 @@
   },
   "homepage": "https://github.com/scherler/jenkins-plugin-site",
   "dependencies": {
-    "babel-runtime": "6.3.19",
+    "classnames": "2.2.3",
+    "immutable": "3.7.6",
+    "localforage": "1.3.1",
+    "lodash": "3.10.1",
+    "moment": "^2.11.1",
     "react": "0.14.5",
+    "react-addons-css-transition-group": "0.14.6",
     "react-dom": "0.14.5",
-    "targetenv": "1.0.0"
+    "react-mini": "^1.1.0",
+    "react-purerender": "^0.1.0",
+    "reflux": "0.3.0",
+    "reflux-hoc": "0.0.1",
+    "remarkable": "1.6.1",
+    "script-loader": "0.6.1",
+    "sift": "3.0.0",
+    "targetenv": "1.0.0",
+    "uuid": "^2.0.1"
   },
   "devDependencies": {
     "babel-core": "6.3.21",
+    "babel-runtime": "6.3.19",
     "babel-eslint": "5.0.0-beta6",
     "babel-loader": "6.2.0",
     "babel-plugin-react-transform": "2.0.0-beta1",

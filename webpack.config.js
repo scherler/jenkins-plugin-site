@@ -45,6 +45,8 @@ var webpack = require('webpack');
 var path = require('path');
 
 module.exports = {
+  debug: true,
+  devtool: 'source-map',
   entry: [
     'webpack-dev-server/client?http://localhost:5000',
     'webpack/hot/dev-server',
@@ -56,9 +58,8 @@ module.exports = {
     publicPath: '/static/'
   },
   resolve: {
-    extensions: ['', '.js']
+    extensions: ['', '.js', '.jsx']
   },
-  devtool: 'eval-source-map',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()

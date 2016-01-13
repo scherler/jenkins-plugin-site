@@ -1,7 +1,7 @@
 let singular = require('./singular');
 let capitalize = require('./capitalize');
 
-export default function ({ collection, collectionSingular, collectionSingularUpper }) {
+let collectionNames = function ({ collection, collectionSingular, collectionSingularUpper }) {
   if (!collection) {
     throw new Error('Invalid store definitions given. No collection name');
   }
@@ -19,3 +19,4 @@ export default function ({ collection, collectionSingular, collectionSingularUpp
   };
 
 }
+ module.exports = collectionNames;

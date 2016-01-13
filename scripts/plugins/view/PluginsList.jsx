@@ -10,31 +10,22 @@ const listComponent = require('../../commons/components/list/index');
 import list from '../../commons/components/list/components/list';*/
 //import { connect } from '../../commons/hoc';
 import React from 'react';
-import pure from 'react-mini/pure'
+import PluginItem from './PluginsItem'
 //import pluginStore from '../stores/pluginStore';
 
-const  { List, ListSpinner} = listComponent.components;
-
-const PluginItem = pure(({ plugin, modifySite }, me) => (
-  <li className="pluginItem" >
-    <div className="title position-inherit">
-      {plugin.name}
-    </div>
-    <div className="commands">
-        <i className="icon-externallink"/>
-    </div>
-  </li>
-));
+const  { List, ListSpinner: Spinner} = listComponent.components;
 
 const PluginList = React.createClass({
   mixins: [listComponent.mixins.filter],
 
-  getInitialState() {
-    let url = 'https://updates.jenkins-ci.org/current/update-center.json';
-    this.jsonp(url, data => {this.setState({plugins: data.plugins}); });//HACK
-    return {
-    //  plugins: pluginStore.getPlugins()
-    };
+  getInitialState: function () {
+
+    return {};
+  },
+
+  transformPlugins: function (plugins) {
+    this.setState({plugins: _.toArray(plugins)});
+    this.updateFilter();
   },
 
   componentWillMount: function () {
@@ -51,17 +42,21 @@ const PluginList = React.createClass({
 
     this.setListToFilter('plugins');
   },
-/*
-  componentDidMount() {
-    this.setFetchStore(pluginStore, 'Plugins');
+
+  componentDidMount: function () {
+
+    let url = 'https://updates.jenkins-ci.org/current/update-center.json';
+    this.jsonp(url, data => {this.transformPlugins(data.plugins); });//HACK
+    //this.setFetchStore(pluginStore, 'Plugins');
   },
+  /*
   onStoreChange() {
     this.setState(this.getInitialState());
     this.updateFilter();
   },
 */
 
-  jsonp(url, callback) {// HACK
+  jsonp: function (url, callback) {// HACK
     let callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
     window.updateCenter = {
       post: function (data) {
@@ -76,21 +71,24 @@ const PluginList = React.createClass({
 
   asPluginItem: function (item) {
     return (
-      <PluginItem plugin={item} key={item.id}/>
+      <PluginItem plugin={item} key={item.sha1}/>
     );
   },
 
-  render() {
-    var listSize = this.state.plugins ? this.state.plugins.size : null;
+  render: function () {
+    var listSize = this.state.plugins ? this.state.plugins.length : null;
     return (
       <div>
-        <div>
-          Spinner <ListSpinner /> no more
-        </div>
         <div>
           Here we will use only one general component "List"
           and then use callbacks to render each item
         </div>
+
+        {!this.state.plugins ? <Spinner /> :
+          <List headers={['', 'nameHeader', 'header.medium', '']}
+            hasEntries={!!listSize}
+            items={this.state.filteredPlugins} mapItem={this.asPluginItem}/>
+          }
 
       </div>
     );
@@ -98,11 +96,7 @@ const PluginList = React.createClass({
 });
 
 module.exports = PluginList;/*
-{!this.state.plugins ? <Spinner /> :
-  <List headers={['', 'nameHeader', 'header.medium', '']}
-    hasEntries={!!listSize}
-    items={this.state.filteredPlugins} mapItem={this.asPluginItem}/>
-  }
+
 
 .compose(
   connect(pluginStore, 'onStoreChange')

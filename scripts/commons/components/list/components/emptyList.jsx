@@ -2,7 +2,7 @@ import React from 'react';
 import pure from 'react-mini/pure';
 import env from '../../../utils/env';
 
-export default pure( ( {
+let Empty =  pure( ( {
   noEntries,
   emptyListText,
   noSearchResultText,
@@ -15,7 +15,9 @@ export default pure( ( {
   mergedClassName += ' flex align-items-center';
 
   return (
-    <li key='empty-state' className={mergedClassName} style={styles}>
+    <li key='empty-state' className={mergedClassName} style={styles}>dddd
       <i className='icon-confused'/><p style={style}>{text}</p>
     </li>);
 });
+
+module.exports = Empty;

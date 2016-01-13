@@ -13,7 +13,7 @@ import React from 'react';
 import PluginItem from './PluginsItem'
 //import pluginStore from '../stores/pluginStore';
 
-const  { List, ListSpinner: Spinner} = listComponent.components;
+const { List, ListSpinner: Spinner} = listComponent.components;
 
 const PluginList = React.createClass({
   mixins: [listComponent.mixins.filter],

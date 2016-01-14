@@ -20,12 +20,12 @@ wiki: "https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+Adaptive+Plugin"
 */
 
 const PluginItem = pure(({ plugin, modifySite }, me) => (
-  <li className="pluginItem" >
-    <div className="title position-inherit">
+  <li style={{display: 'table-row'}}>
+    <div className="col-md-4" style={{display: 'table-cell'}}>
       {plugin.name}
     </div>
-    <div className="commands">
-        <i className="icon-externallink"/>
+    <div className="col-md-8" style={{display: 'table-cell'}}>
+      {plugin.title}
     </div>
   </li>
 ));

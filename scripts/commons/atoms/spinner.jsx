@@ -16,7 +16,7 @@ module.exports = React.createClass({
   },
 
   render: function () {
-    return <i className="icon-spinner spinner" style={this.props.style}>{this.props.children}loading</i>;
+    return <i className="icon-stopwatch spinner" style={this.props.style}>{this.props.children}loading</i>;
   }
 
 });

@@ -3,6 +3,7 @@ const Router = {
   navigate: function (name, params, opts, cb) {
     logger.log('not implemented yet ', name, params, opts, cb);
   },
+  
   parseQS: function (data) {
     if (!data) {return {}; }
     if (data.indexOf('?') === 0) {

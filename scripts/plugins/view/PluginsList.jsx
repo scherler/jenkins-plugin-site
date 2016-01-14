@@ -9,24 +9,28 @@ const listComponent = require('../../commons/components/list/index');
 /*import listSpinner from '../../commons/components/list/components/listSpinner';
 import list from '../../commons/components/list/components/list';*/
 //import { connect } from '../../commons/hoc';
+import Immutable from 'immutable';
 import React from 'react';
 import PluginItem from './PluginsItem'
-//import pluginStore from '../stores/pluginStore';
+import { utils } from '../../commons'
+//import pluginStore from '../stores/pluginStore';  ListFilter,
 
 const { List, ListSpinner: Spinner} = listComponent.components;
+const { env } = utils;
 
-const PluginList = React.createClass({
+// which fields do we want to search
+const searchConfig = ['name', 'title', 'excerpt'];
+
+if (env.isBrowser)
+  require('../../commons/style/common.styl');
+
+const PluginList = React.createClass({//FIXME refactor: dropping mixins and swith to ES6
   mixins: [listComponent.mixins.filter],
 
   getInitialState: function () {
-
     return {};
   },
 
-  transformPlugins: function (plugins) {
-    this.setState({plugins: _.toArray(plugins)});
-    this.updateFilter();
-  },
 
   componentWillMount: function () {
     this.setFilter(function (query) {
@@ -69,6 +73,12 @@ const PluginList = React.createClass({
     document.body.appendChild(script);
   },
 
+  transformPlugins: function (plugins) {
+    this.setState({plugins: new Immutable.List(_.toArray(plugins))});
+    //this.setState({plugins: _.toArray(plugins)});
+    this.updateFilter();
+  },
+
   asPluginItem: function (item) {
     return (
       <PluginItem plugin={item} key={item.sha1}/>
@@ -76,19 +86,24 @@ const PluginList = React.createClass({
   },
 
   render: function () {
-    var listSize = this.state.plugins ? this.state.plugins.length : null;
+    var listSize = this.state.plugins ? this.state.plugins.size : null;
     return (
-      <div>
+      <div
+        style={{paddingTop: '10px'}}
+        className="content content-list row">
         <div>
           Here we will use only one general component "List"
           and then use callbacks to render each item
         </div>
 
-        {!this.state.plugins ? <Spinner /> :
-          <List headers={['', 'nameHeader', 'header.medium', '']}
-            hasEntries={!!listSize}
-            items={this.state.filteredPlugins} mapItem={this.asPluginItem}/>
-          }
+        <div style={{paddingTop: '10px'}} className="list">
+          {!this.state.plugins ? <Spinner /> :
+            <List headers={['Plugin', 'Title', '']}
+              hasEntries={!!listSize}
+              items={this.state.filteredPlugins} mapItem={this.asPluginItem}/>
+            }
+        </div>
+
 
       </div>
     );
@@ -97,6 +112,11 @@ const PluginList = React.createClass({
 
 module.exports = PluginList;/*
 
+/*
+<ListFilter
+          searchFields={searchConfig}
+          searchPlaceholder={'searchPlaceholder'}
+          onSearchChange={this.onFetchFilterChange} />
 
 .compose(
   connect(pluginStore, 'onStoreChange')

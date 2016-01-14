@@ -1,9 +1,8 @@
 import React from 'react';
-import CSSTransitionGroup from 'react-addons-css-transition-group';
-import listColumnDefinition from './listColumnDefinition.jsx';
-import listFooter from './listFooter.jsx';
+import ColumnDefinition from './listColumnDefinition';
+import Footer from './listFooter';
 //import {emptyList} from './emptyList';
-var emptyList = require('./emptyList.jsx');
+import Empty from './emptyList';
 
 const { oneOfType, array, object, func, bool, string } = React.PropTypes;
 
@@ -48,16 +47,24 @@ const List = React.createClass({
     const { nodes, nothingFound } = this.mapper(items);
 
     return (
-      <CSSTransitionGroup transitionEnterTimeout={100} transitionLeaveTimeout={100} transitionName="list-item" component="ul">
-        <listColumnDefinition headers={headers} />
-        { nothingFound && <emptyList
+      <ul style={{
+         position: 'relative',
+         display: 'table',
+         borderCollapse: 'collapse',
+         width: '100%',
+         listStyleType: 'none',
+         margin: 0,
+         padding: 0,
+       }}>
+        <ColumnDefinition headers={headers} />
+        { nothingFound && <Empty
           noEntries={!hasEntries}
           emptyListText={emptyListText}
           noSearchResultText={noSearchResultText}
           /> }
         { !nothingFound && nodes }
-        { !nothingFound && <listFooter columns={headers.length} /> }
-      </CSSTransitionGroup>
+        { !nothingFound && <Footer columns={headers.length} /> }
+      </ul>
     );
   }
 });

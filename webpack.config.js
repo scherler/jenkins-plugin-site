@@ -43,6 +43,9 @@
 /* eslint-disable no-var */
 var webpack = require('webpack');
 var path = require('path');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+var stylusLoader = ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader");
 
 module.exports = {
   debug: true,
@@ -61,6 +64,7 @@ module.exports = {
     extensions: ['', '.js', '.jsx']
   },
   plugins: [
+    new ExtractTextPlugin("styles.css"),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],
@@ -70,6 +74,10 @@ module.exports = {
         test: /\.jsx?$/,
         loaders: ['babel'],
         include: path.join(__dirname, 'scripts')
+      },
+      {
+        test: /\.styl?$/,
+        loader: stylusLoader
       }
     ]
   }

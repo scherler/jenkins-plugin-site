@@ -1,21 +1,21 @@
-import React from 'react';
+import React, {Component} from 'react';
 import uuid from 'uuid';
 
-var ListFooter = React.createClass({
+export default class ListFooter extends Component {
 
-  propTypes: {
+  static propTypes = {
     columns: React.PropTypes.number
-  },
+  };
 
-  getDefaultProps: function() {
-    return { columns: 0 };
-  },
+  static defaultProps = {
+    columns: 0
+  };
 
-  getInitialState: function() {
-    return { keyId: uuid.v4() };
-  },
+  state ={
+    keyId: uuid.v4()
+  };
 
-  render: function() {
+  render() {
     var arr = [];
     for (var i = 0, len = this.props.columns; i < len; i++) {
       arr.push(' ');
@@ -31,6 +31,4 @@ var ListFooter = React.createClass({
       </li>
     );
   }
-});
-
-module.exports = ListFooter;
+};

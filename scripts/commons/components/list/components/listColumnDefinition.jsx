@@ -1,31 +1,28 @@
-import React from 'react';
+import React, {Component} from 'react';
 import uuid from 'uuid';
 
-var ListColumnDefinition = React.createClass({
-
-  propTypes: {
+export default class ListColumnDefinition extends Component {
+  static propTypes = {
     headers: React.PropTypes.array.isRequired
-  },
+  };
 
-  getDefaultProps: function() {
-    return { columns: 0 };
-  },
+  static defaultProps = {
+    columns: 0
+  };
 
-  getInitialState: function() {
-    return { keyId: uuid.v4() };
-  },
+  state = {
+    keyId: uuid.v4()
+  };
 
-  render: function() {
+  render() {
     return (
-      <li className='list-header'>
+      <li style={{display: 'table-row'}}>
         {
           this.props.headers.map(function(item, i) {
-            return <div key={this.state.keyId + '_' + i}>{item}</div>;
+            return <div style={{display: 'table-cell'}} key={this.state.keyId + '_' + i}>{item}</div>;
           }, this)
         }
       </li>
     );
   }
-});
-
-module.exports = ListColumnDefinition;
+};

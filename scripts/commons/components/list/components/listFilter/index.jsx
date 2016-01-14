@@ -1,5 +1,6 @@
 import React from 'react';
-import router from '../../../../router/router';
+//import router from '../../../../router/router';
+const router = require('../../../../router/router');
 import classNames from 'classnames';
 
 import { searchFilter as SearchFilter} from './searchFilter';

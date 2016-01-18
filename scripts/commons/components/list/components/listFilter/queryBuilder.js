@@ -5,7 +5,7 @@
  *
  * All query tokens must be found in any of the given attributes in the target object.
  */
-let buildSearchQuery = function (filterAttributes, filterString) {
+export function buildSearchQuery(filterAttributes, filterString) {
   if (!filterString || filterString.length === 0) {
     return {$and: []};
   }
@@ -41,7 +41,7 @@ let buildSearchQuery = function (filterAttributes, filterString) {
   }
 };
 
-let buildStateQuery = function (filters, filterState) {
+export function buildStateQuery(filters, filterState) {
   let stateFilterQuery = {
     $and: []
   };
@@ -89,9 +89,4 @@ let buildStateQuery = function (filters, filterState) {
     }
   }
   return stateFilterQuery;
-};
-
-module.exports = {
-  buildSearchQuery: buildSearchQuery,
-  buildStateQuery: buildStateQuery
 };

@@ -47,6 +47,17 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var stylusLoader = ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader");
 
+function getJenkinsBuildInformation() {
+  return {
+    timeStamp: new Date().toISOString(),
+    revision: process.env.GIT_COMMIT || 'HEAD',
+    branch: process.env.GIT_BRANCH || 'develop',
+    jenkinsTag: process.env.BUILD_TAG || 'local',
+    //jenkinsUrl: process.env.BUILD_URL || undefined,
+    version: require('./package.json').version
+  };
+}
+
 module.exports = {
   debug: true,
   devtool: 'source-map',
@@ -66,6 +77,13 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin("styles.css"),
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+    'process.env': JSON.stringify({
+      debug: true,
+      NODE_ENV: 'development',
+      buildRevisionInfo: getJenkinsBuildInformation()
+    })
+  }),
     new webpack.NoErrorsPlugin()
   ],
   module: {

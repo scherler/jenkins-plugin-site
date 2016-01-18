@@ -11,15 +11,17 @@ import list from '../../commons/components/list/components/list';*/
 //import { connect } from '../../commons/hoc';
 import Immutable from 'immutable';
 import React from 'react';
+import fetch from 'isomorphic-fetch';
 import PluginItem from './PluginsItem'
 import { utils } from '../../commons'
+import logger from '../../commons/utils/logger';
 //import pluginStore from '../stores/pluginStore';  ListFilter,
 
-const { List, ListSpinner: Spinner} = listComponent.components;
+const { ListFilter, List, ListSpinner: Spinner} = listComponent.components;
 const { env } = utils;
 
 // which fields do we want to search
-const searchConfig = ['name', 'title', 'excerpt'];
+const searchConfig = ['name', 'title'];
 
 if (env.isBrowser)
   require('../../commons/style/common.styl');
@@ -28,6 +30,7 @@ const PluginList = React.createClass({//FIXME refactor: dropping mixins and swit
   mixins: [listComponent.mixins.filter],
 
   getInitialState: function () {
+    logger.log('not implemented yet ');
     return {};
   },
 
@@ -50,6 +53,11 @@ const PluginList = React.createClass({//FIXME refactor: dropping mixins and swit
   componentDidMount: function () {
 
     let url = 'https://updates.jenkins-ci.org/current/update-center.json';
+    fetch(url)
+      .then(response => {
+        console.log("crash", response);
+        response.json()
+      });
     this.jsonp(url, data => {this.transformPlugins(data.plugins); });//HACK
     //this.setFetchStore(pluginStore, 'Plugins');
   },
@@ -95,7 +103,10 @@ const PluginList = React.createClass({//FIXME refactor: dropping mixins and swit
           Here we will use only one general component "List"
           and then use callbacks to render each item
         </div>
-
+        <ListFilter
+          searchFields={searchConfig}
+          searchPlaceholder={'searchPlaceholder'}
+          onSearchChange={this.onFetchFilterChange} />
         <div style={{paddingTop: '10px'}} className="list">
           {!this.state.plugins ? <Spinner /> :
             <List headers={['Plugin', 'Title', '']}

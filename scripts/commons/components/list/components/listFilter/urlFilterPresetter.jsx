@@ -17,7 +17,7 @@
  * @param urlParams
  * @returns {*}
  */
-function getSearchPreset(urlParams) {
+export function getSearchPreset(urlParams) {
   return urlParams.query ? urlParams.query : '';
 }
 
@@ -28,13 +28,13 @@ function getSearchPreset(urlParams) {
  * @param {String[]} valuesToPreset
  * @returns {boolean}
  */
-function isChoiceMatch(choice, valuesToPreset) {
+export function isChoiceMatch(choice, valuesToPreset) {
   return valuesToPreset.some(function (valueToPreset) {
     return (choice.label === valueToPreset || choice.id === valueToPreset);
   });
 }
 
-function presetFilters(filters, urlParams) {
+export function presetFilters(filters, urlParams) {
   let didPreset = false;
 
   let preFilters = filters.map(function (filterItem) {
@@ -76,10 +76,4 @@ function presetFilters(filters, urlParams) {
 
   preFilters.didPreset = didPreset;
   return preFilters;
-
 }
-
-module.exports = {
-  getSearchPreset: getSearchPreset,
-  presetFilters: presetFilters
-};

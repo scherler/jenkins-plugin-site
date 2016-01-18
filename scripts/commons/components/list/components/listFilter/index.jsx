@@ -1,12 +1,10 @@
 import React from 'react';
-//import router from '../../../../router/router';
-const router = require('../../../../router/router');
+import { parseQS } from '../../../../router/router';
 import classNames from 'classnames';
-
-import { searchFilter as SearchFilter} from './searchFilter';
-import  urlFilterPreselector from './urlFilterPresetter';
-import  {stateFilter as StateFilter} from './stateFilter';
-import  queryBuilder from './queryBuilder';
+import { default as SearchFilter } from './searchFilter';
+import  { presetFilters } from './urlFilterPresetter';
+import  { stateFilter as StateFilter } from './stateFilter';
+import  { buildStateQuery, buildSearchQuery } from './queryBuilder';
 import  env from '../../../../utils/env';
 import  PageTitle from '../../../../page/PageTitle';
 
@@ -41,7 +39,7 @@ var ListFilter = React.createClass({
 
   getInitialState: function () {
 
-    var presetResult = urlFilterPreselector.presetFilters(this.props.stateFilters, router.parseQS(window.location.search));
+    var presetResult = presetFilters(this.props.stateFilters, parseQS(window.location.search));
 
     return {
       searchToken: '',
@@ -69,7 +67,7 @@ var ListFilter = React.createClass({
   presetStateFilters: function(props) {
     // if not set stateFilters set them with preset by query - else just update the state
     //if (!this.state.stateFilters) {
-      var presetResult = urlFilterPreselector.presetFilters(props.stateFilters, router.parseQS(window.location.search));
+      var presetResult = presetFilters(props.stateFilters, parseQS(window.location.search));
 
       this.setState({
         stateFilters: presetResult,
@@ -104,8 +102,8 @@ var ListFilter = React.createClass({
 
   trigger: function () {
     var { searchToken, filterState, stateFilters } = this.state;
-    var searchQuery = queryBuilder.buildSearchQuery(this.props.searchFields, searchToken);
-    var stateQuery = queryBuilder.buildStateQuery(stateFilters, filterState);
+    var searchQuery = buildSearchQuery(this.props.searchFields, searchToken);
+    var stateQuery = buildStateQuery(stateFilters, filterState);
 
     var q = {};
     if (hasQuery(searchQuery) && hasQuery(stateQuery)) {

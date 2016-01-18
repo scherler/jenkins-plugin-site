@@ -6,7 +6,7 @@ var Immutable = require('immutable'),
 var FilterMixin = {
 
   componentDidMount: function() {
-    warning.deprecated('taibika-client/ui/list/mixins/filterMixin is deprecated, use filter hoc.');
+    warning.deprecated('commons/components/list/mixins/filterMixin is deprecated, use filter hoc.');
   },
 
   setListToFilter: function(name) {

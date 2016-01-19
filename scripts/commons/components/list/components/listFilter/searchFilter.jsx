@@ -46,7 +46,7 @@ export default class DefaultListFilter extends Component {
             if (wasOpen) this.refs.searchInput.blur();
             this.props.onToggle();
           }}>
-            <i className="kaba-icon-search" />
+            <i className="icon-search" />
             <span
               style={{textTransform: 'none'}}
               className="filter-label">

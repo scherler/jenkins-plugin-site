@@ -7,9 +7,11 @@
 import listComponent from '../../commons/components/list/index';
 import Immutable from 'immutable';
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux'
-import PluginItem from './PluginsItem'
-import { utils } from '../../commons'
+import { connect } from 'react-redux';
+import Filter from 'redux-filter';
+import PluginItem from './PluginsItem';
+import { utils } from '../../commons';
+import Filters from './pluginFilter'
 import logger from '../../commons/utils/logger';
 import { fetchPluginsIfNeeded } from '../actions';
 
@@ -17,13 +19,35 @@ import { fetchPluginsIfNeeded } from '../actions';
 const { ListFilter, List, ListSpinner: Spinner} = listComponent.components;
 const { env } = utils;
 
-// which fields do we want to search
-const searchConfig = ['name', 'title'];
-
 if (env.isBrowser)
   require('../../commons/style/common.styl');
 
+const config = {
+  // things that are filtered
+  // attributes that you filter.
+  // Component will return a unique list of attributes for each filterableCriteria
+  filterableCriteria: [
+      {
+          title: 'Filter By Practice Area',
+          attribute: 'practices'
+      },
+      {
+          title: 'Filter Alphabetically',
+          attribute: 'initial'
+      }
+  ],
+
+  // keys on each subject that will be searched on
+  searchKeys: ['title', 'name'],
+
+  // if you need to order the filterableCriteria output
+  filterableCriteriaSortOptions: {
+      tags: items => [...items].sort()
+  }
+};
+
 class PluginList extends Component {
+
   /*mixins: [listComponent.mixins.filter],//FIXME refactor: dropping mixins and swith to ES6
 
   componentWillMount: function () {
@@ -61,7 +85,10 @@ class PluginList extends Component {
 
   render () {
     const { isFetching, lastUpdated, plugins } = this.props
-    let listSize= plugins.size;
+    let
+      listSize = plugins.items.size,
+      subjects = plugins.items.toArray ? plugins.items.toArray(): [];
+
     console.log("crash", this.props);
     return (
       <div
@@ -80,18 +107,21 @@ class PluginList extends Component {
             </span>
           }
         </p>
-
+ <Filters {...this.props} />
         <ListFilter
-          searchFields={searchConfig}
+          searchFields={config.searchKeys}
           searchPlaceholder={'searchPlaceholder'}
           onSearchChange={this.onFetchFilterChange} />
-        <div style={{paddingTop: '10px'}} className="list">
-          {isFetching ? <Spinner /> :
-            <List headers={['Plugin', 'Title', '']}
-              hasEntries={!!listSize}
-              items={plugins.items} mapItem={this.asPluginItem}/>
-            }
-        </div>
+
+          <div style={{paddingTop: '10px'}} className="list">
+            {isFetching ? <Spinner /> :
+              <Filter {...config} subjects={subjects} >
+                <List headers={['Plugin', 'Title', '']}
+                hasEntries={!!listSize}
+                items={this.props.collection} mapItem={this.asPluginItem}/>
+              </Filter>
+              }
+          </div>
 
 
       </div>

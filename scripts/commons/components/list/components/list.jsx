@@ -9,7 +9,7 @@ const { oneOfType, array, object, func, bool, string } = React.PropTypes;
 const List = React.createClass({
 
   propTypes: {
-    items: oneOfType([ array, object ]).isRequired,
+    collection: oneOfType([ array, object ]).isRequired,
     hasEntries: bool.isRequired,
     headers: array.isRequired,
     mapItem: func.isRequired,
@@ -19,7 +19,7 @@ const List = React.createClass({
 
   getDefaultProps () {
     return {
-      items: [],
+      collection: [],
       headers: [],
       emptyListText: 'emptyListText',
       noSearchResultText: 'noSearchResultText',
@@ -38,13 +38,13 @@ const List = React.createClass({
 
   render () {
     const {
+      collection,
       hasEntries,
-      items,
       headers,
       emptyListText,
       noSearchResultText
     } = this.props;
-    const { nodes, nothingFound } = this.mapper(items);
+    const { nodes, nothingFound } = this.mapper(collection);
 
     return (
       <ul style={{

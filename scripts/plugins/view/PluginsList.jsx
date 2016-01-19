@@ -3,19 +3,16 @@
  * As soon CORS works uncomment the store code and
  * remove all lines marks as HACK
  */
-//import listComponent from '../../commons/components/list/index';
-const listComponent = require('../../commons/components/list/index');
-//import listComponent from '../../commons/components/list/index';
-/*import listSpinner from '../../commons/components/list/components/listSpinner';
-import list from '../../commons/components/list/components/list';*/
-//import { connect } from '../../commons/hoc';
+
+import listComponent from '../../commons/components/list/index';
 import Immutable from 'immutable';
-import React from 'react';
-import fetch from 'isomorphic-fetch';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux'
 import PluginItem from './PluginsItem'
 import { utils } from '../../commons'
 import logger from '../../commons/utils/logger';
-//import pluginStore from '../stores/pluginStore';  ListFilter,
+import { fetchPluginsIfNeeded } from '../actions';
+
 
 const { ListFilter, List, ListSpinner: Spinner} = listComponent.components;
 const { env } = utils;
@@ -26,14 +23,8 @@ const searchConfig = ['name', 'title'];
 if (env.isBrowser)
   require('../../commons/style/common.styl');
 
-const PluginList = React.createClass({//FIXME refactor: dropping mixins and swith to ES6
-  mixins: [listComponent.mixins.filter],
-
-  getInitialState: function () {
-    logger.log('not implemented yet ');
-    return {};
-  },
-
+class PluginList extends Component {
+  /*mixins: [listComponent.mixins.filter],//FIXME refactor: dropping mixins and swith to ES6
 
   componentWillMount: function () {
     this.setFilter(function (query) {
@@ -48,19 +39,13 @@ const PluginList = React.createClass({//FIXME refactor: dropping mixins and swit
     });
 
     this.setListToFilter('plugins');
-  },
+  },*/
 
-  componentDidMount: function () {
-
-    let url = 'https://updates.jenkins-ci.org/current/update-center.json';
-    fetch(url)
-      .then(response => {
-        console.log("crash", response);
-        response.json()
-      });
-    this.jsonp(url, data => {this.transformPlugins(data.plugins); });//HACK
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch(fetchPluginsIfNeeded());
     //this.setFetchStore(pluginStore, 'Plugins');
-  },
+  }
   /*
   onStoreChange() {
     this.setState(this.getInitialState());
@@ -68,50 +53,43 @@ const PluginList = React.createClass({//FIXME refactor: dropping mixins and swit
   },
 */
 
-  jsonp: function (url, callback) {// HACK
-    let callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-    window.updateCenter = {
-      post: function (data) {
-        callback(data);
-      }
-    };
-
-    let script = document.createElement('script');
-    script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
-    document.body.appendChild(script);
-  },
-
-  transformPlugins: function (plugins) {
-    this.setState({plugins: new Immutable.List(_.toArray(plugins))});
-    //this.setState({plugins: _.toArray(plugins)});
-    this.updateFilter();
-  },
-
-  asPluginItem: function (item) {
+  asPluginItem (item) {
     return (
       <PluginItem plugin={item} key={item.sha1}/>
     );
-  },
+  }
 
-  render: function () {
-    var listSize = this.state.plugins ? this.state.plugins.size : null;
+  render () {
+    const { isFetching, lastUpdated, plugins } = this.props
+    let listSize= plugins.size;
+    console.log("crash", this.props);
     return (
       <div
         style={{paddingTop: '10px'}}
         className="content content-list row">
         <div>
           Here we will use only one general component "List"
-          and then use callbacks to render each item
+          and then use callbacks to render each item.
+
         </div>
+        <p>
+          {lastUpdated &&
+            <span>
+              Last updated at {new Date(lastUpdated).toLocaleTimeString()}.
+              {' '}
+            </span>
+          }
+        </p>
+
         <ListFilter
           searchFields={searchConfig}
           searchPlaceholder={'searchPlaceholder'}
           onSearchChange={this.onFetchFilterChange} />
         <div style={{paddingTop: '10px'}} className="list">
-          {!this.state.plugins ? <Spinner /> :
+          {isFetching ? <Spinner /> :
             <List headers={['Plugin', 'Title', '']}
               hasEntries={!!listSize}
-              items={this.state.filteredPlugins} mapItem={this.asPluginItem}/>
+              items={plugins.items} mapItem={this.asPluginItem}/>
             }
         </div>
 
@@ -119,16 +97,33 @@ const PluginList = React.createClass({//FIXME refactor: dropping mixins and swit
       </div>
     );
   }
-});
+}
 
-module.exports = PluginList;/*
+PluginList.propTypes = {
+  plugins: PropTypes.object.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  lastUpdated: PropTypes.number,
+  dispatch: PropTypes.func.isRequired
+};
 
-/*
-<ListFilter
-          searchFields={searchConfig}
-          searchPlaceholder={'searchPlaceholder'}
-          onSearchChange={this.onFetchFilterChange} />
 
-.compose(
-  connect(pluginStore, 'onStoreChange')
-)(PluginList);*/
+function mapStateToProps(state) {
+  const { plugins} = state;
+  const {
+    isFetching,
+    lastUpdated,
+    items: items
+  } = plugins || {
+    isFetching: true,
+    items: []
+  };
+
+  return {
+    plugins,
+    isFetching,
+    lastUpdated
+  }
+}
+
+
+export default connect(mapStateToProps)(PluginList);

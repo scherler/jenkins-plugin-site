@@ -8,10 +8,8 @@ import listComponent from '../../commons/components/list/index';
 import Immutable from 'immutable';
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Filter from 'redux-filter';
 import PluginItem from './PluginsItem';
 import { utils } from '../../commons';
-import Filters from './pluginFilter'
 import logger from '../../commons/utils/logger';
 import { fetchPluginsIfNeeded } from '../actions';
 
@@ -23,27 +21,8 @@ if (env.isBrowser)
   require('../../commons/style/common.styl');
 
 const config = {
-  // things that are filtered
-  // attributes that you filter.
-  // Component will return a unique list of attributes for each filterableCriteria
-  filterableCriteria: [
-      {
-          title: 'Filter By Practice Area',
-          attribute: 'practices'
-      },
-      {
-          title: 'Filter Alphabetically',
-          attribute: 'initial'
-      }
-  ],
-
   // keys on each subject that will be searched on
   searchKeys: ['title', 'name'],
-
-  // if you need to order the filterableCriteria output
-  filterableCriteriaSortOptions: {
-      tags: items => [...items].sort()
-  }
 };
 
 class PluginList extends Component {
@@ -107,7 +86,6 @@ class PluginList extends Component {
             </span>
           }
         </p>
- <Filters {...this.props} />
         <ListFilter
           searchFields={config.searchKeys}
           searchPlaceholder={'searchPlaceholder'}
@@ -115,11 +93,9 @@ class PluginList extends Component {
 
           <div style={{paddingTop: '10px'}} className="list">
             {isFetching ? <Spinner /> :
-              <Filter {...config} subjects={subjects} >
                 <List headers={['Plugin', 'Title', '']}
                 hasEntries={!!listSize}
-                items={this.props.collection} mapItem={this.asPluginItem}/>
-              </Filter>
+                collection={plugins.items} mapItem={this.asPluginItem}/>
               }
           </div>
 

@@ -12,8 +12,9 @@ export default function Header () {
           title='Jenkins logo'
           src='https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
         />
-      <div className={styles.JenkinsText}>Jenkins Plugins</div>
-        <div className={styles.SearchText}>Search</div>
+        <div className={styles.JenkinsText}>Jenkins</div>
+        <div className={styles.SearchText}>Plugins</div>
+        <div className={styles.JenkinsText}>Search</div>
         <img
             title='Redux Search logo'
             width={50}

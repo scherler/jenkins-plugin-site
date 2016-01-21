@@ -22,7 +22,8 @@ export const ACTION_TYPES = keymirror({
 const Record = Immutable.Record({
   id: null,
   name: null,
-  title: null
+  title: null,
+  excerpt: null
 })
 
 const PLUGINS_URL = 'https://updates.jenkins-ci.org/current/update-center.json';

@@ -1,23 +1,24 @@
 import _ from 'lodash';
 import Immutable from 'immutable';
-import { createSelector } from 'reselect';
-import { createSearchAction, getSearchSelectors } from 'redux-search';
 import keymirror from 'keymirror';
 
-export const REQUEST_PLUGINS = 'REQUEST_PLUGINS';
-export const RECEIVE_PLUGINS = 'RECEIVE_PLUGINS';
+export const ACTION_TYPES = keymirror({
+  CLEAR_DATA: null,
+  RECEIVE_PLUGINS: null,
+  REQUEST_PLUGINS: null
+})
 
-const PLUGINS_URL = 'https://updates.jenkins-ci.org/current/update-center.json';
+export const PLUGINS_URL = 'https://updates.jenkins-ci.org/current/update-center.json';
 
 function requestPlugins() {
   return {
-    type: REQUEST_PLUGINS
+    type: ACTION_TYPES.REQUEST_PLUGINS
   };
 }
 
 function receivePlugins(plugins) {
   return {
-    type: RECEIVE_PLUGINS,
+    type: ACTION_TYPES.RECEIVE_PLUGINS,
     plugins: new Immutable.List(_.toArray(plugins)),
     receivedAt: Date.now()
   };

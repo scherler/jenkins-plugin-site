@@ -1,0 +1,128 @@
+/**
+ * Duck for resources that happen to be searchable.
+ * @flow
+ */
+import { createSelector } from 'reselect'
+import { createSearchAction, getSearchSelectors } from 'redux-search'
+import faker from 'faker'
+import Immutable from 'immutable'
+import keymirror from 'keymirror'
+import _ from 'lodash'
+
+export const State = Immutable.Record({
+  map: Immutable.OrderedMap(),
+  immutableMap: Immutable.OrderedMap()
+})
+
+export const ACTION_TYPES = keymirror({
+  CLEAR_DATA: null,
+  CLEAR_IMMUTABLE_DATA: null,
+  SET_DATA: null,
+  SET_IMMUTABLE_DATA: null
+})
+
+// Immutable Data attributes must be accessible as getters
+const Record = Immutable.Record({
+  id: null,
+  name: null,
+  title: null
+})
+
+const PLUGINS_URL = 'https://updates.jenkins-ci.org/current/update-center.json';
+
+export function jsonp(url, callback) {// HACK
+  let callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+  window.updateCenter = {
+    post: function (data) {
+      callback(data);
+    }
+  };
+  let script = document.createElement('script');
+  script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
+  document.body.appendChild(script);
+}
+
+export const actions = {
+  clearData: () => ({ type: ACTION_TYPES.CLEAR_DATA }),
+  clearImmutableData: () => ({ type: ACTION_TYPES.CLEAR_IMMUTABLE_DATA }),
+
+  generateData () {
+    return (dispatch, getState) => {
+      dispatch(actions.clearData())
+      const data = {}
+      for (var i = 0; i < 1000; i++) {
+        let id = faker.random.uuid()
+        data[id] = {
+          id: id,
+          name: faker.name.findName(),
+          title: faker.name.title()
+        }
+      }
+      dispatch({
+        type: ACTION_TYPES.SET_DATA,
+        payload: data
+      })
+    }
+  },
+
+  generateImmutableData () {
+    return (dispatch, getState) => {
+      dispatch(actions.clearImmutableData())
+      const immutableMap = {}
+      return jsonp(PLUGINS_URL, data => {
+        Object.keys(data.plugins).forEach(function(key) {
+            console.log(key);
+        });
+        _.forEach(data.plugins, (item) => {
+          console.log('xxxx')
+          _.set(item, 'id', item.sha1);
+          immutableMap[item.id] = new Record(item);
+        });
+        dispatch({
+          type: ACTION_TYPES.SET_IMMUTABLE_DATA,
+          payload: Immutable.Map(immutableMap)
+        })
+      });
+    }
+  },
+
+  searchData: createSearchAction('map'),
+  searchImmutableData: createSearchAction('immutableMap')
+}
+
+export const actionHandlers = {
+  [ACTION_TYPES.CLEAR_DATA] (state) {
+    return state.set('map', {})
+  },
+  [ACTION_TYPES.CLEAR_IMMUTABLE_DATA] (state) {
+    return state.set('immutableMap', Immutable.Map())
+  },
+  [ACTION_TYPES.SET_DATA] (state, { payload }): State {
+    return state.set('map', payload)
+  },
+  [ACTION_TYPES.SET_IMMUTABLE_DATA] (state, { payload }): State {
+    return state.set('immutableMap', payload)
+  }
+}
+
+export const resources = state => state.resources
+export const resourceSelector = (resourceName, state) => state.resources.get(resourceName)
+export const map = createSelector([resources], resources => resources.map)
+export const immutableMap = createSelector([resources], resources => resources.immutableMap)
+
+const selectors = getSearchSelectors({ resourceName: 'map', resourceSelector })
+export const dataSearchText = selectors.text
+export const filteredIdArray = selectors.result
+
+const immutableSelectors = getSearchSelectors({ resourceName: 'immutableMap', resourceSelector })
+export const immutableDataSearchText = immutableSelectors.text
+export const filteredIdList = createSelector([immutableSelectors.result], result => Immutable.List(result))
+
+export function reducer (state = new State(), action: Object): State {
+  const { type } = action
+  if (type in actionHandlers) {
+    return actionHandlers[type](state, action)
+  } else {
+    return state
+  }
+}

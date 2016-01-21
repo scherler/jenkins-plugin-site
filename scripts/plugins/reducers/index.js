@@ -1,9 +1,8 @@
-import { combineReducers } from 'redux'
 import {
   REQUEST_PLUGINS, RECEIVE_PLUGINS
 } from '../actions'
 
-function plugins(state = {
+export default function plugins(state = {
   isFetching: false,
   didInvalidate: false,
   items: []
@@ -25,9 +24,3 @@ function plugins(state = {
       return state;
   }
 }
-
-const rootReducer = combineReducers({
-  plugins
-})
-
-export default rootReducer

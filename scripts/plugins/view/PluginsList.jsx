@@ -7,12 +7,16 @@
 import listComponent from '../../commons/components/list/index';
 import Immutable from 'immutable';
 import React, { Component, PropTypes } from 'react';
+import Highlighter from 'react-highlight-words'
 import { connect } from 'react-redux';
+import Widget from '../Widget';
 import PluginItem from './PluginsItem';
 import { utils } from '../../commons';
 import logger from '../../commons/utils/logger';
 import { fetchPluginsIfNeeded } from '../actions';
-
+import { createSelector } from 'reselect'
+import { createSearchAction, getSearchSelectors } from 'redux-search'
+import keymirror from 'keymirror'
 
 const { ListFilter, List, ListSpinner: Spinner} = listComponent.components;
 const { env } = utils;
@@ -24,6 +28,15 @@ const config = {
   // keys on each subject that will be searched on
   searchKeys: ['title', 'name'],
 };
+
+
+const resources = state => state.resources
+const resourceSelector = (resourceName, state) => state.resources.get(resourceName)
+const plugins = createSelector([resources], resources => resources.plugins)
+
+const searchSelectors = getSearchSelectors({ resourceName: 'plugins', resourceSelector })
+const dataSearchText = searchSelectors.text
+const filteredIdArray = searchSelectors.result
 
 class PluginList extends Component {
 
@@ -47,14 +60,7 @@ class PluginList extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(fetchPluginsIfNeeded());
-    //this.setFetchStore(pluginStore, 'Plugins');
   }
-  /*
-  onStoreChange() {
-    this.setState(this.getInitialState());
-    this.updateFilter();
-  },
-*/
 
   asPluginItem (item) {
     return (
@@ -63,7 +69,7 @@ class PluginList extends Component {
   }
 
   render () {
-    const { isFetching, lastUpdated, plugins } = this.props
+    const { isFetching, lastUpdated, plugins, search } = this.props
     let
       listSize = plugins.items.size,
       subjects = plugins.items.toArray ? plugins.items.toArray(): [];
@@ -107,6 +113,7 @@ class PluginList extends Component {
 
 PluginList.propTypes = {
   plugins: PropTypes.object.isRequired,
+  search: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
   lastUpdated: PropTypes.number,
   dispatch: PropTypes.func.isRequired
@@ -114,7 +121,7 @@ PluginList.propTypes = {
 
 
 function mapStateToProps(state) {
-  const { plugins} = state;
+  const { plugins, search } = state;
   const {
     isFetching,
     lastUpdated,
@@ -125,11 +132,11 @@ function mapStateToProps(state) {
   };
 
   return {
+    search,
     plugins,
     isFetching,
     lastUpdated
   }
 }
-
 
 export default connect(mapStateToProps)(PluginList);

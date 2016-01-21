@@ -10,15 +10,12 @@ import keymirror from 'keymirror'
 import _ from 'lodash'
 
 export const State = Immutable.Record({
-  map: Immutable.OrderedMap(),
-  immutableMap: Immutable.OrderedMap()
+  plugins: Immutable.OrderedMap()
 })
 
 export const ACTION_TYPES = keymirror({
-  CLEAR_DATA: null,
-  CLEAR_IMMUTABLE_DATA: null,
-  SET_DATA: null,
-  SET_IMMUTABLE_DATA: null
+  CLEAR_PLUGIN_DATA: null,
+  SET_PLUGIN_DATA: null
 })
 
 // Immutable Data attributes must be accessible as getters
@@ -43,80 +40,43 @@ export function jsonp(url, callback) {// HACK
 }
 
 export const actions = {
-  clearData: () => ({ type: ACTION_TYPES.CLEAR_DATA }),
-  clearImmutableData: () => ({ type: ACTION_TYPES.CLEAR_IMMUTABLE_DATA }),
+  clearPluginData: () => ({ type: ACTION_TYPES.CLEAR_PLUGIN_DATA }),
 
-  generateData () {
+  generatePluginData () {
     return (dispatch, getState) => {
-      dispatch(actions.clearData())
-      const data = {}
-      for (var i = 0; i < 1000; i++) {
-        let id = faker.random.uuid()
-        data[id] = {
-          id: id,
-          name: faker.name.findName(),
-          title: faker.name.title()
-        }
-      }
-      dispatch({
-        type: ACTION_TYPES.SET_DATA,
-        payload: data
-      })
-    }
-  },
-
-  generateImmutableData () {
-    return (dispatch, getState) => {
-      dispatch(actions.clearImmutableData())
-      const immutableMap = {}
+      dispatch(actions.clearPluginData())
+      const plugins = {}
       return jsonp(PLUGINS_URL, data => {
-        Object.keys(data.plugins).forEach(function(key) {
-            console.log(key);
-        });
         _.forEach(data.plugins, (item) => {
-          console.log('xxxx')
           _.set(item, 'id', item.sha1);
-          immutableMap[item.id] = new Record(item);
+          plugins[item.id] = new Record(item);
         });
         dispatch({
-          type: ACTION_TYPES.SET_IMMUTABLE_DATA,
-          payload: Immutable.Map(immutableMap)
+          type: ACTION_TYPES.SET_PLUGIN_DATA,
+          payload: Immutable.Map(plugins)
         })
       });
     }
   },
-
-  searchData: createSearchAction('map'),
-  searchImmutableData: createSearchAction('immutableMap')
+  searchPluginData: createSearchAction('plugins')
 }
 
 export const actionHandlers = {
-  [ACTION_TYPES.CLEAR_DATA] (state) {
-    return state.set('map', {})
+  [ACTION_TYPES.CLEAR_PLUGIN_DATA] (state) {
+    return state.set('plugins', Immutable.Map())
   },
-  [ACTION_TYPES.CLEAR_IMMUTABLE_DATA] (state) {
-    return state.set('immutableMap', Immutable.Map())
-  },
-  [ACTION_TYPES.SET_DATA] (state, { payload }): State {
-    return state.set('map', payload)
-  },
-  [ACTION_TYPES.SET_IMMUTABLE_DATA] (state, { payload }): State {
-    return state.set('immutableMap', payload)
+  [ACTION_TYPES.SET_PLUGIN_DATA] (state, { payload }): State {
+    return state.set('plugins', payload)
   }
 }
 
 export const resources = state => state.resources
 export const resourceSelector = (resourceName, state) => state.resources.get(resourceName)
-export const map = createSelector([resources], resources => resources.map)
-export const immutableMap = createSelector([resources], resources => resources.immutableMap)
+export const plugins = createSelector([resources], resources => resources.plugins)
 
-const selectors = getSearchSelectors({ resourceName: 'map', resourceSelector })
-export const dataSearchText = selectors.text
-export const filteredIdArray = selectors.result
-
-const immutableSelectors = getSearchSelectors({ resourceName: 'immutableMap', resourceSelector })
-export const immutableDataSearchText = immutableSelectors.text
-export const filteredIdList = createSelector([immutableSelectors.result], result => Immutable.List(result))
+const pluginSelectors = getSearchSelectors({ resourceName: 'plugins', resourceSelector })
+export const searchText = pluginSelectors.text
+export const filteredList = createSelector([pluginSelectors.result], result => Immutable.List(result))
 
 export function reducer (state = new State(), action: Object): State {
   const { type } = action

@@ -9,8 +9,7 @@ export default function createAppStore (): Object {
     applyMiddleware(thunk),
     reduxSearch({
       resourceIndexes: {
-        map: ['name', 'title'],
-        immutableMap: ['name', 'title']
+        plugins: ['name', 'title']
       },
       resourceSelector: (resourceName, state) => {
         return state.resources.get(resourceName)

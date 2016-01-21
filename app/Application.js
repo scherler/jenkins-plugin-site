@@ -1,5 +1,5 @@
 /** @flow */
-import { actions, dataSearchText, filteredIdArray, filteredIdList, immutableDataSearchText, immutableMap, map } from './resources'
+import { actions, searchText, filteredList, plugins } from './resources'
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
 import { Card, CardWrapper } from './components/Card'
@@ -12,39 +12,20 @@ import Highlighter from 'react-highlight-words'
 import styles from './Application.css'
 
 Application.propTypes = {
-  dataSearchText: PropTypes.string.isRequired,
-  generateData: PropTypes.func.isRequired,
-  generateImmutableData: PropTypes.func.isRequired,
-  filteredIdArray: PropTypes.array.isRequired,
-  filteredIdList: PropTypes.instanceOf(Immutable.List).isRequired,
-  immutableDataSearchText: PropTypes.string.isRequired,
-  immutableMap: PropTypes.any.isRequired,
-  map: PropTypes.object.isRequired,
-  searchData: PropTypes.func.isRequired,
-  searchImmutableData: PropTypes.func.isRequired
+  searchText: PropTypes.string.isRequired,
+  generatePluginData: PropTypes.func.isRequired,
+  filteredList: PropTypes.instanceOf(Immutable.List).isRequired,
+  searchText: PropTypes.string.isRequired,
+  plugins: PropTypes.any.isRequired,
+  searchPluginData: PropTypes.func.isRequired
 }
 export default function Application ({
-  dataSearchText,
-  generateData,
-  generateImmutableData,
-  filteredIdArray,
-  filteredIdList,
-  immutableDataSearchText,
-  immutableMap,
-  map,
-  searchData,
-  searchImmutableData
+  generatePluginData,
+  filteredList,
+  searchText,
+  plugins,
+  searchPluginData
 }) {
-  console.log("crash", dataSearchText,
-  generateData,
-  generateImmutableData,
-  filteredIdArray,
-  filteredIdList,
-  immutableDataSearchText,
-  immutableMap,
-  map,
-  searchData,
-  searchImmutableData);
   return (
     <div>
       <Header/>
@@ -59,12 +40,12 @@ export default function Application ({
       <CardWrapper>
         <Card>
           <Widget
-            generateData={generateImmutableData}
-            recordIds={filteredIdList}
-            recordsMap={immutableMap}
+            generateData={generatePluginData}
+            recordIds={filteredList}
+            recordsMap={plugins}
             rowRenderer={
               index => {
-                const plugin = immutableMap.get(filteredIdList.get(index))
+                const plugin = plugins.get(filteredList.get(index))
                 return (
                   <div
                     key={index}
@@ -72,14 +53,14 @@ export default function Application ({
                   >
                     <Highlighter
                       highlightClassName={styles.Highlight}
-                      searchWords={immutableDataSearchText.split(/\s+/)}
+                      searchWords={searchText.split(/\s+/)}
                       textToHighlight={`${plugin.name}, ${plugin.title}`}
                     />
                   </div>
                 )
               }
             }
-            searchData={searchImmutableData}
+            searchData={searchPluginData}
             title={'List of Plugins'}
           />
         </Card>
@@ -90,14 +71,11 @@ export default function Application ({
 }
 
 const selectors = createSelector(
-  [dataSearchText, filteredIdArray, filteredIdList, immutableDataSearchText, immutableMap, map],
-  (dataSearchText, filteredIdArray, filteredIdList, immutableDataSearchText, immutableMap, map) => ({
-    dataSearchText,
-    filteredIdArray,
-    filteredIdList,
-    immutableDataSearchText,
-    immutableMap,
-    map
+  [filteredList, searchText, plugins],
+  (filteredList, searchText, plugins) => ({
+    filteredList,
+    searchText,
+    plugins
   })
 )
 

@@ -32,51 +32,6 @@ export default function Application ({
         generateData={generatePluginData}
         recordIds={filteredList}
         recordsMap={plugins}
-        rowRenderer={
-          index => {
-            const plugin = plugins.get(filteredList.get(index))
-            return (
-
-              <div
-                key={index}
-                className={styles.Row}
-              >
-                <a href={plugin.wiki} className={styles.Tile}>
-                  <div className={styles.Icon}>
-                    {plugin.iconDom}
-                  </div>
-
-                  <div className={styles.Score}>
-                    <span className={getScoreClassName()}></span>
-                  </div>
-                  <div className={styles.Title}>
-                    <h4>{cleanTitle(plugin.title)}</h4>
-                  </div>
-                  <div className={styles.Version}>
-                    <span className={styles.v}>{plugin.version}</span>
-                    <span className="jc">
-                      <span className="j">Jenkins</span>
-                      <span className="c">{plugin.requiredCore}+</span>
-                      </span>
-                  </div>
-
-                  <div className={styles.Wiki}>
-                    {plugin.wiki}
-                  </div>
-
-                  <div className={styles.Excerpt}>
-                    {plugin.excerpt}
-                  </div>
-
-                  <div className={styles.Authors}>
-                    {getMaintainers(plugin.developers,index)}
-                  </div>
-
-                </a>
-              </div>
-            )
-          }
-        }
         searchData={searchPluginData}
         title={'List of Plugins'}
       />

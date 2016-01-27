@@ -46,7 +46,7 @@ const Record = Immutable.Record({
   developers: [],
   labels: [],
   dependencies: []
-})
+});
 
 //const PLUGINS_URL = 'https://updates.jenkins-ci.org/current/update-center.json';
 const PLUGINS_URL = 'http://0.0.0.0:1337/';

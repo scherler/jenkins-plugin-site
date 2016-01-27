@@ -11,7 +11,6 @@ Widget.propTypes = {
   generateData: PropTypes.func.isRequired,
   recordIds: PropTypes.any.isRequired,
   recordsMap: PropTypes.any.isRequired,
-  rowRenderer: PropTypes.any.isRequired,
   searchData: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired
 }

@@ -76,13 +76,13 @@ export const actions = {
     const colors = ['#6D6B6D','#DCD9D8','#D33833','#335061','#81B0C4','#709aaa','#000'];
     const color = colors[Math.floor(Math.random() * (colors.length - 1))];
     const iconClass='i '+ type + ' color' + color;
-    
+
     const firstLetter = title.substring(0,1).toUpperCase();
     const firstSpace = title.indexOf(' ') + 1;
     const nextIndx = (firstSpace === 0)?
-        1: firstSpace; 
+        1: firstSpace;
     const nextLetter = title.substring(nextIndx,nextIndx + 1);
-    
+
     return (
       <i className={iconClass} style={{background:color}}>
         <span className="first">{firstLetter}</span>
@@ -90,8 +90,8 @@ export const actions = {
       </i>
     );
   },
-    
-    
+
+
   clearPluginData: () => ({ type: ACTION_TYPES.CLEAR_PLUGIN_DATA }),
 
   generatePluginData () {
@@ -100,7 +100,6 @@ export const actions = {
       const plugins = {}
       return jsonp(PLUGINS_URL, data => {
         _.forEach(data.plugins, (item) => {
-          console.log(item);
           _.set(item, 'id', item.sha1);
           _.set(item, 'iconDom', actions.makeIcon(item.title));
           plugins[item.id] = new Record(item);

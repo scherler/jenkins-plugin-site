@@ -1,8 +1,11 @@
 /** @flow */
 import Immutable from 'immutable'
+import Entry from './Entry'
 import styles from './Widget.css'
 import React, { PropTypes } from 'react'
+import {cleanTitle, getMaintainers, getScoreClassName} from '../../helper'
 import { VirtualScroll } from 'react-virtualized'
+import classNames from 'classnames'
 
 Widget.propTypes = {
   generateData: PropTypes.func.isRequired,
@@ -26,10 +29,10 @@ export default function Widget ({
   const filteredSize = recordIds instanceof Immutable.Collection
     ? recordIds.size
     : recordIds.length
-    
+
   return (
     <div>
-      
+
         {totalSize > 0 &&
           <small className={styles.ResultsSummary}>
             {filteredSize} of {totalSize}
@@ -44,29 +47,12 @@ export default function Widget ({
           placeholder='Search..'
         />
       </div>
-      <div onClick={
-          function(){
-            document.getElementById('plugin-spinner').className = "spinner"
-            generateData()
-          }
-        }>
-      
-      <VirtualScroll
-        className={styles.VirtualScroll + ' grid-box'}
-        height={600}
-        rowHeight={20}
-        noRowsRenderer={() => (
-          <div className={styles.noRows}>
-            <div id="plugin-spinner">
-              Click to load
-              <div className="double-bounce1"></div>
-              <div className="double-bounce2"></div>
-            </div>
-          </div>
-        )}
-        rowsCount={filteredSize}
-        rowRenderer={rowRenderer}
-      /></div>
+      <button onClick={()=>  generateData()}>getPlugins</button>
+      <div className={styles.VirtualScroll, 'grid-box'} >
+        {totalSize > 0 && recordsMap.valueSeq().map(plugin => {
+          return <Entry key={plugin.id} plugin={plugin} />
+        })}
+      </div>
     </div>
-  )
+    )
 }

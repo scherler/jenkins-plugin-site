@@ -26,34 +26,7 @@ export default function Application ({
   plugins,
   searchPluginData
 }) {
-  
-  //FIXME: This isn't the best way to do this, but plugins currently have a lot of repetitive goop in their titles.
-  // plugins leading with 'Jenkins' is particularly bad because then sorting on the name lumps a bunch of plugins toggether incorrectly.
-  // but even 'plugin' at the end of the string is just junk. All of these are plugins.
-  function cleanTitle(title){
-    return title.replace('Jenkins ','').replace(' Plugin','').replace(' plugin','').replace(' Plug-in','');
-  }
-  
-  function getScoreClassName(score){
-    score = score || '4'
-    return 'i scr_' + score;
-  }
-  function getMaintainers(devs,itemIndex){
-    var maintainers = [];
-    if(devs){
-      for(var i = 0; i < devs.length; i++){
-        var devIndex = itemIndex + '_' + i;
-        var dev = devs[i].name || devs[i].developerId; 
-        maintainers.push(
-            <div key={devIndex}>{dev}</div>
-        );
-      }
-    }
-    return maintainers;
-  }
-  
-  
-  
+
   return (
       <Widget
         generateData={generatePluginData}
@@ -63,7 +36,7 @@ export default function Application ({
           index => {
             const plugin = plugins.get(filteredList.get(index))
             return (
-                
+
               <div
                 key={index}
                 className={styles.Row}
@@ -72,7 +45,7 @@ export default function Application ({
                   <div className={styles.Icon}>
                     {plugin.iconDom}
                   </div>
-                  
+
                   <div className={styles.Score}>
                     <span className={getScoreClassName()}></span>
                   </div>
@@ -82,23 +55,23 @@ export default function Application ({
                   <div className={styles.Version}>
                     <span className={styles.v}>{plugin.version}</span>
                     <span className="jc">
-                      <span className="j">Jenkins</span> 
+                      <span className="j">Jenkins</span>
                       <span className="c">{plugin.requiredCore}+</span>
                       </span>
                   </div>
-                  
+
                   <div className={styles.Wiki}>
                     {plugin.wiki}
                   </div>
-                  
+
                   <div className={styles.Excerpt}>
                     {plugin.excerpt}
                   </div>
-                  
+
                   <div className={styles.Authors}>
                     {getMaintainers(plugin.developers,index)}
                   </div>
-                  
+
                 </a>
               </div>
             )

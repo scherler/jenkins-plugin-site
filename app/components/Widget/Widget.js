@@ -48,9 +48,9 @@ export default function Widget ({
         />
       </div>
       <button onClick={()=>  generateData()}>getPlugins</button>
-      <div className={styles.VirtualScroll, 'grid-box'} >
-        {totalSize > 0 && recordsMap.valueSeq().map(plugin => {
-          return <Entry key={plugin.id} plugin={plugin} />
+      <div className={classNames(styles.VirtualScroll, 'grid-box')} >
+        {totalSize > 0 && recordIds.valueSeq().map(id => {
+          return <Entry key={recordsMap.get(id).id} plugin={recordsMap.get(id)} />
         })}
       </div>
     </div>

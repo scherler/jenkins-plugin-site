@@ -26,24 +26,17 @@ export default function Widget ({
   const filteredSize = recordIds instanceof Immutable.Collection
     ? recordIds.size
     : recordIds.length
-
+    
   return (
     <div>
-      <h2 className={styles.Title}>
-        {title}
+      
         {totalSize > 0 &&
           <small className={styles.ResultsSummary}>
             {filteredSize} of {totalSize}
           </small>
         }
-      </h2>
       <div className={styles.ControlBar}>
-        <button
-          className={styles.Button}
-          onClick={generateData}
-        >
-          Fetch Plugins
-        </button>
+
         <input
           disabled={recordsMap.size === 0}
           className={styles.SearchInput}
@@ -51,19 +44,29 @@ export default function Widget ({
           placeholder='Search..'
         />
       </div>
+      <div onClick={
+          function(){
+            document.getElementById('plugin-spinner').className = "spinner"
+            generateData()
+          }
+        }>
+      
       <VirtualScroll
-        className={styles.VirtualScroll}
-        width={300}
-        height={200}
+        className={styles.VirtualScroll + ' grid-box'}
+        height={600}
+        rowHeight={20}
         noRowsRenderer={() => (
           <div className={styles.noRows}>
-            {totalSize > 0 ? 'No results' : 'Generate data'}
+            <div id="plugin-spinner">
+              Click to load
+              <div className="double-bounce1"></div>
+              <div className="double-bounce2"></div>
+            </div>
           </div>
         )}
         rowsCount={filteredSize}
-        rowHeight={25}
         rowRenderer={rowRenderer}
-      />
+      /></div>
     </div>
   )
 }

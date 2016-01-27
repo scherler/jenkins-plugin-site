@@ -7,8 +7,12 @@ CardWrapper.propTypes = {
 }
 export default function CardWrapper ({ children }) {
   return (
-    <div className={styles.CardWrapper}>
-      {children}
+    <div className="container">
+      <div className="row">
+        <div className="col-md-12">
+          {children}
+        </div>
+      </div>
     </div>
   )
 }

@@ -7,7 +7,7 @@ Card.propTypes = {
 }
 export default function Card ({ children }) {
   return (
-    <div className={styles.Card}>
+    <div className={styles.Box}>
       {children}
     </div>
   )

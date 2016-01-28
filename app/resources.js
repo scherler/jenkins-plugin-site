@@ -1,7 +1,3 @@
-/**
- * Duck for resources that happen to be searchable.
- * @flow
- */
 import { createSelector } from 'reselect'
 import { createSearchAction, getSearchSelectors } from 'redux-search'
 import faker from 'faker'
@@ -40,17 +36,17 @@ const Record = Immutable.Record({
   id: null,
   name: null,
   title: '',
-  buildDate:null,
-  releaseTimestamp:null,
-  version:null,
-  wiki:'',
+  buildDate: null,
+  releaseTimestamp: null,
+  version: null,
+  wiki: '',
   excerpt: '',
-  iconDom:null,
-  requiredCore:null,
-  developers:[],
-  labels:[],
-  dependencies:[]
-})
+  iconDom: null,
+  requiredCore: null,
+  developers: [],
+  labels: [],
+  dependencies: []
+});
 
 //const PLUGINS_URL = 'https://updates.jenkins-ci.org/current/update-center.json';
 const PLUGINS_URL = 'http://0.0.0.0:1337/';
@@ -90,7 +86,6 @@ export const actions = {
       </i>
     );
   },
-
 
   clearPluginData: () => ({ type: ACTION_TYPES.CLEAR_PLUGIN_DATA }),
 

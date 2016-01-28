@@ -38,8 +38,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      inject: true,
-      template: './' + entryDirectory + '/index.html'
+      inject: true
     }),
     new webpack.DefinePlugin({
     'process.env': JSON.stringify({

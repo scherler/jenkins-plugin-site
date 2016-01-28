@@ -11,9 +11,17 @@ export function getMaintainers(devs,itemIndex){
     for(var i = 0; i < devs.length; i++){
       var devIndex = itemIndex + '_' + i;
       var dev = devs[i].name || devs[i].developerId;
-      maintainers.push(
+      if( i>1 && i+1 < devs.length ){
+        maintainers.push(
+          <div key={devIndex}>({devs.length - 2} other contributers)</div>
+        );
+        i = devs.length;
+      }
+      else{
+        maintainers.push(
           <div key={devIndex}>{dev}</div>
-      );
+        );
+      }
     }
   }
   return maintainers;

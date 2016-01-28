@@ -11,8 +11,9 @@ export default function Entry ({plugin}) {
   return (
     <div
         key={plugin.get('sha1')}
-        className={styles.Row}
+        className={styles.Item}
       >
+        
         <a href={plugin.get('wiki')} className={styles.Tile}>
           <div className={styles.Icon}>
             {plugin.get('iconDom')}

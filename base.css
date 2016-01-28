@@ -203,3 +203,19 @@ spinner .double-bounce1, .spinner .double-bounce2 {
 .list > .item > .Tile > .Authors > div {display:inline-block  }
 #ji-toolbar form {margin:0}
 #ji-toolbar.navbar-dark .navbar-nav .nav-item.active a{color:#fff}
+
+.jumbotron.plugins {
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#81b0c4+0,335061+100 */
+background: #81b0c4; /* Old browsers */
+background: -moz-linear-gradient(left,  #81b0c4 0%, #335061 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(left,  #81b0c4 0%,#335061 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to right,  #81b0c4 0%,#335061 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#81b0c4', endColorstr='#335061',GradientType=1 ); /* IE6-9 */
+  border-radius:0;
+  color:#fff}
+.overview {padding-top:1.5rem}
+.overview p {font-size:1.1rem}
+
+body .btn-primary {background:#55aacc; border-color:#81B0C4}
+body .btn-primary:hover{background:#335061; border-color:#88C5CC}
+nav .nav-item.active {box-shadow:inset #D33833 0 -2px}

@@ -1,13 +1,10 @@
-
-/* eslint-disable no-var */
-var webpack = require('webpack');
-var path = require('path');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpack = require('webpack');
+const path = require('path');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-require('react-transform-catch-errors');
-require('redbox-react');
+const poly = require ('babel-polyfill');
 
-var stylusLoader = ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader");
+const stylusLoader = ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader");
 
 function getJenkinsBuildInformation() {
   return {
@@ -15,7 +12,7 @@ function getJenkinsBuildInformation() {
     revision: process.env.GIT_COMMIT || 'HEAD',
     branch: process.env.GIT_BRANCH || 'develop',
     jenkinsTag: process.env.BUILD_TAG || 'local',
-    //jenkinsUrl: process.env.BUILD_URL || undefined,
+    jenkinsUrl: process.env.BUILD_URL || undefined,
     version: require('./package.json').version
   };
 }
@@ -24,9 +21,15 @@ const entryDirectory = 'app';
 
 module.exports = {
   debug: true,
+  devServer: {
+    contentBase: 'build',
+    port: 5000
+  },
   devtool: 'source-map',
   entry: [
-    'babel/polyfill',
+    'webpack-dev-server/client?http://localhost:5000',
+    'webpack/hot/dev-server',
+    'babel-polyfill',
     './' + entryDirectory + '/index'
   ],
   output: {
@@ -38,17 +41,19 @@ module.exports = {
     extensions: ['', '.js', '.jsx']
   },
   plugins: [
+    new ExtractTextPlugin("styles.css"),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify({
+        debug: true,
+        NODE_ENV: 'development',
+        buildRevisionInfo: getJenkinsBuildInformation()
+      })
+    }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       inject: true
     }),
-    new webpack.DefinePlugin({
-    'process.env': JSON.stringify({
-      debug: true,
-      NODE_ENV: 'development',
-      buildRevisionInfo: getJenkinsBuildInformation()
-    })
-  }),
     new webpack.NoErrorsPlugin()
   ],
   module: {
@@ -59,9 +64,8 @@ module.exports = {
         include: path.join(__dirname, entryDirectory)
       },
       {
-        test: /\.js?$/,
-        loaders: ['babel'],
-        include: path.join(__dirname, entryDirectory),
+        test: /\.js$/,
+        loader: 'babel',
         exclude: path.join(__dirname, 'node_modules')
       },
       {
@@ -74,9 +78,5 @@ module.exports = {
         exclude: path.join(__dirname, 'node_modules')
       }
     ]
-  },
-  devServer: {
-    contentBase: __dirname,
-    port: 5000
   }
 };

@@ -51,7 +51,7 @@ const Record = Immutable.Record({
 });
 
 //const PLUGINS_URL = 'https://updates.jenkins-ci.org/current/update-center.json';
-const PLUGINS_URL = 'http://0.0.0.0:1337/';
+const PLUGINS_URL = 'http://0.0.0.0:3000/update-center.json';
 
 export function jsonp(url, callback) {// HACK
   let callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());

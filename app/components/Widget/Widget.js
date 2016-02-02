@@ -31,7 +31,6 @@ export default function Widget ({
 
   return (
     <div className={classNames(styles.ItemFinder, 'item-finder')} >
-      
       <div className={classNames(styles.CategoriesBox, 'categories-box col-md-2')} >
         <ul className="list-group">
           <li className={classNames(styles.scm, 'scm')}>
@@ -50,9 +49,9 @@ export default function Widget ({
             <a className={classNames(styles.li, 'list-group-item')}>General purpose</a></li>
         </ul>
       </div>
-      
+
       <div className={classNames(styles.ItemsList, 'items-box col-md-10')}>
-      
+
         <nav id="cb-grid-toolbar" className='navbar navbar-light bg-faded'>
           <ul className="nav navbar-nav">
             <li className="nav-item active"><a className="nav-link">Featured</a></li>
@@ -62,7 +61,7 @@ export default function Widget ({
             <li className="nav-item btn-group"><a className="nav-link dropdown-toggle">Technologies</a></li>
             <li className="nav-item"><button className="btn btn-sm" onClick={()=>  generateData()}>getPlugins</button></li>
           </ul>
-          
+
           <ul className="pull-xs-right nav navbar-nav">
             <li className="nav-item">
               {totalSize > 0 &&
@@ -89,27 +88,27 @@ export default function Widget ({
             </li>
             <li className="nav-item btn-group dropdown">
               <a className="nav-link dropdown-toggle">View</a>
-              
+
             </li>
-          </ul>          
+          </ul>
         </nav>
-        
-        
+
+
         <div id="cb-item-finder-grid-box" className={classNames(styles.GridBox, 'grid-box')} >
           <div className={classNames(styles.Grid, 'grid foo')} >
-          
+
             {totalSize > 0 && recordIds.valueSeq().map(id => {
               return <Entry className="Entry" key={recordsMap.get(id).id} plugin={recordsMap.get(id)} />
             })}
-            
+
           </div>
         </div>
-        
-      
+
+
         <div className="clearfix"></div>
-      
+
       </div>
-      
+
     </div>
     )
 }

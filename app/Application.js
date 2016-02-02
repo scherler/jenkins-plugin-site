@@ -1,5 +1,5 @@
 /** @flow */
-import { actions, searchText, filteredList, plugins } from './resources'
+import { actions, searchText, filteredList, plugins, isFetching } from './resources'
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
 import { Card, CardWrapper } from './components/Card'
@@ -17,34 +17,36 @@ Application.propTypes = {
   filteredList: PropTypes.instanceOf(Immutable.List).isRequired,
   searchText: PropTypes.string.isRequired,
   plugins: PropTypes.any.isRequired,
-  searchPluginData: PropTypes.func.isRequired
+  searchPluginData: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool.isRequired
 }
 export default function Application ({
   generatePluginData,
   filteredList,
   searchText,
   plugins,
-  searchPluginData
+  searchPluginData,
+  isFetching
 }) {
-
   return (
       <Widget
         generateData={generatePluginData}
         recordIds={filteredList}
         recordsMap={plugins}
         searchData={searchPluginData}
-        title={'List of Plugins'}
+        title={'Loading ' + isFetching}
       />
 
   )
 }
 
 const selectors = createSelector(
-  [filteredList, searchText, plugins],
-  (filteredList, searchText, plugins) => ({
+  [filteredList, searchText, plugins, isFetching],
+  (filteredList, searchText, plugins, isFetching) => ({
     filteredList,
     searchText,
-    plugins
+    plugins,
+    isFetching
   })
 )
 

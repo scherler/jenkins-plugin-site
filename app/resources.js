@@ -7,11 +7,13 @@ import _ from 'lodash'
 import React, { PropTypes } from 'react'
 
 export const State = Immutable.Record({
-  plugins: Immutable.OrderedMap()
+  plugins: Immutable.OrderedMap(),
+  isFetching: false
 })
 
 export const ACTION_TYPES = keymirror({
   CLEAR_PLUGIN_DATA: null,
+  FETCH_PLUGIN_DATA: null,
   SET_PLUGIN_DATA: null
 })
 /*
@@ -89,9 +91,12 @@ export const actions = {
 
   clearPluginData: () => ({ type: ACTION_TYPES.CLEAR_PLUGIN_DATA }),
 
+  fetchPluginData: () => ({ type: ACTION_TYPES.FETCH_PLUGIN_DATA }),
+
   generatePluginData () {
     return (dispatch, getState) => {
       dispatch(actions.clearPluginData())
+      dispatch(actions.fetchPluginData())
       const plugins = {}
       return jsonp(PLUGINS_URL, data => {
         _.forEach(data.plugins, (item) => {
@@ -103,6 +108,7 @@ export const actions = {
           type: ACTION_TYPES.SET_PLUGIN_DATA,
           payload: Immutable.Map(plugins)
         })
+        dispatch(actions.fetchPluginData())
       });
     }
   },
@@ -113,6 +119,9 @@ export const actionHandlers = {
   [ACTION_TYPES.CLEAR_PLUGIN_DATA] (state) {
     return state.set('plugins', Immutable.Map())
   },
+  [ACTION_TYPES.FETCH_PLUGIN_DATA] (state, {}): State {
+    return state.set('isFetching', !state.isFetching)
+  },
   [ACTION_TYPES.SET_PLUGIN_DATA] (state, { payload }): State {
     return state.set('plugins', payload)
   }
@@ -121,6 +130,8 @@ export const actionHandlers = {
 export const resources = state => state.resources
 export const resourceSelector = (resourceName, state) => state.resources.get(resourceName)
 export const plugins = createSelector([resources], resources => resources.plugins)
+
+export const isFetching = createSelector([resources], resources => resources.isFetching)
 
 const pluginSelectors = getSearchSelectors({ resourceName: 'plugins', resourceSelector })
 export const searchText = pluginSelectors.text

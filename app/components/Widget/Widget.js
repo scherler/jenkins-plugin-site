@@ -31,6 +31,7 @@ export default function Widget ({
 
   return (
     <div className={classNames(styles.ItemFinder, 'item-finder')} >
+      <span>{title}</span>
       <div className={classNames(styles.CategoriesBox, 'categories-box col-md-2')} >
         <ul className="list-group">
           <li className={classNames(styles.scm, 'scm')}>

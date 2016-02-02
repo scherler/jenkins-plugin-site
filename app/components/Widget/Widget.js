@@ -17,10 +17,10 @@ export default class Widget extends Component {
     title: PropTypes.string.isRequired
   };
 
-/*  state = {
+  state = {
     clicked: false
   };
-*/
+
   render () {
 
     const {
@@ -32,7 +32,7 @@ export default class Widget extends Component {
       title
     } = this.props;
 
-    //const { clicked } = this.state;
+    const { clicked } = this.state;
 
     const totalSize = recordsMap instanceof Immutable.Collection
       ? recordsMap.size
@@ -45,7 +45,13 @@ export default class Widget extends Component {
     return (
       <div className={classNames(styles.ItemFinder, 'item-finder')} >
         <span>{title}</span>
-        
+          <button onClick={()=>  {
+            this.setState({
+              clicked: !clicked
+            });
+          }}>Light switch</button>
+        { clicked && <span> on</span> }
+        { !clicked && <span> off</span> }
         <div className={classNames(styles.CategoriesBox, 'categories-box col-md-2')} >
           <ul className="list-group">
             <li className={classNames(styles.scm, 'scm')}>

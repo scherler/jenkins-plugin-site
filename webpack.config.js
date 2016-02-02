@@ -3,7 +3,9 @@
 var webpack = require('webpack');
 var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+require('react-transform-catch-errors');
+require('redbox-react');
 
 var stylusLoader = ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader");
 
@@ -22,7 +24,7 @@ const entryDirectory = 'app';
 
 module.exports = {
   debug: true,
-  devtool: 'eval',
+  devtool: 'source-map',
   entry: [
     'babel/polyfill',
     './' + entryDirectory + '/index'

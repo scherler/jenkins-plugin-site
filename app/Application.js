@@ -1,11 +1,11 @@
 /** @flow */
 import {
   actions,
-  searchText,
-  filteredList,
-  plugins,
+  totalSize,
   isFetching,
-  labelFilter
+  labelFilter,
+  getVisiblePlugins,
+  getVisiblePluginsLabels
 } from './resources'
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
@@ -19,31 +19,30 @@ import Highlighter from 'react-highlight-words'
 import styles from './Application.css'
 
 Application.propTypes = {
-  searchText: PropTypes.string.isRequired,
   generatePluginData: PropTypes.func.isRequired,
-  filteredList: PropTypes.instanceOf(Immutable.List).isRequired,
-  searchText: PropTypes.string.isRequired,
-  plugins: PropTypes.any.isRequired,
+  totalSize: PropTypes.any.isRequired,
+  getVisiblePlugins: PropTypes.any.isRequired,
+  getVisiblePluginsLabels: PropTypes.any.isRequired,
   searchPluginData: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
   labelFilter: PropTypes.any.isRequired
 }
 export default function Application ({
   generatePluginData,
-  filteredList,
-  searchText,
-  plugins,
+  totalSize,
   searchPluginData,
   isFetching,
-  labelFilter
+  labelFilter,
+  getVisiblePlugins,
+  getVisiblePluginsLabels
 }) {
   return (
       <Widget
         generateData={generatePluginData}
-        recordIds={filteredList}
-        recordsMap={plugins}
+        getVisiblePlugins={getVisiblePlugins}
+        totalSize={totalSize}
         searchData={searchPluginData}
-        labelFilter={labelFilter}
+        labelFilter={getVisiblePluginsLabels}
         title={'Loading ' + isFetching}
       />
 
@@ -51,13 +50,13 @@ export default function Application ({
 }
 
 const selectors = createSelector(
-  [filteredList, searchText, plugins, isFetching, labelFilter],
-  (filteredList, searchText, plugins, isFetching, labelFilter) => ({
-    filteredList,
-    searchText,
-    plugins,
+  [ totalSize, isFetching, labelFilter, getVisiblePlugins, getVisiblePluginsLabels],
+  ( totalSize, isFetching, labelFilter, getVisiblePlugins, getVisiblePluginsLabels) => ({
+    totalSize,
     isFetching,
-    labelFilter
+    labelFilter,
+    getVisiblePlugins,
+    getVisiblePluginsLabels
   })
 )
 

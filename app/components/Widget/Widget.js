@@ -12,8 +12,8 @@ export default class Widget extends Component {
 
   static propTypes = {
     generateData: PropTypes.func.isRequired,
-    recordIds: PropTypes.any.isRequired,
-    recordsMap: PropTypes.any.isRequired,
+    totalSize: PropTypes.any.isRequired,
+    getVisiblePlugins: PropTypes.any.isRequired,
     searchData: PropTypes.func.isRequired,
     title: PropTypes.string.isRequired,
     labelFilter: PropTypes.any.isRequired
@@ -27,23 +27,19 @@ export default class Widget extends Component {
 
     const {
       generateData,
-      recordIds,
-      recordsMap,
       rowRenderer,
       searchData,
       title,
+      totalSize,
+      getVisiblePlugins,
       labelFilter
     } = this.props;
 
     const { clicked } = this.state;
 
-    const totalSize = recordsMap instanceof Immutable.Collection
-      ? recordsMap.size
-      : Object.keys(recordsMap).length
-
-    const filteredSize = recordIds instanceof Immutable.Collection
-      ? recordIds.size
-      : recordIds.length
+    const filteredSize = getVisiblePlugins instanceof Immutable.Collection
+      ? getVisiblePlugins.size
+      : getVisiblePlugins.length
 
     return (
       <div className={classNames(styles.ItemFinder, 'item-finder')} >
@@ -100,7 +96,7 @@ export default class Widget extends Component {
               <li className="nav-item">
                 <form className="form-inline pull-xs-right">
                 <input
-                  disabled={recordsMap.size === 0}
+                  disabled={totalSize === 0}
                   className={classNames(styles.SearchInput, "form-control")}
                   onChange={event => searchData(event.target.value)}
                   placeholder='Filter...'
@@ -123,8 +119,11 @@ export default class Widget extends Component {
           <div id="cb-item-finder-grid-box" className={classNames(styles.GridBox, 'grid-box')} >
             <div className={classNames(styles.Grid, 'grid foo')} >
 
-              {totalSize > 0 && recordIds.valueSeq().map(id => {
-                return <Entry className="Entry" key={recordsMap.get(id).id} plugin={recordsMap.get(id)} />
+              {totalSize > 0 && getVisiblePlugins.valueSeq().map(plugin => {
+                return <Entry
+                  className="Entry"
+                  key={plugin.id}
+                  plugin={plugin} />
               })}
 
             </div>

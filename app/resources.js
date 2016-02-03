@@ -67,6 +67,25 @@ export function jsonp(url, callback) {// HACK
   document.body.appendChild(script);
 }
 
+export function groupAndCountLabels(recordsMap) {
+  const labelMap = _.map(
+      _.groupBy(
+        _.flatten(recordsMap.toArray().map(
+          function(a) {
+            return a.labels;
+          }
+        )
+      )
+    ), (array, item) => {
+      return {
+        value: array.length,
+        key: item
+      }
+    }
+  );
+  return Immutable.List(labelMap);
+}
+
 export const actions = {
 
     //FIXME: This should not inject React DOM here, but.... hack...
@@ -122,7 +141,7 @@ export const actions = {
             }
           }
         );
-        const labels = Immutable.List(labelMap);
+        const labels = groupAndCountLabels(recordsMap);
         dispatch({
           type: ACTION_TYPES.SET_PLUGIN_DATA,
           payload: recordsMap
@@ -163,6 +182,30 @@ export const labelFilter = createSelector([resources], resources => resources.la
 const pluginSelectors = getSearchSelectors({ resourceName: 'plugins', resourceSelector })
 export const searchText = pluginSelectors.text
 export const filteredList = createSelector([pluginSelectors.result], result => Immutable.List(result))
+
+export const getVisiblePlugins = createSelector(
+  [ filteredList, plugins ],
+  (filteredList, plugins) => {
+    return filteredList.map(
+      (id) => {
+        return plugins.get(id);
+      })
+  }
+)
+
+export const totalSize = createSelector(
+  [ plugins ],
+  ( plugins ) => {
+    return plugins.size;
+  }
+)
+
+export const getVisiblePluginsLabels = createSelector(
+  [ getVisiblePlugins ],
+  ( plugins ) => {
+    return groupAndCountLabels(plugins);
+  }
+)
 
 export function reducer (state = new State(), action: Object): State {
   const { type } = action

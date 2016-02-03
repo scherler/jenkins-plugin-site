@@ -2,6 +2,7 @@
 import Immutable from 'immutable'
 import Entry from './Entry'
 import styles from './Widget.css'
+import LabelWidget from './Labels'
 import React, { PropTypes, Component } from 'react'
 import {cleanTitle, getMaintainers, getScoreClassName} from '../../helper'
 import { VirtualScroll } from 'react-virtualized'
@@ -14,7 +15,8 @@ export default class Widget extends Component {
     recordIds: PropTypes.any.isRequired,
     recordsMap: PropTypes.any.isRequired,
     searchData: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired
+    title: PropTypes.string.isRequired,
+    labelFilter: PropTypes.any.isRequired
   };
 
   state = {
@@ -29,7 +31,8 @@ export default class Widget extends Component {
       recordsMap,
       rowRenderer,
       searchData,
-      title
+      title,
+      labelFilter
     } = this.props;
 
     const { clicked } = this.state;
@@ -44,14 +47,17 @@ export default class Widget extends Component {
 
     return (
       <div className={classNames(styles.ItemFinder, 'item-finder')} >
-        <span>{title}</span>
-          <button onClick={()=>  {
-            this.setState({
-              clicked: !clicked
-            });
-          }}>Light switch</button>
-        { clicked && <span> on</span> }
-        { !clicked && <span> off</span> }
+        <div>
+          <span>{title}</span>
+            <button onClick={()=>  {
+              this.setState({
+                clicked: !clicked
+              });
+            }}>Light switch</button>
+          { clicked && <span> on</span> }
+          { !clicked && <span> off</span> }
+          { totalSize > 0 && <LabelWidget labels={labelFilter}/> }
+        </div>
         <div className={classNames(styles.CategoriesBox, 'categories-box col-md-2')} >
           <ul className="list-group">
             <li className={classNames(styles.scm, 'scm')}>

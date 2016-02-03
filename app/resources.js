@@ -8,13 +8,15 @@ import React, { PropTypes } from 'react'
 
 export const State = Immutable.Record({
   plugins: Immutable.OrderedMap(),
-  isFetching: false
+  isFetching: false,
+  labelFilter: Immutable.OrderedMap()
 })
 
 export const ACTION_TYPES = keymirror({
   CLEAR_PLUGIN_DATA: null,
   FETCH_PLUGIN_DATA: null,
-  SET_PLUGIN_DATA: null
+  SET_PLUGIN_DATA: null,
+  SET_LABEL_FILTER: null
 })
 /*
 buildDate: "Mar 03, 2011"
@@ -104,9 +106,30 @@ export const actions = {
           _.set(item, 'iconDom', actions.makeIcon(item.title));
           plugins[item.id] = new Record(item);
         });
+        const recordsMap = Immutable.Map(plugins);
+        const labelMap = _.map(
+            _.groupBy(
+              _.flatten(recordsMap.toArray().map(
+                function(a) {
+                  return a.labels;
+                }
+              )
+            )
+          ), (array, item) => {
+            return {
+              value: array.length,
+              key: item
+            }
+          }
+        );
+        const labels = Immutable.List(labelMap);
         dispatch({
           type: ACTION_TYPES.SET_PLUGIN_DATA,
-          payload: Immutable.Map(plugins)
+          payload: recordsMap
+        })
+        dispatch({
+          type: ACTION_TYPES.SET_LABEL_FILTER,
+          payload: labels.sortBy(label => label.key)
         })
         dispatch(actions.fetchPluginData())
       });
@@ -124,6 +147,9 @@ export const actionHandlers = {
   },
   [ACTION_TYPES.SET_PLUGIN_DATA] (state, { payload }): State {
     return state.set('plugins', payload)
+  },
+  [ACTION_TYPES.SET_LABEL_FILTER] (state, { payload }): State {
+    return state.set('labelFilter', payload)
   }
 }
 
@@ -132,6 +158,7 @@ export const resourceSelector = (resourceName, state) => state.resources.get(res
 export const plugins = createSelector([resources], resources => resources.plugins)
 
 export const isFetching = createSelector([resources], resources => resources.isFetching)
+export const labelFilter = createSelector([resources], resources => resources.labelFilter)
 
 const pluginSelectors = getSearchSelectors({ resourceName: 'plugins', resourceSelector })
 export const searchText = pluginSelectors.text

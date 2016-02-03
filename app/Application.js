@@ -1,5 +1,12 @@
 /** @flow */
-import { actions, searchText, filteredList, plugins, isFetching } from './resources'
+import {
+  actions,
+  searchText,
+  filteredList,
+  plugins,
+  isFetching,
+  labelFilter
+} from './resources'
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
 import { Card, CardWrapper } from './components/Card'
@@ -18,7 +25,8 @@ Application.propTypes = {
   searchText: PropTypes.string.isRequired,
   plugins: PropTypes.any.isRequired,
   searchPluginData: PropTypes.func.isRequired,
-  isFetching: PropTypes.bool.isRequired
+  isFetching: PropTypes.bool.isRequired,
+  labelFilter: PropTypes.any.isRequired
 }
 export default function Application ({
   generatePluginData,
@@ -26,7 +34,8 @@ export default function Application ({
   searchText,
   plugins,
   searchPluginData,
-  isFetching
+  isFetching,
+  labelFilter
 }) {
   return (
       <Widget
@@ -34,6 +43,7 @@ export default function Application ({
         recordIds={filteredList}
         recordsMap={plugins}
         searchData={searchPluginData}
+        labelFilter={labelFilter}
         title={'Loading ' + isFetching}
       />
 
@@ -41,12 +51,13 @@ export default function Application ({
 }
 
 const selectors = createSelector(
-  [filteredList, searchText, plugins, isFetching],
-  (filteredList, searchText, plugins, isFetching) => ({
+  [filteredList, searchText, plugins, isFetching, labelFilter],
+  (filteredList, searchText, plugins, isFetching, labelFilter) => ({
     filteredList,
     searchText,
     plugins,
-    isFetching
+    isFetching,
+    labelFilter
   })
 )
 

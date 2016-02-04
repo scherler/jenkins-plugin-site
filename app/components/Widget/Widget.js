@@ -45,9 +45,10 @@ export default class Widget extends Component {
       ? getVisiblePlugins.size
       : getVisiblePlugins.length
 
+
     return (
       <div className={classNames(styles.ItemFinder, 'item-finder')} >
-        <div>
+        {false && <div>
           <span>{title}</span>
             <button onClick={()=>  {
               this.setState({
@@ -62,7 +63,7 @@ export default class Widget extends Component {
             }}>set filter</button>
           { clicked && <span> on</span> }
           { !clicked && <span> off</span> }
-        </div>
+        </div>}
         <div className={classNames(styles.CategoriesBox, 'categories-box col-md-2')} >
           <ul className="list-group">
             <li className={classNames(styles.scm, 'scm')}>

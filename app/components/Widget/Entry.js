@@ -13,7 +13,7 @@ export default function Entry ({plugin}) {
         key={plugin.get('sha1')}
         className={styles.Item}
       >
-        
+
         <a href={plugin.get('wiki')} className={styles.Tile}>
           <div className={styles.Icon}>
             {plugin.get('iconDom')}

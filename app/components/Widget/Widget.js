@@ -12,6 +12,8 @@ export default class Widget extends Component {
 
   static propTypes = {
     generateData: PropTypes.func.isRequired,
+    filterVisibleList: PropTypes.any.isRequired,
+    setFilter: PropTypes.func.isRequired,
     totalSize: PropTypes.any.isRequired,
     getVisiblePlugins: PropTypes.any.isRequired,
     searchData: PropTypes.func.isRequired,
@@ -27,7 +29,9 @@ export default class Widget extends Component {
 
     const {
       generateData,
+      setFilter,
       rowRenderer,
+      filterVisibleList,
       searchData,
       title,
       totalSize,
@@ -50,9 +54,14 @@ export default class Widget extends Component {
                 clicked: !clicked
               });
             }}>Light switch</button>
+          <button onClick={()=>  {
+              setFilter(new Immutable.Record({
+                field: 'labels',
+                search: 'android'
+              }));
+            }}>set filter</button>
           { clicked && <span> on</span> }
           { !clicked && <span> off</span> }
-          { totalSize > 0 && <LabelWidget labels={labelFilter}/> }
         </div>
         <div className={classNames(styles.CategoriesBox, 'categories-box col-md-2')} >
           <ul className="list-group">
@@ -71,6 +80,14 @@ export default class Widget extends Component {
             <li className={classNames(styles.general, 'general')}>
               <a className={classNames(styles.li, 'list-group-item')}>General purpose</a></li>
           </ul>
+          { totalSize > 0 && <LabelWidget
+            labels={labelFilter}
+            onClick={(event)=>  {
+              setFilter(new Immutable.Record({
+                field: 'labels',
+                search: event.target.innerText
+              }))}}
+            /> }
         </div>
 
         <div className={classNames(styles.ItemsList, 'items-box col-md-10')}>

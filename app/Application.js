@@ -5,6 +5,7 @@ import {
   isFetching,
   labelFilter,
   getVisiblePlugins,
+  filterVisibleList,
   getVisiblePluginsLabels
 } from './resources'
 import { connect } from 'react-redux'
@@ -20,6 +21,8 @@ import styles from './Application.css'
 
 Application.propTypes = {
   generatePluginData: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
+  filterVisibleList: PropTypes.any.isRequired,
   totalSize: PropTypes.any.isRequired,
   getVisiblePlugins: PropTypes.any.isRequired,
   getVisiblePluginsLabels: PropTypes.any.isRequired,
@@ -29,18 +32,21 @@ Application.propTypes = {
 }
 export default function Application ({
   generatePluginData,
+  setFilter,
+  filterVisibleList,
   totalSize,
   searchPluginData,
   isFetching,
   labelFilter,
-  getVisiblePlugins,
   getVisiblePluginsLabels
 }) {
   return (
       <Widget
         generateData={generatePluginData}
-        getVisiblePlugins={getVisiblePlugins}
+        setFilter={setFilter}
+        getVisiblePlugins={filterVisibleList}
         totalSize={totalSize}
+        filterVisibleList={filterVisibleList}
         searchData={searchPluginData}
         labelFilter={getVisiblePluginsLabels}
         title={'Loading ' + isFetching}
@@ -50,12 +56,13 @@ export default function Application ({
 }
 
 const selectors = createSelector(
-  [ totalSize, isFetching, labelFilter, getVisiblePlugins, getVisiblePluginsLabels],
-  ( totalSize, isFetching, labelFilter, getVisiblePlugins, getVisiblePluginsLabels) => ({
+  [ totalSize, isFetching, labelFilter, getVisiblePlugins, filterVisibleList, getVisiblePluginsLabels],
+  ( totalSize, isFetching, labelFilter, getVisiblePlugins, filterVisibleList, getVisiblePluginsLabels) => ({
     totalSize,
     isFetching,
     labelFilter,
     getVisiblePlugins,
+    filterVisibleList,
     getVisiblePluginsLabels
   })
 )

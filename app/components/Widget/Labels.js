@@ -1,7 +1,12 @@
 import React, { PropTypes, Component } from 'react'
 
-export function LabelWidgetItem ({index, item}) {
-  return (<li key={index}>{item.key}: {item.value}</li>);
+export function LabelWidgetItem ({index, item, onClick}) {
+  return (<li
+    key={index}
+    style={{ cursor:'pointer' }}
+    onClick={onClick}>
+      {item.key}: {item.value}
+    </li>);
 }
 
 export default class LabelWidget extends Component {
@@ -12,11 +17,12 @@ export default class LabelWidget extends Component {
   };
 
   static propTypes = {
-    labels: PropTypes.any.isRequired
+    labels: PropTypes.any.isRequired,
+    onClick: PropTypes.func
   };
 
   render () {
-    const { labels } = this.props;
+    const { labels, onClick } = this.props;
     const { field, asc } = this.state;
     const sortedLabels = labels.sortBy(
       label => {
@@ -43,8 +49,9 @@ export default class LabelWidget extends Component {
       }
     );
 
-    return (<ul>
+    return (<ul style={{backgroundColor:'#66ccff',float:'left'}}>
       <li>
+        Just a demo for label filters
         <button onClick={()=>  {
           this.setState({
             field: 'key',
@@ -61,7 +68,7 @@ export default class LabelWidget extends Component {
       {
         sortedLabels.valueSeq().map(
         (item, index) => {
-          return (<LabelWidgetItem key={index} index={index} item={item}/>)
+          return (<LabelWidgetItem key={index} index={index} item={item} onClick={onClick}/>)
         })
       }
       </ul>);

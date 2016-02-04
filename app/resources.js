@@ -9,7 +9,10 @@ import React, { PropTypes } from 'react'
 export const State = Immutable.Record({
   plugins: Immutable.OrderedMap(),
   isFetching: false,
-  labelFilter: Immutable.OrderedMap()
+  labelFilter: Immutable.Record({
+    field: null,
+    search: null
+  })
 })
 
 export const ACTION_TYPES = keymirror({
@@ -87,7 +90,6 @@ export function groupAndCountLabels(recordsMap) {
 }
 
 export const actions = {
-
     //FIXME: This should not inject React DOM here, but.... hack...
   makeIcon(title, type){
     title = title.replace('Jenkins ','').replace('jenkins ','').replace(' Plugin','').replace(' Plug-in','').replace(' lugin','');
@@ -113,6 +115,15 @@ export const actions = {
   clearPluginData: () => ({ type: ACTION_TYPES.CLEAR_PLUGIN_DATA }),
 
   fetchPluginData: () => ({ type: ACTION_TYPES.FETCH_PLUGIN_DATA }),
+
+  setFilter(filter) {
+    return (dispatch) => {
+      dispatch({
+        type: ACTION_TYPES.SET_LABEL_FILTER,
+        payload: filter
+      })
+    }
+  },
 
   generatePluginData () {
     return (dispatch, getState) => {
@@ -141,14 +152,9 @@ export const actions = {
             }
           }
         );
-        const labels = groupAndCountLabels(recordsMap);
         dispatch({
           type: ACTION_TYPES.SET_PLUGIN_DATA,
           payload: recordsMap
-        })
-        dispatch({
-          type: ACTION_TYPES.SET_LABEL_FILTER,
-          payload: labels.sortBy(label => label.key)
         })
         dispatch(actions.fetchPluginData())
       });
@@ -200,8 +206,26 @@ export const totalSize = createSelector(
   }
 )
 
+export const filterVisibleList = createSelector (
+  [getVisiblePlugins, labelFilter],
+  (plugins, labelFilter) => {
+    let list  = plugins.filter(
+      item => {
+        if (labelFilter instanceof Function) {
+          labelFilter = labelFilter();
+        }
+        if ( !labelFilter.field ||! labelFilter.search ) {
+          return true;
+        }
+        return (_.findIndex(item[labelFilter.field], (i) => i === labelFilter.search) >= 0);
+      }
+    );
+    return list;
+  }
+)
+
 export const getVisiblePluginsLabels = createSelector(
-  [ getVisiblePlugins ],
+  [ filterVisibleList ],
   ( plugins ) => {
     return groupAndCountLabels(plugins);
   }

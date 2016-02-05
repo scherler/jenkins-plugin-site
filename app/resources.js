@@ -11,8 +11,9 @@ export const State = Immutable.Record({
   isFetching: false,
   labelFilter: Immutable.Record({//fixme: that should become label: search, sort: field
     field: 'title',
+    searchField: null,
     asc: false,
-    search: null
+    search: []
   })
 })
 
@@ -203,13 +204,22 @@ export const filterVisibleList = createSelector (
     let list  = plugins
     .filter(
       item => {
-        if ( !labelFilter.field ||! labelFilter.search ) {
+        if ( !labelFilter.searchField || !labelFilter.search || !labelFilter.search.length > 0) {
           return true;
         }
-        return (_.findIndex(item[labelFilter.field], (i) => i === labelFilter.search) >= 0);
+        let matchIndex = _.findIndex(item[labelFilter.searchField], (i) => {
+          let match = false;
+          labelFilter.search.some(searchFilter => {
+            match = (i === searchFilter);
+            return match;
+          })
+          return match;
+        })
+        return ( matchIndex >= 0);
       }
     )
-    .sortBy(plugin => plugin[labelFilter.field], (plugin, nextPlugin) => {
+    .sortBy(plugin => {
+      return plugin[labelFilter.field]}, (plugin, nextPlugin) => {
       if (labelFilter.asc) {
         return nextPlugin.localeCompare(plugin);
       } else {

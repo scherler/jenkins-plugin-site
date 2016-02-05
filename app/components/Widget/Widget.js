@@ -98,7 +98,14 @@ export default class Widget extends Component {
             <li className={classNames(styles.containers, 'containers')}>
               <a className={classNames(styles.li, 'list-group-item')}>Containers</a></li>
             <li className={classNames(styles.security, 'security')}>
-              <a className={classNames(styles.li, 'list-group-item')}>Users and security</a></li>
+              <a className={classNames(styles.li, 'list-group-item')} onClick={()=>  {
+              setFilter(new Immutable.Record({
+                searchField: 'labels',
+                field: filter.title || 'title',
+                search: ['user', 'security'],
+                asc: filter.asc || true
+              }));
+            }}>Users and security</a></li>
             <li className={classNames(styles.general, 'general')}>
               <a className={classNames(styles.li, 'list-group-item')}>General purpose</a></li>
           </ul>
@@ -106,8 +113,10 @@ export default class Widget extends Component {
             labels={getVisiblePluginsLabels}
             onClick={(event)=>  {
               setFilter(new Immutable.Record({
-                field: 'labels',
-                search: event.target.innerText
+                searchField: 'labels',
+                field: filter.title || 'title',
+                search: [event.target.innerText],
+                asc: filter.asc || true
               }))}}
             /> }
         </div>

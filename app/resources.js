@@ -9,8 +9,9 @@ import React, { PropTypes } from 'react'
 export const State = Immutable.Record({
   plugins: Immutable.OrderedMap(),
   isFetching: false,
-  labelFilter: Immutable.Record({
-    field: null,
+  labelFilter: Immutable.Record({//fixme: that should become label: search, sort: field
+    field: 'title',
+    asc: false,
     search: null
   })
 })
@@ -137,21 +138,6 @@ export const actions = {
           plugins[item.id] = new Record(item);
         });
         const recordsMap = Immutable.Map(plugins);
-        const labelMap = _.map(
-            _.groupBy(
-              _.flatten(recordsMap.toArray().map(
-                function(a) {
-                  return a.labels;
-                }
-              )
-            )
-          ), (array, item) => {
-            return {
-              value: array.length,
-              key: item
-            }
-          }
-        );
         dispatch({
           type: ACTION_TYPES.SET_PLUGIN_DATA,
           payload: recordsMap
@@ -209,16 +195,28 @@ export const totalSize = createSelector(
 export const filterVisibleList = createSelector (
   [getVisiblePlugins, labelFilter],
   (plugins, labelFilter) => {
-    let list  = plugins.filter(
+
+    if (labelFilter instanceof Function) {
+      labelFilter = labelFilter();
+    }
+
+    let list  = plugins
+    .filter(
       item => {
-        if (labelFilter instanceof Function) {
-          labelFilter = labelFilter();
-        }
         if ( !labelFilter.field ||! labelFilter.search ) {
           return true;
         }
         return (_.findIndex(item[labelFilter.field], (i) => i === labelFilter.search) >= 0);
       }
+    )
+    .sortBy(plugin => plugin[labelFilter.field], (plugin, nextPlugin) => {
+      if (labelFilter.asc) {
+        return nextPlugin.localeCompare(plugin);
+      } else {
+        return plugin.localeCompare(nextPlugin);
+      }
+    }
+
     );
     return list;
   }

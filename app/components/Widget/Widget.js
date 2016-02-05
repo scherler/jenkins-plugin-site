@@ -12,10 +12,10 @@ export default class Widget extends Component {
 
   static propTypes = {
     generateData: PropTypes.func.isRequired,
-    filterVisibleList: PropTypes.any.isRequired,
     setFilter: PropTypes.func.isRequired,
     totalSize: PropTypes.any.isRequired,
     getVisiblePlugins: PropTypes.any.isRequired,
+    getVisiblePluginsLabels: PropTypes.any.isRequired,
     searchData: PropTypes.func.isRequired,
     title: PropTypes.string.isRequired,
     labelFilter: PropTypes.any.isRequired
@@ -31,13 +31,20 @@ export default class Widget extends Component {
       generateData,
       setFilter,
       rowRenderer,
-      filterVisibleList,
       searchData,
       title,
       totalSize,
       getVisiblePlugins,
+      getVisiblePluginsLabels,
       labelFilter
     } = this.props;
+
+    let filter;
+    if (labelFilter instanceof Function) {
+      filter = labelFilter();
+    } else {
+      filter = labelFilter;
+    }
 
     const { clicked } = this.state;
 
@@ -48,21 +55,35 @@ export default class Widget extends Component {
 
     return (
       <div className={classNames(styles.ItemFinder, 'item-finder')} >
-        {false && <div>
+        {true && <div>
           <span>{title}</span>
             <button onClick={()=>  {
               this.setState({
                 clicked: !clicked
               });
             }}>Light switch</button>
+
+            { clicked && <span> on</span> }
+            { !clicked && <span> off</span> }
+
           <button onClick={()=>  {
               setFilter(new Immutable.Record({
-                field: 'labels',
-                search: 'android'
+                field: 'name',
+                asc: !filter.asc
               }));
-            }}>set filter</button>
-          { clicked && <span> on</span> }
-          { !clicked && <span> off</span> }
+            }}>switch sort on 'name'</button>
+          <button onClick={()=>  {
+              setFilter(new Immutable.Record({
+                field: 'title',
+                asc: !filter.asc
+              }));
+            }}>switch sort on 'title'</button>
+          <button onClick={()=>  {
+              setFilter(new Immutable.Record({
+                field: 'releaseTimestamp',
+                asc: !filter.asc
+              }));
+            }}>switch sort on 'releaseTimestamp'</button>
         </div>}
         <div className={classNames(styles.CategoriesBox, 'categories-box col-md-2')} >
           <ul className="list-group">
@@ -82,7 +103,7 @@ export default class Widget extends Component {
               <a className={classNames(styles.li, 'list-group-item')}>General purpose</a></li>
           </ul>
           { totalSize > 0 && <LabelWidget
-            labels={labelFilter}
+            labels={getVisiblePluginsLabels}
             onClick={(event)=>  {
               setFilter(new Immutable.Record({
                 field: 'labels',

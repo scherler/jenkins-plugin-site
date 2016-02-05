@@ -4,7 +4,6 @@ import {
   totalSize,
   isFetching,
   labelFilter,
-  getVisiblePlugins,
   filterVisibleList,
   getVisiblePluginsLabels
 } from './resources'
@@ -24,7 +23,6 @@ Application.propTypes = {
   setFilter: PropTypes.func.isRequired,
   filterVisibleList: PropTypes.any.isRequired,
   totalSize: PropTypes.any.isRequired,
-  getVisiblePlugins: PropTypes.any.isRequired,
   getVisiblePluginsLabels: PropTypes.any.isRequired,
   searchPluginData: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
@@ -46,9 +44,9 @@ export default function Application ({
         setFilter={setFilter}
         getVisiblePlugins={filterVisibleList}
         totalSize={totalSize}
-        filterVisibleList={filterVisibleList}
         searchData={searchPluginData}
-        labelFilter={getVisiblePluginsLabels}
+        getVisiblePluginsLabels={getVisiblePluginsLabels}
+        labelFilter={labelFilter}
         title={'Loading ' + isFetching}
       />
 
@@ -56,12 +54,11 @@ export default function Application ({
 }
 
 const selectors = createSelector(
-  [ totalSize, isFetching, labelFilter, getVisiblePlugins, filterVisibleList, getVisiblePluginsLabels],
-  ( totalSize, isFetching, labelFilter, getVisiblePlugins, filterVisibleList, getVisiblePluginsLabels) => ({
+  [ totalSize, isFetching, labelFilter, filterVisibleList, getVisiblePluginsLabels],
+  ( totalSize, isFetching, labelFilter, filterVisibleList, getVisiblePluginsLabels) => ({
     totalSize,
     isFetching,
     labelFilter,
-    getVisiblePlugins,
     filterVisibleList,
     getVisiblePluginsLabels
   })

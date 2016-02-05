@@ -133,11 +133,12 @@ export default class Widget extends Component {
                 }
               </li>
               <li className="nav-item">
-                <form className="form-inline pull-xs-right">
+                <form className="form-inline pull-xs-right" action='#'>
                 <input
                   disabled={totalSize === 0}
                   className={classNames(styles.SearchInput, "form-control")}
                   onChange={event => searchData(event.target.value)}
+                  onSubmit={event => searchData(event.target.value)}
                   placeholder='Filter...'
                 />
                 </form>

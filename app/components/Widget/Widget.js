@@ -22,7 +22,9 @@ export default class Widget extends Component {
   };
 
   state = {
-    clicked: false
+    clicked: false,
+    view:'tiles',
+    sort:'name'
   };
 
   render () {
@@ -52,11 +54,14 @@ export default class Widget extends Component {
       ? getVisiblePlugins.size
       : getVisiblePlugins.length
 
-
+    const viewClass = styles[this.state.view]
+    
     return (
-      <div className={classNames(styles.ItemFinder, 'item-finder')} >
+      <div>
+      <h1>!!!!!</h1>
+      <div className={classNames(styles.ItemFinder, viewClass, 'item-finder')} >
         {true && <div>
-          <span>{title}</span>
+          <span>{title} !!!!!</span>
             <button onClick={()=>  {
               this.setState({
                 clicked: !clicked
@@ -159,14 +164,39 @@ export default class Widget extends Component {
                 <a className="nav-link dropdown-toggle">Filter</a>
               </li>
               <li className="nav-item btn-group dropdown">
-                <a className="nav-link dropdown-toggle">View</a>
+                <a className="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">View</a>
+                <div className="dropdown-menu" aria-labelledby="dLabel">
+                
+                  <a className="dropdown-item" href="#">Regular link</a>
+                  <a className="dropdown-item disabled" href="#">Disabled link</a>
+                  <a className="dropdown-item" href="#">Another link</a>
+                
+                </div>
 
               </li>
+              
+              <li className="nav-item dropdown">
+                <button className="nav-link  dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  View
+                </button>
+              <div className="dropdown-menu">
+                <a className="dropdown-item" href="#view=tiles" 
+                  onClick={()=>  {this.setState({ view: 'tiles' });}}>Tiles</a>
+                <a className="dropdown-item" href="#view=list"
+                  onClick={()=>  {this.setState({ view: 'list' });}}>List</a>
+                <a className="dropdown-item" href="#view=table">
+                  onClick={()=>  {this.setState({ view: 'table' });}}>Table</a>
+              </div>
+            </li>
+              
+              
+              
+              
             </ul>
           </nav>
 
           <div id="cb-item-finder-grid-box" className={classNames(styles.GridBox, 'grid-box')} >
-            <div className={classNames(styles.Grid, 'grid foo')} >
+            <div className={classNames(styles.Grid, 'grid')} >
 
               {totalSize > 0 && getVisiblePlugins.valueSeq().map(plugin => {
                 return <Entry
@@ -182,6 +212,7 @@ export default class Widget extends Component {
 
         </div>
 
+      </div>
       </div>
       )
   };

@@ -78,7 +78,7 @@ nav form {
 }
 
 .ItemFinder {
-  background: #DCD9D8 url(/img/bricks_30x30.png) fixed;
+  background: #DCD9D8;
   min-height: 40rem;
   box-shadow: inset rgba(0, 0, 0, .15) 0 -2px 1px;
   float:left;
@@ -198,6 +198,7 @@ body div .GridBox>.Grid>div>a>div.Title>h4 {font-size:.85rem; font-weight:bold; 
 body .Item{
   display:block;
 }
+body .tiles.ItemFinder .GridBox>.Grid>div>a.item,
 body .Tile{
     height: auto;
     position: relative;

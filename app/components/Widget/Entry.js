@@ -14,7 +14,7 @@ export default function Entry ({plugin}) {
         className={styles.Item}
       >
 
-        <a href={plugin.get('wiki')} className={styles.Tile}>
+        <a href={plugin.get('wiki')} className={classNames('item',styles.Tile)}>
           <div className={styles.Icon}>
             {plugin.get('iconDom')}
           </div>

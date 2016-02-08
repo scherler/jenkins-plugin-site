@@ -10,14 +10,8 @@ const entryDirectory = 'app';
 
 module.exports = {
   debug: false,
-  devServer: {
-    contentBase: 'build',
-    port: 5000
-  },
-  devtool: 'source-map',
+  devtool: 'eval',
   entry: [
-    'webpack-dev-server/client?http://localhost:5000',
-    'webpack/hot/dev-server',
     'babel-polyfill',
     './' + entryDirectory + '/index'
   ],

@@ -81,6 +81,7 @@
     "html-webpack-plugin": "2.7.1",
     "path": "0.12.7",
     "react-transform-hmr": "1.0.1",
+    "request": "2.69.0",
     "style-loader": "0.13.0",
     "stylus-loader": "1.4.3",
     "watch": "0.17.1",

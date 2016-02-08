@@ -27,6 +27,26 @@ export default class Widget extends Component {
     sort:'name'
   };
 
+  filterSet (search, filter) {
+    this.props.setFilter(new Immutable.Record({
+      searchField: 'labels',
+      field: filter.title || 'title',
+      search: search,
+      asc: filter.asc || true
+    }))
+
+  };
+
+  getFilter (labelFilter) {
+    let filter;
+    if (labelFilter instanceof Function) {
+      filter = labelFilter();
+    } else {
+      filter = labelFilter;
+    }
+    return filter;
+  };
+
   render () {
 
     const {
@@ -41,12 +61,7 @@ export default class Widget extends Component {
       labelFilter
     } = this.props;
 
-    let filter;
-    if (labelFilter instanceof Function) {
-      filter = labelFilter();
-    } else {
-      filter = labelFilter;
-    }
+    const filter = this.getFilter(labelFilter);
 
     const { clicked } = this.state;
 
@@ -55,7 +70,7 @@ export default class Widget extends Component {
       : getVisiblePlugins.length
 
     const viewClass = styles[this.state.view]
-    
+
     return (
       <div>
       <h1>!!!!!</h1>
@@ -93,24 +108,25 @@ export default class Widget extends Component {
         <div className={classNames(styles.CategoriesBox, 'categories-box col-md-2')} >
           <ul className="list-group">
             <li className={classNames(styles.scm, 'scm')}>
-              <a className={classNames(styles.li, 'list-group-item')}>SCM connectors</a></li>
+              <a className={classNames(styles.li, 'list-group-item')} onClick={()=>  {
+                    this.filterSet(['scm-related', 'scm'], labelFilter)
+                }}>SCM connectors</a></li>
             <li className={classNames(styles.build, 'build')}>
-              <a className={classNames(styles.li, 'list-group-item')}>Build and analytics</a></li>
+              <a className={classNames(styles.li, 'list-group-item')} onClick={()=>  {
+                    this.filterSet(['builder', 'buildwrapper'], labelFilter)
+                }}>Build and analytics</a></li>
             <li className={classNames(styles.deployment, 'deployment')}>
-              <a className={classNames(styles.li, 'list-group-item')}>Deployment</a></li>
+              <a className={classNames(styles.li, 'list-group-item')} onClick={()=>  {
+                    this.filterSet([ 'cli', 'deployment'], labelFilter)
+                }}>Deployment</a></li>
             <li className={classNames(styles.pipelines, 'pipelines')}>
               <a className={classNames(styles.li, 'list-group-item')}>Pipelines</a></li>
             <li className={classNames(styles.containers, 'containers')}>
               <a className={classNames(styles.li, 'list-group-item')}>Containers</a></li>
             <li className={classNames(styles.security, 'security')}>
               <a className={classNames(styles.li, 'list-group-item')} onClick={()=>  {
-              setFilter(new Immutable.Record({
-                searchField: 'labels',
-                field: filter.title || 'title',
-                search: ['user', 'security'],
-                asc: filter.asc || true
-              }));
-            }}>Users and security</a></li>
+                    this.filterSet(['user', 'security'], labelFilter)
+                }}>Users and security</a></li>
             <li className={classNames(styles.general, 'general')}>
               <a className={classNames(styles.li, 'list-group-item')}>General purpose</a></li>
           </ul>
@@ -166,21 +182,21 @@ export default class Widget extends Component {
               <li className="nav-item btn-group dropdown">
                 <a className="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">View</a>
                 <div className="dropdown-menu" aria-labelledby="dLabel">
-                
+
                   <a className="dropdown-item" href="#">Regular link</a>
                   <a className="dropdown-item disabled" href="#">Disabled link</a>
                   <a className="dropdown-item" href="#">Another link</a>
-                
+
                 </div>
 
               </li>
-              
+
               <li className="nav-item dropdown">
                 <button className="nav-link  dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   View
                 </button>
               <div className="dropdown-menu">
-                <a className="dropdown-item" href="#view=tiles" 
+                <a className="dropdown-item" href="#view=tiles"
                   onClick={()=>  {this.setState({ view: 'tiles' });}}>Tiles</a>
                 <a className="dropdown-item" href="#view=list"
                   onClick={()=>  {this.setState({ view: 'list' });}}>List</a>
@@ -188,10 +204,10 @@ export default class Widget extends Component {
                   onClick={()=>  {this.setState({ view: 'table' });}}>Table</a>
               </div>
             </li>
-              
-              
-              
-              
+
+
+
+
             </ul>
           </nav>
 

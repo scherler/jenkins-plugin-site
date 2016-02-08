@@ -3,6 +3,7 @@ import { createSearchAction, getSearchSelectors } from 'redux-search'
 import faker from 'faker'
 import Immutable from 'immutable'
 import keymirror from 'keymirror'
+import { env } from './commons'
 import _ from 'lodash'
 import React, { PropTypes } from 'react'
 
@@ -57,8 +58,11 @@ const Record = Immutable.Record({
   dependencies: []
 });
 
-//const PLUGINS_URL = 'https://updates.jenkins-ci.org/current/update-center.json';
-const PLUGINS_URL = 'http://0.0.0.0:3000/update-center.json';
+let PLUGINS_URL = 'https://updates.jenkins-ci.org/current/update-center.json';
+
+if (env.debug) {
+  PLUGINS_URL = 'http://0.0.0.0:3000/update-center.json';
+}
 
 export function jsonp(url, callback) {// HACK
   let callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());

@@ -72,7 +72,7 @@ export default class Widget extends Component {
 
     const viewClass = styles[this.state.view]
 
-    
+
     return (
       <div className={classNames(styles.ItemFinder, this.state.view, 'item-finder')} >
         <div className={classNames(styles.CategoriesBox, 'categories-box col-md-2')} >
@@ -80,8 +80,8 @@ export default class Widget extends Component {
             <li className={classNames(styles.title, 'label')}>
               <div className={classNames(styles.li, 'list-group-item')}>Categories</div></li>
             <li className={classNames(styles.scm, 'scm')}>
-              <a href="#category=scm" className={classNames(styles.li, 'list-group-item', (this.state.category === 'scm')?'active':'')} 
-                onClick={()=> 
+              <a href="#category=scm" className={classNames(styles.li, 'list-group-item', (this.state.category === 'scm')?'active':'')}
+                onClick={()=>
                   {
                     {this.state.category = 'scm'}
                     {this.filterSet(['scm-related', 'scm'], labelFilter)}
@@ -89,8 +89,8 @@ export default class Widget extends Component {
                 }
               >SCM connectors</a></li>
             <li className={classNames(styles.build, 'build')}>
-              <a href="#category=build" className={classNames(styles.li, 'list-group-item', (this.state.category === 'build')?'active':'')} 
-              onClick={()=> 
+              <a href="#category=build" className={classNames(styles.li, 'list-group-item', (this.state.category === 'build')?'active':'')}
+              onClick={()=>
                 {
                   {this.state.category = 'build'}
                   {this.filterSet(['builder', 'buildwrapper'], labelFilter)}
@@ -99,7 +99,7 @@ export default class Widget extends Component {
               >Build and analytics</a></li>
             <li className={classNames(styles.deployment, 'deployment')}>
               <a href="#category=deployment" className={classNames(styles.li, 'list-group-item', (this.state.category === 'deployment')?'active':'')}
-              onClick={()=> 
+              onClick={()=>
               {
                 {this.state.category = 'deployment'}
                 {this.filterSet(['cli', 'deployment'], labelFilter)}
@@ -111,7 +111,7 @@ export default class Widget extends Component {
               <a href="#category=containers" className={classNames(styles.li, 'list-group-item')}>Containers</a></li>
             <li className={classNames(styles.security, 'security')}>
               <a href="#category=security" className={classNames(styles.li, 'list-group-item', (this.state.category === 'security')?'active':'')}
-              onClick={()=> 
+              onClick={()=>
               {
                 {this.state.category = 'security'}
                 {this.filterSet(['user', 'security'], labelFilter)}
@@ -208,7 +208,7 @@ export default class Widget extends Component {
                       setFilter(new Immutable.Record({
                         field: 'releaseTimestamp',
                         asc: !filter.asc
-                      }))}}>Created</a>  
+                      }))}}>Created</a>
                 </div>
               </li>
 

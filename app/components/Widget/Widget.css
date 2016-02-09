@@ -95,7 +95,7 @@ nav form {
   border-radius: 0;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
-  box-shadow: 0 3px 2px rgba(0, 0, 0, .15);
+  box-shadow: 0 3px 2px -1px rgba(0, 0, 0, .1);
   margin-top: -1px
 }
 
@@ -105,7 +105,7 @@ nav form {
 }
 
 .CategoriesBox>ul>li {
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   margin-top: -1px;
 }
 
@@ -177,7 +177,7 @@ body div .GridBox>.Grid>div>a {
   
 }
 
-body div .GridBox>.Grid>div>a>div {
+body div.table .GridBox>.Grid>div>a>div {
   display: table-cell;
   max-height: 4.9rem;
   height: auto;
@@ -187,18 +187,18 @@ body div .GridBox>.Grid>div>a>div {
   font-size:.8rem;
   border-bottom:1px solid #ccc;
 }
-body div .GridBox>.Grid>div>a>div.Icon,
-body div .GridBox>.Grid>div>a>div.Wiki {display:none}
-body div .GridBox>.Grid>div>a>div.Score {white-space:nowrap; font-size:.8rem}
-body div .GridBox>.Grid>div>a>div.Title {width:20%}
-body div .GridBox>.Grid>div>a>div.Title>h4 {font-size:.85rem; font-weight:bold; color:#5ac; min-height:2.2rem}
+body z .GridBox>.Grid>div>a>div.Icon,
+body z .GridBox>.Grid>div>a>div.Wiki {display:none}
+body z .GridBox>.Grid>div>a>div.Score {white-space:nowrap; font-size:.8rem}
+body z .GridBox>.Grid>div>a>div.Title {width:20%}
+body z .GridBox>.Grid>div>a>div.Title>h4 {font-size:.85rem; font-weight:bold; color:#5ac; min-height:2.2rem}
 
 
 
 body .Item{
   display:block;
 }
-body .tiles.ItemFinder .GridBox>.Grid>div>a.item,
+body .tiles .GridBox>.Grid>div>a.item,
 body .Tile{
     height: auto;
     position: relative;
@@ -346,7 +346,7 @@ body .Tile > .Excerpt {
   right: 0;
 }
 
-.Tile h4 {
+.Entry h4 {
   font-size: 1rem;
   margin: 0 0 .5rem;
   line-height: 1.1rem;

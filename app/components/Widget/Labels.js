@@ -1,12 +1,14 @@
 import React, { PropTypes, Component } from 'react'
 
 export function LabelWidgetItem ({index, item, onClick}) {
-  return (<li
+  var href = "#key=" + item.key;
+  return (<a
+    href={href}
     key={index}
-    style={{ cursor:'pointer' }}
+    className="dropdown-item"
     onClick={onClick}>
-      {item.key}: {item.value}
-    </li>);
+      <span className="key">{item.key}</span> <span className="count">{item.value}</span>
+    </a>);
 }
 
 export default class LabelWidget extends Component {
@@ -49,28 +51,14 @@ export default class LabelWidget extends Component {
       }
     );
 
-    return (<ul style={{backgroundColor:'#66ccff',float:'left'}}>
-      <li>
-        Just a demo for label filters
-        <button onClick={()=>  {
-          this.setState({
-            field: 'key',
-            asc: !asc
-          });
-        }}>Sort names</button>
-        <button onClick={()=>  {
-          this.setState({
-            field: 'value',
-            asc: !asc
-          });
-        }}>Sort popular</button>
-      </li>
+    return (
+      <div className="filter-keys dropdown-menu">
       {
         sortedLabels.valueSeq().map(
         (item, index) => {
           return (<LabelWidgetItem key={index} index={index} item={item} onClick={onClick}/>)
         })
       }
-      </ul>);
+      </div>);
   }
 }

@@ -1,4 +1,34 @@
-html {font-size:16px}
+#ji-toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    border-radius: 0;
+  background:#000;
+  font-size:.85rem
+}
+#ji-toolbar > .navbar-brand {
+    font: bold 2rem 'georgia';
+    margin-top: -.2rem;
+}
+#ji-toolbar-offset {
+    min-height: 3rem;
+}
+body .item-finder.tiles .Entry-box{
+  display:inline-block;
+}
+.categories-box .list-group{margin-top:-2.75rem;position:relative; z-index:2; box-shadow:0 3px 2px -1px rgba(0,0,0,.1)}
+.categories-box .list-group > .label {    background:rgba(0,0,0,.5); 
+    display: block;
+    border: none;
+    border-radius: 0;
+    border-top-right-radius:10px;}
+.categories-box .list-group > .label > .list-group-item {background:none; color:#fff; border:none; font-size:1rem; text-align:left;}
+button.nav-link {border-radius:3px; background:#f9f9f9; border:1px solid #ccc; box-shadow:0 2px 4px -3px rgba(0,0,0,.25)}
+button.nav-link b {color:#666;}
+.form-inline > .form-control.nav-link {margin:0; width:12rem;border-radius:3px; border:1px solid #ccc; background:#f9f9f9; padding-left:.25rem; box-shadow:inset 0 2px 4px -2px rgba(0,0,0,.25)}
+body .item-finder.tiles a.item,
 .Tile {
   display: block;
   border: .1rem solid #ccc;
@@ -7,29 +37,36 @@ html {font-size:16px}
   width:13rem;
   box-sizing: border-box;
   padding: .67rem;
-  box-shadow: 0 8px 1px -4px rgba(0,0,0,.25);
+  box-shadow: 0 2px 3px rgba(0,0,0,.25);
   color: #666;
   text-decoration: none !important;
   background: #fff;
   opacity: .9;
   border-radius: 3px;
+  margin:.25rem;
 }
-
+body .item-finder.tiles .grid-box > div {padding:.5rem 0}
+body .item-finder.list a.item > div,
+body .item-finder.tiles a.item > div {display:block; position:relative; width:auto; top:auto; left:auto}
+body .item-finder.tiles a.item:hover,
 .Tile:hover {
   border: .1rem solid #999;
   opacity: 1;
 }
-
+body .item-finder.tiles a.item .Title:hover h4,
 .Tile:hover h4 {
   color: #069;
   text-decoration: underline;
 }
 
+body .item-finder.tiles a.item .Icon,
 .Tile .Icon {
   text-align: center;
   margin: .5rem 0 0;
+  display:block;
 }
 
+body .item-finder.tiles a.item .Icon>i,
 .Tile .Icon>i {
   display: inline-block;
   font-size: 1.33rem;
@@ -42,36 +79,38 @@ html {font-size:16px}
   margin: -1px 0 0 -1px;
   text-shadow: rgba(0, 0, 0, .5) 1px 2px 1px
 }
-
+body .item-finder a.item .Score,
 .Tile .Score {
   margin: 0 0 .67rem
 }
-
+body .item-finder a.item .Score>.scr_4:after,
 .Tile .Score>.scr_4:after {
   content: '\2605 \2605 \2605 \2605 \2606';
   display: block;
   text-align: center;
 }
-
+body .item-finder.tiles a.item .Version,
 .Tile .Version {
   font-size: .75rem;
   margin: -.5rem 0 .5rem;
   color: #999;
 }
-
+body .item-finder.tiles a.item .Version span,
 .Tile .Version span {
   margin-right: .25rem
 }
-
+body .item-finder.tiles a.item .Version span.v,
 .Tile .Version span.v {
   margin-right: 1rem;
   display: none;
 }
 
+body .item-finder.tiles a.item .Version span.c:after,
 .Tile .Version span.c:after {
   content: '+'
 }
-
+body div .item-finder a.item > .Wiki{display:none}
+body .item-finder.tiles a.item .Excerpt,
 .Tile .Excerpt {
   white-space: normal;
   line-height: 1.1rem;
@@ -82,10 +121,13 @@ html {font-size:16px}
   margin: 0 0 .67rem;
 }
 
+body .item-finder.tiles a.item .Excerpt p, 
+body .item-finder.tiles a.item  .Excerpt div,
 .Tile .Excerpt p, .Tile .Excerpt div {
   display: inline;
 }
-
+body .item-finder.tiles a.item h4:after,
+body .item-finder.tiles a.item .Excerpt:after,
 .Tile h4:after, .Tile .Excerpt:after {
   display: block;
   content: ' ';
@@ -97,7 +139,7 @@ html {font-size:16px}
   bottom: 0;
   right: 0;
 }
-
+body .item-finder a.item h4,
 .Tile h4 {
   font-size: 1rem;
   margin: 0 0 .5rem;
@@ -109,7 +151,7 @@ html {font-size:16px}
   font-weight: normal;
   position: relative;
 }
-
+body .item-finder.tiles a.item .Authors>div,
 .Tile .Authors>div {
   font-size: .75rem;
   display: block;
@@ -182,29 +224,52 @@ spinner .double-bounce1, .spinner .double-bounce2 {
 .tbody > .thead {display:table-header-group}
 .tbody > .thead > .tr {display: table-row}
 .tbody > .thead > .tr > div {display:table-cell; border-bottom:1px solid #ccc; padding:.25rem}
+body .item-finder.table .Entry-box,
 .tbody > .Row {display: table-row-group;}
-.tbody > .Row > .Tile {display:table-row; height:auto; width:auto; margin:0; padding:0}
-.tbody > .Row > .Tile > div {display:table-cell; max-height:3.3rem; height:auto; padding:.25rem}
+body .item-finder.table a.Entrty,
+.tbody > .Row > .Tile {display:table-row; height:auto; width:auto; margin:0; padding:0;}
+/*
+body .item-finder.table .Entry-box:nth-child(odd) > .Entry > div{background:#f9f9f9 !important}
+body .item-finder.table .Entry-box:nth-child(odd) > .Entry > div h4:after,
+body .item-finder.table .Entry-box:nth-child(odd) > .Entry > div.Excerpt{box-shadow: inset #fff -250px 0 250px -200px;}
+*/
+body .item-finder.table a.Entry > div,
+.tbody > .Row > .Tile > div {display:table-cell; max-height:3.3rem; height:auto; padding:.25rem; border-bottom:1px solid #eee}
+body .item-finder.table a.Entry > div.Score {margin:0; font-size:.85rem; position:static}
+body .item-finder.table a.Entry > div.Wiki {display:none}
+body .item-finder.table a.Entry > div.Title,
 .tbody > .Row > .Tile > div.Title{width:20%}
+body .item-finder.table a.Entry > div.Title > h4 {font-size:.85rem; color:#369; font-weight:bold;}
+body .item-finder.table a.Entry > div.Icon,
 .tbody > .Row > .Tile > div.Icon {display:none}
+body .item-finder.table a.Entry > div.Authors > div,
 .tbody > .Row > .Tile > div.Authors > div {white-space:nowrap}
 
 .list > .list > .thead {display:none}
-.list > .item > .Tile {    height: auto; position:relative;
+body .item-finder.list a.Entry,
+.list > .item > .Tile {  display:block;  height: auto; position:relative;
     width: auto;
     padding: .5rem .5rem .5rem 6rem;
     text-align: left;}
-.list > .item > .Tile > .Version {margin-bottom:.25rem}    
+body .item-finder.list a.Entry .Version,
+.list > .item > .Tile > .Version {margin-bottom:.25rem}
+body .item-finder.list a.Entry .Score,
+body .item-finder.list a.Entry .Icon,    
 .list > .item > .Tile > .Score,    
 .list > .item > .Tile > .Icon {position:absolute; left:.5rem; width:5rem;}
+body .item-finder.list a.Entry .Score,
 .list > .item > .Tile > .Score {top:4rem;}
+body .item-finder.list a.Entry .Excerpt,
 .list > .item > .Tile > .Excerpt {height:auto; max-height:3.3rem; margin-bottom:.25rem}
+body .item-finder.list a.Entry .Authors,
 .list > .item > .Tile > .Authors {margin:0}
+body .item-finder.list a.Entry .Authors > div,
 .list > .item > .Tile > .Authors > div {display:inline-block  }
 #ji-toolbar form {margin:0}
 #ji-toolbar.navbar-dark .navbar-nav .nav-item.active a{color:#fff}
 
 .jumbotron.plugins {
+  margin:0;
 /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#81b0c4+0,335061+100 */
 background: #81b0c4; /* Old browsers */
 background: -moz-linear-gradient(left,  #81b0c4 0%, #335061 100%); /* FF3.6-15 */
@@ -219,3 +284,88 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#81b0c4', end
 body .btn-primary {background:#55aacc; border-color:#81B0C4}
 body .btn-primary:hover{background:#335061; border-color:#88C5CC}
 nav .nav-item.active {box-shadow:inset #D33833 0 -2px}
+.categories-box .filter-keys.dropdown-menu{
+    padding: 0;
+    position: static;
+    display: block;
+    margin: -1px 0 0;
+    width: auto;
+    max-width: 9999rem;
+    float: none;
+    border-color:#ccc;
+    border-radius: 0;
+    background:#f9f9f9
+}
+.categories-box .filter-keys.dropdown-menu a{
+
+  color:#999;
+  padding:1px 2px;
+  font-size:.85rem;
+  display:block;
+  width:auto;
+  position:relative;
+}
+.categories-box .filter-keys.dropdown-menu a:hover{box-shadow:rgba(0,0,0,.06) 0 100px inset}
+.categories-box .filter-keys.dropdown-menu a:nth-child(odd){background:#eee}
+.categories-box .filter-keys.dropdown-menu a span{display:inline-block;  padding:.25rem 0 .25rem 2.25rem; color:#369}
+.categories-box .filter-keys.dropdown-menu a .count {padding:.25rem .75rem; width:5rem; text-align:right; position:absolute; right:0;}
+body .list-group > li > a.active:active,
+body .list-group > li > a.active:hover,
+body .list-group > li > a.active {color:#000 !important; box-shadow:inset 0 99rem rgba(200,240,255,.67); background:#fff !important}
+#download-menu > .dropdown-menu {
+    width: 50rem;
+    padding: 2rem;
+}
+#doc-toolbar *, #ji-toolbar * {
+    line-height: 1.2rem !important;
+    vertical-align: bottom !important;
+}
+nav .form-inline .input-group>.form-control {
+    width: 0;
+    transition: all 0.5s ease;
+}
+form.search {
+    opacity: .9;
+    float: right;
+}
+nav form.search .input-group:hover>input.form-control, nav form.search .input-group:focus>input.form-control, nav form.search .input-group>input.form-control:focus {
+    opacity: 1;
+    width: 12rem;
+}
+#ji-toolbar > .navbar-brand {
+    font: bold 1.33rem/1.5rem georgia;
+    margin:0 1rem 0 0;
+    border-top:3px solid transparent;
+}
+#footer {
+    color: rgb(170, 204, 221);
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    float: left;
+    clear: both;
+    background: rgb(0, 68, 102);
+    padding: 2rem;
+}
+#footer ul, #footer li {
+    display: block;
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+#footer .links {
+    text-align: right;
+    float: right;
+}
+#footer .links ul li {
+    text-align: left;
+}
+#footer ul > .area {
+    display: inline-block;
+    padding-left: 1rem;
+    vertical-align: top;
+    font-size: 0.85rem;
+}
+#footer a {
+    color: rgb(255, 255, 255);
+}

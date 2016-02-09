@@ -11,37 +11,37 @@ export default function Entry ({plugin}) {
   return (
     <div
         key={plugin.get('sha1')}
-        className={styles.Item}
+        className={classNames(styles.Item,'Entry-box')}
       >
 
-        <a href={plugin.get('wiki')} className={classNames('item',styles.Tile)}>
-          <div className={styles.Icon}>
+        <a href={plugin.get('wiki')} className={classNames('item','Entry',styles.Tile)}>
+          <div className={classNames(styles.Icon,'Icon')}>
             {plugin.get('iconDom')}
           </div>
 
-          <div className={styles.Score}>
+          <div className={classNames(styles.Score,'Score')}>
             <span className={getScoreClassName()}></span>
           </div>
-          <div className={styles.Title}>
+          <div className={classNames(styles.Title,'Title')}>
             <h4>{cleanTitle(plugin.get('title'))}</h4>
           </div>
-          <div className={styles.Version}>
-            <span className={styles.v}>{plugin.get('version')}</span>
+          <div className={classNames(styles.Version,'Version')}>
+            <span className={classNames(styles.v,'v')}>{plugin.get('version')}</span>
             <span className="jc">
               <span className="j">Jenkins</span>
               <span className="c">{plugin.get('requiredCore')}+</span>
               </span>
           </div>
 
-          <div className={styles.Wiki}>
+          <div className={classNames(styles.Wiki,'Wiki')}>
             {plugin.get('wiki')}
           </div>
 
-          <div className={styles.Excerpt}>
+          <div className={classNames(styles.Excerpt,'Excerpt')}>
             {plugin.get('excerpt')}
           </div>
 
-          <div className={styles.Authors}>
+          <div className={classNames(styles.Authors,'Authors')}>
             {getMaintainers(plugin.get('developers'),plugin.get('sha1'))}
           </div>
 

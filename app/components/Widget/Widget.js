@@ -138,7 +138,9 @@ export default class Widget extends Component {
             <ul className="nav navbar-nav">
               <li className="nav-item active"><a className="nav-link">Featured</a></li>
               <li className="nav-item"><a className="nav-link">New</a></li>
-              <li className="nav-item"><a className="nav-link">All</a></li>
+              <li className="nav-item">
+                <button className="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tags</button>
+              </li>
               <li className="nav-item btn-group">
                 <button className="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tags</button>
                 { totalSize > 0 && <LabelWidget

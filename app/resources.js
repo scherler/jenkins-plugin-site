@@ -28,7 +28,9 @@ export const ACTION_TYPES = keymirror({
 buildDate: "Mar 03, 2011"
 dependencies: Array[0]
 developers: Array[1]
-excerpt: "This (experimental) plug-in exposes the jenkins build extension points (SCM, Build, Publish) to a groovy scripting environment that has some DSL-style extensions for ease of development."
+excerpt: "This (experimental) plug-in exposes the jenkins build extension
+ points (SCM, Build, Publish) to a groovy scripting environment that has
+  some DSL-style extensions for ease of development."
 gav: "jenkins:AdaptivePlugin:0.1"
 labels: Array[2]
 name: "AdaptivePlugin"
@@ -80,7 +82,7 @@ export function groupAndCountLabels(recordsMap) {
   const labelMap = _.map(
       _.groupBy(
         _.flatten(recordsMap.toArray().map(
-          function(a) {
+          function (a) {
             return a.labels;
           }
         )
@@ -98,7 +100,12 @@ export function groupAndCountLabels(recordsMap) {
 export const actions = {
     //FIXME: This should not inject React DOM here, but.... hack...
   makeIcon(title, type){
-    title = title.replace('Jenkins ','').replace('jenkins ','').replace(' Plugin','').replace(' Plug-in','').replace(' lugin','');
+    title = title
+      .replace('Jenkins ','')
+      .replace('jenkins ','')
+      .replace(' Plugin','')
+      .replace(' Plug-in','')
+      .replace(' lugin','');
     type = type || '';
     const colors = ['#6D6B6D','#DCD9D8','#D33833','#335061','#81B0C4','#709aaa','#000'];
     const color = colors[Math.floor(Math.random() * (colors.length - 1))];
@@ -131,7 +138,7 @@ export const actions = {
     }
   },
 
-  generatePluginData () {
+  generatePluginData() {
     return (dispatch, getState) => {
       dispatch(actions.clearPluginData())
       dispatch(actions.fetchPluginData())
@@ -155,16 +162,16 @@ export const actions = {
 }
 
 export const actionHandlers = {
-  [ACTION_TYPES.CLEAR_PLUGIN_DATA] (state) {
+  [ACTION_TYPES.CLEAR_PLUGIN_DATA](state) {
     return state.set('plugins', Immutable.Map())
   },
-  [ACTION_TYPES.FETCH_PLUGIN_DATA] (state, {}): State {
+  [ACTION_TYPES.FETCH_PLUGIN_DATA](state, {}): State {
     return state.set('isFetching', !state.isFetching)
   },
-  [ACTION_TYPES.SET_PLUGIN_DATA] (state, { payload }): State {
+  [ACTION_TYPES.SET_PLUGIN_DATA](state, { payload }): State {
     return state.set('plugins', payload)
   },
-  [ACTION_TYPES.SET_LABEL_FILTER] (state, { payload }): State {
+  [ACTION_TYPES.SET_LABEL_FILTER](state, { payload }): State {
     return state.set('labelFilter', payload)
   }
 }
@@ -243,7 +250,7 @@ export const getVisiblePluginsLabels = createSelector(
   }
 )
 
-export function reducer (state = new State(), action: Object): State {
+export function reducer(state = new State(), action: Object): State {
   const { type } = action
   if (type in actionHandlers) {
     return actionHandlers[type](state, action)

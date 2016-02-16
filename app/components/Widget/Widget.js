@@ -28,7 +28,7 @@ export default class Widget extends Component {
     category:'all'
   };
 
-  filterSet (search, filter) {
+  filterSet(search, filter) {
     this.props.setFilter(new Immutable.Record({
       searchField: 'labels',
       field: filter.title || 'title',
@@ -38,7 +38,7 @@ export default class Widget extends Component {
 
   };
 
-  getFilter (labelFilter) {
+  getFilter(labelFilter) {
     let filter;
     if (labelFilter instanceof Function) {
       filter = labelFilter();
@@ -48,12 +48,11 @@ export default class Widget extends Component {
     return filter;
   };
 
-  render () {
+  render() {
 
     const {
       generateData,
       setFilter,
-      rowRenderer,
       searchData,
       title,
       totalSize,
@@ -80,7 +79,9 @@ export default class Widget extends Component {
             <li className={classNames(styles.title, 'label')}>
               <div className={classNames(styles.li, 'list-group-item')}>Categories</div></li>
             <li className={classNames(styles.scm, 'scm')}>
-              <a href="#category=scm" className={classNames(styles.li, 'list-group-item', (this.state.category === 'scm')?'active':'')}
+              <a
+                href="#category=scm"
+                className={classNames(styles.li, 'list-group-item', (this.state.category === 'scm')?'active':'')}
                 onClick={()=>
                   {
                     {this.state.category = 'scm'}
@@ -89,7 +90,8 @@ export default class Widget extends Component {
                 }
               >SCM connectors</a></li>
             <li className={classNames(styles.build, 'build')}>
-              <a href="#category=build" className={classNames(styles.li, 'list-group-item', (this.state.category === 'build')?'active':'')}
+              <a href="#category=build"
+                className={classNames(styles.li, 'list-group-item', (this.state.category === 'build')?'active':'')}
               onClick={()=>
                 {
                   {this.state.category = 'build'}
@@ -98,7 +100,8 @@ export default class Widget extends Component {
               }
               >Build and analytics</a></li>
             <li className={classNames(styles.deployment, 'deployment')}>
-              <a href="#category=deployment" className={classNames(styles.li, 'list-group-item', (this.state.category === 'deployment')?'active':'')}
+              <a href="#category=deployment"
+                 className={classNames(styles.li, 'list-group-item', (this.state.category === 'deployment')?'active':'')}
               onClick={()=>
               {
                 {this.state.category = 'deployment'}
@@ -106,11 +109,18 @@ export default class Widget extends Component {
               }
             }>Deployment</a></li>
             <li className={classNames(styles.pipelines, 'pipelines')}>
-              <a href="#category=pipelines" className={classNames(styles.li, 'list-group-item')}>Pipelines</a></li>
+              <a href="#category=pipelines"
+                className={classNames(styles.li, 'list-group-item')}>
+                Pipelines</a>
+            </li>
             <li className={classNames(styles.containers, 'containers')}>
-              <a href="#category=containers" className={classNames(styles.li, 'list-group-item')}>Containers</a></li>
+              <a href="#category=containers"
+                 className={classNames(styles.li, 'list-group-item')}>
+                 Containers
+              </a></li>
             <li className={classNames(styles.security, 'security')}>
-              <a href="#category=security" className={classNames(styles.li, 'list-group-item', (this.state.category === 'security')?'active':'')}
+              <a href="#category=security"
+                className={classNames(styles.li, 'list-group-item', (this.state.category === 'security')?'active':'')}
               onClick={()=>
               {
                 {this.state.category = 'security'}
@@ -118,7 +128,10 @@ export default class Widget extends Component {
               }
             }>Users and security</a></li>
             <li className={classNames(styles.general, 'general')}>
-              <a href="#category=general" className={classNames(styles.li, 'list-group-item')}>General purpose</a></li>
+              <a href="#category=general"
+                className={classNames(styles.li, 'list-group-item')}>
+                General purpose</a>
+            </li>
           </ul>
           { totalSize > 0 && <LabelWidget
             labels={getVisiblePluginsLabels}
@@ -134,15 +147,31 @@ export default class Widget extends Component {
 
         <div className={classNames(styles.ItemsList, 'items-box col-md-10')}>
 
-          <nav id="cb-grid-toolbar" className='navbar navbar-light bg-faded'>
+          <nav id="cb-grid-toolbar"
+             className='navbar navbar-light bg-faded'>
             <ul className="nav navbar-nav">
-              <li className="nav-item active"><a className="nav-link">Featured</a></li>
-              <li className="nav-item"><a className="nav-link">New</a></li>
+              <li className="nav-item active">
+                <a className="nav-link">Featured</a>
+              </li>
               <li className="nav-item">
-                <button className="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tags</button>
+                <a className="nav-link">New</a>
+              </li>
+              <li className="nav-item">
+                <button className="nav-link dropdown-toggle"
+                   data-toggle="dropdown"
+                   aria-haspopup="true"
+                   aria-expanded="false">
+                   Tags
+               </button>
               </li>
               <li className="nav-item btn-group">
-                <button className="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tags</button>
+                <button
+                  className="nav-link dropdown-toggle"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false">
+                  Tags
+                </button>
                 { totalSize > 0 && <LabelWidget
                   labels={getVisiblePluginsLabels}
                   onClick={(event)=>  {
@@ -154,8 +183,15 @@ export default class Widget extends Component {
                     }))}}
                   /> }
               </li>
-              <li className="nav-item btn-group"><a className="nav-link dropdown-toggle">Technologies</a></li>
-              <li className="nav-item"><button className="btn btn-sm" onClick={()=>  generateData()}>getPlugins</button></li>
+              <li className="nav-item btn-group">
+                <a className="nav-link dropdown-toggle">
+                  Technologies
+                </a></li>
+              <li className="nav-item">
+                <button
+                  className="btn btn-sm"
+                  onClick={()=>  generateData()}>
+                  getPlugins</button></li>
             </ul>
 
             <ul className="pull-xs-right nav navbar-nav">
@@ -170,7 +206,7 @@ export default class Widget extends Component {
                 <form className="form-inline pull-xs-right" action='#'>
                 <input
                   disabled={totalSize === 0}
-                  className={classNames(styles.SearchInput, "form-control nav-link")}
+                  className={classNames(styles.SearchInput, 'form-control nav-link')}
                   onChange={event => searchData(event.target.value)}
                   onSubmit={event => searchData(event.target.value)}
                   placeholder='Filter...'
@@ -178,7 +214,12 @@ export default class Widget extends Component {
                 </form>
               </li>
               <li className="nav-item btn-group">
-                <button className="nav-link dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button
+                  className="nav-link dropdown-toggle"
+                  type="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false">
                   sort: <b>{this.state.sort}</b></button>
                 <div className="dropdown-menu">
                   <a className="dropdown-item" href="#sort=name"
@@ -215,7 +256,12 @@ export default class Widget extends Component {
               </li>
 
               <li className="nav-item dropdown">
-                <button className="nav-link  dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button
+                  className="nav-link  dropdown-toggle"
+                  type="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false">
                   view: <b>{this.state.view}</b>
                 </button>
               <div className="dropdown-menu">
@@ -228,9 +274,6 @@ export default class Widget extends Component {
               </div>
             </li>
 
-
-
-
             </ul>
           </nav>
 
@@ -238,10 +281,10 @@ export default class Widget extends Component {
             <div className={classNames(styles.Grid, 'grid')} >
 
               {totalSize > 0 && getVisiblePlugins.valueSeq().map(plugin => {
-                return <Entry
+                return (<Entry
                   className="Entry"
                   key={plugin.id}
-                  plugin={plugin} />
+                  plugin={plugin} />)
               })}
 
             </div>

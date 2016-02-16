@@ -12,7 +12,7 @@ const content = `<ul>
 
 const app = express();
 // home page
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
   res.send(content);
 });
 
@@ -23,7 +23,7 @@ dns.resolve4(host, (err, addresses) => {
     app.use(express.static('server'));
     console.log('Using local plugin list');
   } else {
-    app.use('/update-center.json', function(req, res) {
+    app.use('/update-center.json', function (req, res) {
       const url = 'https://' + host + '/current/update-center.json';
       req.pipe(request(url)).pipe(res);
     });
@@ -43,7 +43,7 @@ new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
   hot: true,
   historyApiFallback: true
-}).listen(portClient, '0.0.0.0', function(err) {
+}).listen(portClient, '0.0.0.0', function (err) {
   if (err) {
     console.error(err);
   }

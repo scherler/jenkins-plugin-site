@@ -24,7 +24,7 @@ dns.resolve4(host, (err, addresses) => {
     console.log('Using local plugin list');
   } else {
     app.use('/update-center.json', function (req, res) {
-      const url = 'https://' + host + '/current/update-center.json';
+      const url = `https://${host}/current/update-center.json`;
       req.pipe(request(url)).pipe(res);
     });
   }

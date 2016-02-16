@@ -67,14 +67,14 @@ if (env.debug) {
 }
 
 export function jsonp(url, callback) {// HACK
-  let callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+  let callbackName = `jsonp_callback_${Math.round(100000 * Math.random())}`;
   window.updateCenter = {
-    post: function (data) {
+    post(data) {
       callback(data);
     }
   };
   let script = document.createElement('script');
-  script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
+  script.src = `${url}${url.indexOf('?') >= 0 ? '&' : '?'}callback=${callbackName}`;
   document.body.appendChild(script);
 }
 
@@ -109,7 +109,7 @@ export const actions = {
     type = type || '';
     const colors = ['#6D6B6D','#DCD9D8','#D33833','#335061','#81B0C4','#709aaa','#000'];
     const color = colors[Math.floor(Math.random() * (colors.length - 1))];
-    const iconClass='i '+ type + ' color' + color;
+    const iconClass=`i ${type}  color${color}`;
 
     const firstLetter = title.substring(0,1).toUpperCase();
     const firstSpace = title.indexOf(' ') + 1;

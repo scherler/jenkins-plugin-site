@@ -47,7 +47,6 @@ export default function Application({
         searchData={searchPluginData}
         getVisiblePluginsLabels={getVisiblePluginsLabels}
         labelFilter={labelFilter}
-        title={'Loading ' + isFetching}
       />
 
   )

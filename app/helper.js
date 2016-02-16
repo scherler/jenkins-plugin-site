@@ -2,14 +2,14 @@ import React from 'react'
 
 export function getScoreClassName(score){
   score = score || '4';
-  return 'i scr_' + score;
+  return `i scr_${score}`;
 }
 
 export function getMaintainers(devs,itemIndex){
   let maintainers = [];
   if(devs){
     for(let i = 0; i < devs.length; i++){
-      let devIndex = itemIndex + '_' + i;
+      let devIndex = `${itemIndex}_${i}`;
       let dev = devs[i].name || devs[i].developerId;
       if( i>1 && i+1 < devs.length ){
         maintainers.push(

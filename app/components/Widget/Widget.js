@@ -7,6 +7,7 @@ import React, { PropTypes, Component } from 'react';
 import {cleanTitle, getMaintainers, getScoreClassName} from '../../helper';
 import { VirtualScroll } from 'react-virtualized';
 import classNames from 'classnames';
+import Spinner from '../../commons/spinner';
 
 export default class Widget extends Component {
 
@@ -14,6 +15,7 @@ export default class Widget extends Component {
     generateData: PropTypes.func.isRequired,
     setFilter: PropTypes.func.isRequired,
     totalSize: PropTypes.any.isRequired,
+    isFetching: PropTypes.bool.isRequired,
     getVisiblePlugins: PropTypes.any.isRequired,
     getVisiblePluginsLabels: PropTypes.any.isRequired,
     searchData: PropTypes.func.isRequired,
@@ -27,7 +29,11 @@ export default class Widget extends Component {
     category: 'all'
   };
 
-  filterSet(search, filter) {
+  componentWillMount () {
+    this.props.generateData();
+  };
+
+  filterSet (search, filter) {
     this.props.setFilter(new Immutable.Record({
       search,
       searchField: 'labels',
@@ -53,6 +59,8 @@ export default class Widget extends Component {
       generateData,
       setFilter,
       searchData,
+      isFetching,
+      title,
       totalSize,
       getVisiblePlugins,
       getVisiblePluginsLabels,
@@ -155,12 +163,16 @@ export default class Widget extends Component {
                 <a className="nav-link">New</a>
               </li>
               <li className="nav-item">
-                <button className="nav-link dropdown-toggle"
-                   data-toggle="dropdown"
-                   aria-haspopup="true"
-                   aria-expanded="false">
-                   Tags
-               </button>
+                <button className="nav-link" onClick={() => {
+                    setFilter(new Immutable.Record({
+                      searchField: 'labels',
+                      field: filter.title || 'title',
+                      search: '',
+                      asc: filter.asc || true
+                    }))
+                  }}>
+                  All
+                </button>
               </li>
               <li className="nav-item btn-group">
                 <button
@@ -186,10 +198,8 @@ export default class Widget extends Component {
                   Technologies
                 </a></li>
               <li className="nav-item">
-                <button
-                  className="btn btn-sm"
-                  onClick={()=>  generateData()}>
-                  getPlugins</button></li>
+                <button className="btn btn-sm" onClick={()=>  generateData()}>refresh plugins</button>
+              </li>
             </ul>
 
             <ul className="pull-xs-right nav navbar-nav">
@@ -277,6 +287,8 @@ export default class Widget extends Component {
 
           <div id="cb-item-finder-grid-box" className={classNames(styles.GridBox, 'grid-box')} >
             <div className={classNames(styles.Grid, 'grid')} >
+
+              {isFetching && <Spinner>loading</Spinner>}
 
               {totalSize > 0 && getVisiblePlugins.valueSeq().map(plugin => {
                 return (<Entry

@@ -37,3 +37,18 @@ ESLint with React linting options have been enabled.
 ```
 npm run lint
 ```
+
+You can use the --fix flag in this command and it will try to fix all
+offenses, whoever there maybe some more that you need to fix manually.
+
+Remember:
+
+```
+npm run [command] [-- <args>]
+```
+
+Note the necessary --. 
+
+```
+npm run lint -- --fix
+```

@@ -13,7 +13,7 @@ module.exports = {
   devtool: 'eval',
   entry: [
     'babel-polyfill',
-    './' + entryDirectory + '/index'
+    `./${entryDirectory}/index`
   ],
   output: {
     path: path.join(__dirname, 'dist'),

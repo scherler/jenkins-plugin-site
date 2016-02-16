@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react'
 
 export function LabelWidgetItem({index, item, onClick}) {
-  let href = '#key=' + item.key;
+  let href = `#key=${item.key}`;
   return (<a
     href={href}
     key={index}

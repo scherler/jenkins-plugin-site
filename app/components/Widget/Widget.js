@@ -17,7 +17,6 @@ export default class Widget extends Component {
     getVisiblePlugins: PropTypes.any.isRequired,
     getVisiblePluginsLabels: PropTypes.any.isRequired,
     searchData: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired,
     labelFilter: PropTypes.any.isRequired
   };
 
@@ -30,9 +29,9 @@ export default class Widget extends Component {
 
   filterSet(search, filter) {
     this.props.setFilter(new Immutable.Record({
+      search,
       searchField: 'labels',
       field: filter.title || 'title',
-      search: search,
       asc: filter.asc || true
     }))
 
@@ -54,7 +53,6 @@ export default class Widget extends Component {
       generateData,
       setFilter,
       searchData,
-      title,
       totalSize,
       getVisiblePlugins,
       getVisiblePluginsLabels,

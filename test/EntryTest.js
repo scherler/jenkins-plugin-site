@@ -1,0 +1,59 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Immutable from 'immutable';
+import TestUtils from 'react-addons-test-utils';
+import expect from 'expect';
+import jsdom from 'mocha-jsdom';
+
+import Entry from '../app/components/Widget/Entry';
+
+const Record = Immutable.Record({
+  id: null,
+  name: null,
+  title: '',
+  buildDate: null,
+  releaseTimestamp: null,
+  version: null,
+  wiki: '',
+  excerpt: '',
+  iconDom: null,
+  requiredCore: null,
+  developers: [],
+  labels: [],
+  dependencies: []
+});
+
+let plugin = {
+    buildDate: 'Mar 03, 2011',
+    dependencies: [0],
+    developers: [1],
+    excerpt: 'This (experimental) plug-in exposes the jenkins build extension points (SCM, Build, Publish) to a groovy scripting environment that has   some DSL-style extensions for ease of development.',
+    gav: 'jenkins:AdaptivePlugin:0.1',
+    labels: ['xxx', 'yyy'],
+    name: 'AdaptivePlugin',
+    releaseTimestamp: '2011-03-03T16:49:24.00Z',
+    requiredCore: '1.398',
+    scm: 'github.com',
+    sha1: 'il8z91iDnqVMu78Ghj8q2swCpdk=',
+    title: 'Jenkins Adaptive DSL Plugin',
+    url: 'http://updates.jenkins-ci.org/download/plugins/AdaptivePlugin/0.1/AdaptivePlugin.hpi',
+    version: '0.1',
+    wiki: 'https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+Adaptive+Plugin'
+  };
+
+
+describe('Test whether one plugin entry renders correctly', () => {
+  jsdom(); // Provide a DOM for ReactJS
+
+  before('render and locate element', function() {
+    const testElement = (<Entry plugin={new Record(plugin)} />);
+    this.renderedComponent = TestUtils.renderIntoDocument(testElement);
+  });
+
+
+  it('Shows the correct table', () => {
+
+  });
+
+
+});

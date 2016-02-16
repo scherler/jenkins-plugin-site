@@ -5,7 +5,7 @@ import styles from './Card.css'
 Card.propTypes = {
   children: React.PropTypes.node.isRequired
 }
-export default function Card ({ children }) {
+export default function Card({ children }) {
   return (
     <div className={styles.Box}>
       {children}

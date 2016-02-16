@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react'
 
-export function LabelWidgetItem ({index, item, onClick}) {
-  var href = "#key=" + item.key;
+export function LabelWidgetItem({index, item, onClick}) {
+  let href = '#key=' + item.key;
   return (<a
     href={href}
     key={index}
@@ -23,7 +23,7 @@ export default class LabelWidget extends Component {
     onClick: PropTypes.func
   };
 
-  render () {
+  render() {
     const { labels, onClick } = this.props;
     const { field, asc } = this.state;
     const sortedLabels = labels.sortBy(

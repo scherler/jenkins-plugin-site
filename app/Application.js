@@ -28,7 +28,7 @@ Application.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   labelFilter: PropTypes.any.isRequired
 }
-export default function Application ({
+export default function Application({
   generatePluginData,
   setFilter,
   filterVisibleList,

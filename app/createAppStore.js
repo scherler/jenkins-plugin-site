@@ -4,7 +4,7 @@ import { reducer as searchReducer, reduxSearch } from 'redux-search'
 import { reducer as resourceReducer } from './resources'
 import thunk from 'redux-thunk'
 
-export default function createAppStore (): Object {
+export default function createAppStore(): Object {
   const finalCreateStore = compose(
     applyMiddleware(thunk),
     reduxSearch({

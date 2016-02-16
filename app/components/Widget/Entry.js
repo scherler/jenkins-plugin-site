@@ -7,7 +7,7 @@ Entry.propTypes = {
   plugin: PropTypes.any.isRequired
 }
 
-export default function Entry ({plugin}) {
+export default function Entry({plugin}) {
   return (
     <div
         key={plugin.get('sha1')}

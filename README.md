@@ -52,3 +52,38 @@ Note the necessary --.
 ```
 npm run lint -- --fix
 ```
+
+### Testing
+
+We have created different test environments that you can us during development.
+
+#### TDD support via watch
+
+```
+npm run test:watch
+```
+
+Can be used for TDD with a rapid feedback loop (as soon you save all tests will run)
+
+#### Debug Tests in a Browser
+
+Mocha tests typically use require statements and often access the file system,
+so running them directly in the browser is challenging.
+The next best thing is to use node-inspector, which connects a version of the
+Chrome dev tools to the Node runtime used by Mocha.
+
+To use this (only once):
+
+```
+npm install -g node-inspector
+
+```
+Then you can use:
+
+```
+npm run test:debug
+```
+
+Then run node-inspector. It will prompt you to open a browser at a debug URL.
+From there, you can set breakpoints and inspect variables in the same way
+you would in the Chrome Dev Tools.

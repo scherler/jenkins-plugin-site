@@ -1,3 +1,4 @@
 module.exports = {
-  env: require('./env')
+  env: require('./env'),
+  Spinner: require('./spinner')
 };

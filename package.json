@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node server",
-    "test": "mocha --compilers js:babel-core/register --recursive",
-    "test:debug": "mocha --compilers js:babel-core/register --recursive --debug-brk",
-    "test:watch": "mocha --compilers js:babel-core/register --watch --reporter min",
+    "test": "mocha --require ignore-styles --compilers js:babel-core/register --recursive",
+    "test:debug": "npm test -- --debug-brk",
+    "test:watch": "npm test -- --watch --reporter min",
     "clean": "rm npm-debug.log.*",
     "build": "./node_modules/.bin/webpack --config webpack.config.production.js",
     "lint": "./node_modules/.bin/eslint .",
@@ -15,20 +15,37 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/scherler/jenkins-plugin-site.git"
+    "url": "https://github.com/jenkins-infra/plugin-site.git"
   },
   "keywords": [
-    "react",
+    "jenkins-ci",
+    "plugins",
     "es6",
     "babel",
     "webpack"
   ],
-  "author": "CloudBees",
+  "author": "Thorsten Scherler <https://github.com/scherler>",
+  "contributors": [{
+    "name": "Vasa",
+    "email": "https://github.com/vasanthk aka vasanthk"
+  }, {
+    "name": "gusreiber",
+    "email": "https://github.com/gusreiber)"
+  }, {
+    "name": "Nathaniel Charles",
+    "email": "https://github.com/oepn aka oepn"
+  }, {
+    "name": "Thorsten Scherler",
+    "email": "https://github.com/scherler aka scherler"
+  }, {
+    "name": "R. Tyler Croy",
+    "email": "https://github.com/rtyler aka rtyler "
+  }],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gusreiber/jenkins-plugin-site/issues"
+    "url": "https://issues.jenkins-ci.org/secure/RapidBoard.jspa?rapidView=1&projectKey=WEBSITE&view=detail"
   },
-  "homepage": "https://github.com/scherler/jenkins-plugin-site",
+  "homepage": "http://plugins.jenkins-ci.org/",
   "dependencies": {
     "classnames": "2.2.3",
     "immutable": "3.7.6",
@@ -83,8 +100,10 @@
     "faker": "3.0.1",
     "fs": "0.0.2",
     "html-webpack-plugin": "2.7.1",
+    "ignore-styles": "^1.2.0",
     "jsdom": "8.0.2",
     "mocha": "2.4.5",
+    "mocha-jsdom": "^1.0.0",
     "path": "0.12.7",
     "react-addons-test-utils": "0.14.7",
     "react-transform-hmr": "1.0.1",

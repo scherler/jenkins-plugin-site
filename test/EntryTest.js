@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
-import TestUtils from 'react-addons-test-utils';
+import TestUtils, {createRenderer} from 'react-addons-test-utils';
+import { assert} from 'chai';
 import expect from 'expect';
-import jsdom from 'mocha-jsdom';
 
 import Entry from '../app/components/Widget/Entry';
 
@@ -41,20 +41,40 @@ const plugin = {
     wiki: 'https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+Adaptive+Plugin'
   };
 
+const
+  testElement = (<Entry plugin={new Record(plugin)} />);
 
 describe('Test whether one plugin entry renders correctly', () => {
-  jsdom(); // Provide a DOM for ReactJS
 
-  before('render and locate element', function () {
-    const testElement = (<Entry plugin={new Record(plugin)} />);
-    this.renderedComponent = TestUtils.renderIntoDocument(testElement);
+  const renderer = createRenderer();
+
+  before('render and locate element', () => renderer.render(testElement));
+
+  it('Shows the correct entry', () => {
+    const
+      result = renderer.getRenderOutput(),
+      children = result.props.children;
+    expect(result.type).toBe('div');
+    expect(result.props.className).toBe('Entry-box');
+    expect(children.props.children.length).toBe(7);
+
+    expect(children.props.children[2].props.className).toBe('Title');
+    expect(children.props.children[2].props.children.props.children).toBe('Adaptive DSL');
+
   });
 
-
-  it('Shows the correct table', () => {
-
-
+  it('Should throw an exception when not using Immutable', () => {
+    const throwing = () => {
+      renderer.render(<Entry plugin={plugin} />);
+    };
+    assert.throws(throwing, 'plugin.get is not a function');
   });
 
+  it('Should throw an exception when NPE', () => {
+    const throwing = () => {
+      renderer.render(<Entry />);
+    };
+    assert.throws(throwing, 'Cannot read property \'get\' of undefined');
+  });
 
 });

@@ -1,12 +1,12 @@
 /** @flow */
-import Immutable from 'immutable'
-import Entry from './Entry'
-import styles from './Widget.css'
-import LabelWidget from './Labels'
-import React, { PropTypes, Component } from 'react'
-import {cleanTitle, getMaintainers, getScoreClassName} from '../../helper'
-import { VirtualScroll } from 'react-virtualized'
-import classNames from 'classnames'
+import Immutable from 'immutable';
+import Entry from './Entry';
+import styles from './Widget.css';
+import LabelWidget from './Labels';
+import React, { PropTypes, Component } from 'react';
+import {cleanTitle, getMaintainers, getScoreClassName} from '../../helper';
+import { VirtualScroll } from 'react-virtualized';
+import classNames from 'classnames';
 
 export default class Widget extends Component {
 
@@ -22,9 +22,9 @@ export default class Widget extends Component {
 
   state = {
     clicked: false,
-    view:'tiles',
-    sort:'title',
-    category:'all'
+    view: 'tiles',
+    sort: 'title',
+    category: 'all'
   };
 
   filterSet(search, filter) {
@@ -33,9 +33,9 @@ export default class Widget extends Component {
       searchField: 'labels',
       field: filter.title || 'title',
       asc: filter.asc || true
-    }))
+    }));
 
-  };
+  }
 
   getFilter(labelFilter) {
     let filter;
@@ -45,7 +45,7 @@ export default class Widget extends Component {
       filter = labelFilter;
     }
     return filter;
-  };
+  }
 
   render() {
 
@@ -65,9 +65,9 @@ export default class Widget extends Component {
 
     const filteredSize = getVisiblePlugins instanceof Immutable.Collection
       ? getVisiblePlugins.size
-      : getVisiblePlugins.length
+      : getVisiblePlugins.length;
 
-    const viewClass = styles[this.state.view]
+    const viewClass = styles[this.state.view];
 
 
     return (
@@ -82,8 +82,8 @@ export default class Widget extends Component {
                 className={classNames(styles.li, 'list-group-item', (this.state.category === 'scm')?'active':'')}
                 onClick={()=>
                   {
-                    {this.state.category = 'scm'}
-                    {this.filterSet(['scm-related', 'scm'], labelFilter)}
+                    {this.state.category = 'scm';}
+                    {this.filterSet(['scm-related', 'scm'], labelFilter);}
                   }
                 }
               >SCM connectors</a></li>
@@ -92,8 +92,8 @@ export default class Widget extends Component {
                 className={classNames(styles.li, 'list-group-item', (this.state.category === 'build')?'active':'')}
               onClick={()=>
                 {
-                  {this.state.category = 'build'}
-                  {this.filterSet(['builder', 'buildwrapper'], labelFilter)}
+                  {this.state.category = 'build';}
+                  {this.filterSet(['builder', 'buildwrapper'], labelFilter);}
                 }
               }
               >Build and analytics</a></li>
@@ -102,8 +102,8 @@ export default class Widget extends Component {
                  className={classNames(styles.li, 'list-group-item', (this.state.category === 'deployment')?'active':'')}
               onClick={()=>
               {
-                {this.state.category = 'deployment'}
-                {this.filterSet(['cli', 'deployment'], labelFilter)}
+                {this.state.category = 'deployment';}
+                {this.filterSet(['cli', 'deployment'], labelFilter);}
               }
             }>Deployment</a></li>
             <li className={classNames(styles.pipelines, 'pipelines')}>
@@ -121,8 +121,8 @@ export default class Widget extends Component {
                 className={classNames(styles.li, 'list-group-item', (this.state.category === 'security')?'active':'')}
               onClick={()=>
               {
-                {this.state.category = 'security'}
-                {this.filterSet(['user', 'security'], labelFilter)}
+                {this.state.category = 'security';}
+                {this.filterSet(['user', 'security'], labelFilter);}
               }
             }>Users and security</a></li>
             <li className={classNames(styles.general, 'general')}>
@@ -139,7 +139,7 @@ export default class Widget extends Component {
                 field: filter.title || 'title',
                 search: [event.target.innerText],
                 asc: filter.asc || true
-              }))}}
+              }));}}
             /> }
         </div>
 
@@ -178,7 +178,7 @@ export default class Widget extends Component {
                       field: filter.title || 'title',
                       search: [event.target.innerText],
                       asc: filter.asc || true
-                    }))}}
+                    }));}}
                   /> }
               </li>
               <li className="nav-item btn-group">
@@ -222,34 +222,34 @@ export default class Widget extends Component {
                 <div className="dropdown-menu">
                   <a className="dropdown-item" href="#sort=name"
                     onClick={()=> {
-                    this.setState({ sort: 'name' })
+                    this.setState({ sort: 'name' });
                     setFilter(new Immutable.Record({
                       field: 'name',
                       asc: !filter.asc
-                    }))}}>Name</a>
+                    }));}}>Name</a>
                   <a className="dropdown-item" href="#sort=version"
                     onClick={()=> {
-                    this.setState({ sort: 'core' })
+                    this.setState({ sort: 'core' });
                     setFilter(new Immutable.Record({
                       field: 'requiredCore',
                       asc: !filter.asc
-                    }))}}>Core version</a>
+                    }));}}>Core version</a>
                   <a className="dropdown-item" href="#sort=table"
                     onClick={()=>  {this.setState({ sort: 'rating' });}}>Ratings</a>
                   <a className="dropdown-item" href="#sort=buildDate"
                     onClick={()=> {
-                      this.setState({ sort: 'updated' })
+                      this.setState({ sort: 'updated' });
                       setFilter(new Immutable.Record({
                         field: 'buildDate',
                         asc: !filter.asc
-                      }))}}>Updated</a>
+                      }));}}>Updated</a>
                   <a className="dropdown-item" href="#sort=releaseTimestamp"
                     onClick={()=> {
-                      this.setState({ sort: 'created' })
+                      this.setState({ sort: 'created' });
                       setFilter(new Immutable.Record({
                         field: 'releaseTimestamp',
                         asc: !filter.asc
-                      }))}}>Created</a>
+                      }));}}>Created</a>
                 </div>
               </li>
 
@@ -282,7 +282,7 @@ export default class Widget extends Component {
                 return (<Entry
                   className="Entry"
                   key={plugin.id}
-                  plugin={plugin} />)
+                  plugin={plugin} />);
               })}
 
             </div>
@@ -293,7 +293,7 @@ export default class Widget extends Component {
         </div>
 
       </div>
-      )
-  };
+      );
+  }
 
 }

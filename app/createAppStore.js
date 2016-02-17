@@ -1,8 +1,8 @@
 /** @flow */
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
-import { reducer as searchReducer, reduxSearch } from 'redux-search'
-import { reducer as resourceReducer } from './resources'
-import thunk from 'redux-thunk'
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
+import { reducer as searchReducer, reduxSearch } from 'redux-search';
+import { reducer as resourceReducer } from './resources';
+import thunk from 'redux-thunk';
 
 export default function createAppStore(): Object {
   const finalCreateStore = compose(
@@ -12,15 +12,15 @@ export default function createAppStore(): Object {
         plugins: ['name', 'title', 'excerpt']
       },
       resourceSelector: (resourceName, state) => {
-        return state.resources.get(resourceName)
+        return state.resources.get(resourceName);
       }
     })
-  )(createStore)
+  )(createStore);
 
   const rootReducer = combineReducers({
     resources: resourceReducer,
     search: searchReducer
-  })
+  });
 
-  return finalCreateStore(rootReducer)
+  return finalCreateStore(rootReducer);
 }

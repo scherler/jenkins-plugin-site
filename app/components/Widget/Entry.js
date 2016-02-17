@@ -1,11 +1,11 @@
-import React, { PropTypes } from 'react'
-import styles from './Widget.css'
-import {cleanTitle, getMaintainers, getScoreClassName} from '../../helper'
-import classNames from 'classnames'
+import React, { PropTypes } from 'react';
+import styles from './Widget.css';
+import {cleanTitle, getMaintainers, getScoreClassName} from '../../helper';
+import classNames from 'classnames';
 
 Entry.propTypes = {
   plugin: PropTypes.any.isRequired
-}
+};
 
 export default function Entry({plugin}) {
   return (
@@ -47,5 +47,5 @@ export default function Entry({plugin}) {
 
         </a>
       </div>
-  )
+  );
 }

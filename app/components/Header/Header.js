@@ -1,6 +1,6 @@
 /** @flow */
-import React from 'react'
-import styles from './Header.css'
+import React from 'react';
+import styles from './Header.css';
 
 export default function Header() {
   return (
@@ -44,7 +44,7 @@ export default function Header() {
         />
       </ul>
     </nav>
-  )
+  );
 }
 
 function NavLink({ pathData, text, url }) {
@@ -63,5 +63,5 @@ function NavLink({ pathData, text, url }) {
         {text}
       </a>
     </li>
-  )
+  );
 }

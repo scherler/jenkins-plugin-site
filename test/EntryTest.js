@@ -23,7 +23,7 @@ const Record = Immutable.Record({
   dependencies: []
 });
 
-let plugin = {
+const plugin = {
     buildDate: 'Mar 03, 2011',
     dependencies: [0],
     developers: [1],
@@ -45,13 +45,14 @@ let plugin = {
 describe('Test whether one plugin entry renders correctly', () => {
   jsdom(); // Provide a DOM for ReactJS
 
-  before('render and locate element', function() {
+  before('render and locate element', function () {
     const testElement = (<Entry plugin={new Record(plugin)} />);
     this.renderedComponent = TestUtils.renderIntoDocument(testElement);
   });
 
 
   it('Shows the correct table', () => {
+
 
   });
 

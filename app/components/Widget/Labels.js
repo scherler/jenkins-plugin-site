@@ -46,7 +46,7 @@ export default class LabelWidget extends Component {
       {
         sortedLabels.valueSeq().map(
         (item, index) => {
-          return (<LabelWidgetItem key={index} index={index} item={item} onClick={onClick}/>)
+          return (<LabelWidgetItem key={index} index={index} item={item} onClick={onClick}/>);
         })
       }
       </div>);

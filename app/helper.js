@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export function getScoreClassName(score){
   score = score || '4';
@@ -6,11 +6,11 @@ export function getScoreClassName(score){
 }
 
 export function getMaintainers(devs,itemIndex){
-  let maintainers = [];
+  const maintainers = [];
   if(devs){
     for(let i = 0; i < devs.length; i++){
-      let devIndex = `${itemIndex}_${i}`;
-      let dev = devs[i].name || devs[i].developerId;
+      const devIndex = `${itemIndex}_${i}`;
+      const dev = devs[i].name || devs[i].developerId;
       if( i>1 && i+1 < devs.length ){
         maintainers.push(
           <div key={devIndex}>({devs.length - 2} other contributers)</div>

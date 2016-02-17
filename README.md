@@ -17,6 +17,21 @@ npm start
 Open http://localhost:5000
 ```
 
+### Code Integrity
+
+To test the integrity of our code base we are using a compination of eslint and tests.
+
+```
+npm run integrity
+```
+
+To make sure you do not push faulty code we create as well a pre-push hook which will call the test.
+You can activate it with:
+
+```
+ln -s ./pre-push.sh .git/hooks/pre-push
+```
+
 ### Linting with npm
 
 ESLint with React linting options have been enabled.

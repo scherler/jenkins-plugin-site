@@ -9,6 +9,7 @@
     "test:debug": "npm test -- --debug-brk",
     "test:watch": "npm test -- --watch --reporter min",
     "clean": "rm npm-debug.log.*",
+    "integrity": "npm run lint && npm test",
     "build": "./node_modules/.bin/webpack --config webpack.config.production.js",
     "lint": "./node_modules/.bin/eslint .",
     "lint:fix": "npm run lint -- --fix",

@@ -1,4 +1,4 @@
-/* eslint-disable no-console, no-var, strict */ //This is because of node being babel6 ready byet
+/* eslint-disable no-console */ //This is because we are using console log for communications
 const express = require('express');
 const dns = require('dns');
 const request = require('request');

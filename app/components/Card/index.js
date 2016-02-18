@@ -1,2 +1,2 @@
-export Card from './Card'
-export CardWrapper from './CardWrapper'
+export Card from './Card';
+export CardWrapper from './CardWrapper';

@@ -5,27 +5,55 @@
   "main": "index.js",
   "scripts": {
     "start": "node server",
+    "test": "mocha --require ignore-styles --compilers js:babel-core/register --recursive",
+    "test:debug": "npm test -- --debug-brk",
+    "test:watch": "npm test -- --watch --reporter min",
     "clean": "rm npm-debug.log.*",
+    "integrity": "npm run lint && npm test",
     "build": "./node_modules/.bin/webpack --config webpack.config.production.js",
     "lint": "./node_modules/.bin/eslint .",
+    "lint:fix": "npm run lint -- --fix",
     "watch": "watch -b -n 15 npm run lint"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/scherler/jenkins-plugin-site.git"
+    "url": "https://github.com/jenkins-infra/plugin-site.git"
   },
   "keywords": [
-    "react",
+    "jenkins-ci",
+    "plugins",
     "es6",
     "babel",
     "webpack"
   ],
-  "author": "CloudBees",
+  "author": "Thorsten Scherler <https://github.com/scherler>",
+  "contributors": [
+    {
+      "name": "Vasa",
+      "email": "https://github.com/vasanthk aka vasanthk"
+    },
+    {
+      "name": "gusreiber",
+      "email": "https://github.com/gusreiber)"
+    },
+    {
+      "name": "Nathaniel Charles",
+      "email": "https://github.com/oepn aka oepn"
+    },
+    {
+      "name": "Thorsten Scherler",
+      "email": "https://github.com/scherler aka scherler"
+    },
+    {
+      "name": "R. Tyler Croy",
+      "email": "https://github.com/rtyler aka rtyler "
+    }
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gusreiber/jenkins-plugin-site/issues"
+    "url": "https://issues.jenkins-ci.org/secure/RapidBoard.jspa?rapidView=1&projectKey=WEBSITE&view=detail"
   },
-  "homepage": "https://github.com/scherler/jenkins-plugin-site",
+  "homepage": "http://plugins.jenkins-ci.org/",
   "dependencies": {
     "classnames": "2.2.3",
     "immutable": "3.7.6",
@@ -60,26 +88,31 @@
     "auto-prefixer": "0.4.2",
     "babel": "6.3.26",
     "babel-core": "6.3.26",
-    "babel-eslint": "5.0.0-beta6",
+    "babel-eslint": "5.0.0-beta10",
     "babel-loader": "6.2.0",
     "babel-plugin-react-transform": "2.0.0",
     "babel-plugin-transform-runtime": "6.3.13",
-    "babel-polyfill": "^6.3.14",
+    "babel-polyfill": "6.3.14",
     "babel-preset-es2015": "6.3.13",
     "babel-preset-react": "6.3.13",
     "babel-preset-stage-0": "6.3.13",
     "babel-runtime": "6.3.19",
+    "chai": "^3.5.0",
     "css-loader": "0.23.1",
     "cssnext": "1.8.4",
     "cssnext-loader": "1.0.1",
-    "eslint": "0.21.2",
+    "eslint": "2.0.0-rc.1",
     "eslint-plugin-react": "2.3.0",
-    "express": "^4.13.4",
+    "expect": "1.14.0",
+    "express": "4.13.4",
     "extract-text-webpack-plugin": "1.0.1",
     "faker": "3.0.1",
     "fs": "0.0.2",
     "html-webpack-plugin": "2.7.1",
+    "ignore-styles": "^1.2.0",
+    "mocha": "2.4.5",
     "path": "0.12.7",
+    "react-addons-test-utils": "0.14.7",
     "react-transform-hmr": "1.0.1",
     "request": "2.69.0",
     "style-loader": "0.13.0",

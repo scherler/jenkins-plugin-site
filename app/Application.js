@@ -6,17 +6,17 @@ import {
   labelFilter,
   filterVisibleList,
   getVisiblePluginsLabels
-} from './resources'
-import { connect } from 'react-redux'
-import { createSelector } from 'reselect'
-import { Card, CardWrapper } from './components/Card'
-import Footer from './components/Footer'
-import Header from './components/Header'
-import Immutable from 'immutable'
-import React, { PropTypes } from 'react'
-import Widget from './components/Widget'
-import Highlighter from 'react-highlight-words'
-import styles from './Application.css'
+} from './resources';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+import { Card, CardWrapper } from './components/Card';
+import Footer from './components/Footer';
+import Header from './components/Header';
+import Immutable from 'immutable';
+import React, { PropTypes } from 'react';
+import Widget from './components/Widget';
+import Highlighter from 'react-highlight-words';
+import styles from './Application.css';
 
 Application.propTypes = {
   generatePluginData: PropTypes.func.isRequired,
@@ -27,8 +27,8 @@ Application.propTypes = {
   searchPluginData: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
   labelFilter: PropTypes.any.isRequired
-}
-export default function Application ({
+};
+export default function Application({
   generatePluginData,
   setFilter,
   filterVisibleList,
@@ -47,10 +47,9 @@ export default function Application ({
         searchData={searchPluginData}
         getVisiblePluginsLabels={getVisiblePluginsLabels}
         labelFilter={labelFilter}
-        title={'Loading ' + isFetching}
       />
 
-  )
+  );
 }
 
 const selectors = createSelector(
@@ -62,6 +61,6 @@ const selectors = createSelector(
     filterVisibleList,
     getVisiblePluginsLabels
   })
-)
+);
 
-export default connect(selectors, actions)(Application)
+export default connect(selectors, actions)(Application);

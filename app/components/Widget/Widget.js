@@ -5,7 +5,7 @@ import styles from './Widget.css';
 import LabelWidget from './Labels';
 import React, { PropTypes, Component } from 'react';
 import {cleanTitle, getMaintainers, getScoreClassName} from '../../helper';
-import Spinner from '../../commons/spinner'
+import Spinner from '../../commons/spinner';
 import { VirtualScroll } from 'react-virtualized';
 import classNames from 'classnames';
 
@@ -29,9 +29,9 @@ export default class Widget extends Component {
     category: 'all'
   };
 
-  componentWillMount () {
+  componentWillMount() {
     this.props.generateData();
-  };
+  }
 
 
   filterSet(search, filter) {

@@ -4,7 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const poly = require ('babel-polyfill');
 
-const stylusLoader = ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader");
+const stylusLoader = ExtractTextPlugin.extract('style-loader', 'css-loader!stylus-loader');
 
 function getJenkinsBuildInformation() {
   return {
@@ -30,7 +30,7 @@ module.exports = {
     'webpack-dev-server/client?http://localhost:5000',
     'webpack/hot/dev-server',
     'babel-polyfill',
-    './' + entryDirectory + '/index'
+    `./${entryDirectory}/index`
   ],
   output: {
     path: __dirname,
@@ -41,7 +41,7 @@ module.exports = {
     extensions: ['', '.js', '.jsx']
   },
   plugins: [
-    new ExtractTextPlugin("styles.css"),
+    new ExtractTextPlugin('styles.css'),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
       'process.env': JSON.stringify({

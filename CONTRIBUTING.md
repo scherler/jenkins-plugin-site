@@ -32,7 +32,7 @@ included in the project:
    ```
 
 4. Make your changes. You can check in the [README.md](/README.md) file how to
-   setup a development environment.
+   setup a development environment and how to test the integrity of the code.
 
 5. Commit your changes in logical chunks. Please adhere to these [git commit
    message guidelines](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html)

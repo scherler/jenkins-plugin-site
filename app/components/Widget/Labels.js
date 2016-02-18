@@ -1,15 +1,5 @@
-import React, { PropTypes, Component } from 'react'
-
-export function LabelWidgetItem ({index, item, onClick}) {
-  var href = "#key=" + item.key;
-  return (<a
-    href={href}
-    key={index}
-    className="dropdown-item"
-    onClick={onClick}>
-      <span className="key">{item.key}</span> <span className="count">{item.value}</span>
-    </a>);
-}
+import React, { PropTypes, Component } from 'react';
+import LabelWidgetItem from './LabelWidgetItem';
 
 export default class LabelWidget extends Component {
 
@@ -23,7 +13,7 @@ export default class LabelWidget extends Component {
     onClick: PropTypes.func
   };
 
-  render () {
+  render() {
     const { labels, onClick } = this.props;
     const { field, asc } = this.state;
     const sortedLabels = labels.sortBy(
@@ -56,7 +46,7 @@ export default class LabelWidget extends Component {
       {
         sortedLabels.valueSeq().map(
         (item, index) => {
-          return (<LabelWidgetItem key={index} index={index} item={item} onClick={onClick}/>)
+          return (<LabelWidgetItem key={index} index={index} item={item} onClick={onClick}/>);
         })
       }
       </div>);

@@ -1,11 +1,11 @@
 /** @flow */
-import React from 'react'
-import styles from './CardWrapper.css'
+import React from 'react';
+import styles from './CardWrapper.css';
 
 CardWrapper.propTypes = {
   children: React.PropTypes.node.isRequired
-}
-export default function CardWrapper ({ children }) {
+};
+export default function CardWrapper({ children }) {
   return (
     <div className="container">
       <div className="row">
@@ -14,5 +14,5 @@ export default function CardWrapper ({ children }) {
         </div>
       </div>
     </div>
-  )
+  );
 }

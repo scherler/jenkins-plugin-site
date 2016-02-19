@@ -15,8 +15,8 @@ export default class Widget extends Component {
     generateData: PropTypes.func.isRequired,
     setFilter: PropTypes.func.isRequired,
     totalSize: PropTypes.any.isRequired,
-    isFetching: PropTypes.bool.isRequired,
     getVisiblePlugins: PropTypes.any.isRequired,
+    isFetching: PropTypes.bool.isRequired,
     getVisiblePluginsLabels: PropTypes.any.isRequired,
     searchData: PropTypes.func.isRequired,
     labelFilter: PropTypes.any.isRequired
@@ -59,8 +59,8 @@ export default class Widget extends Component {
       generateData,
       setFilter,
       searchData,
-      isFetching,
       totalSize,
+      isFetching,
       getVisiblePlugins,
       getVisiblePluginsLabels,
       labelFilter

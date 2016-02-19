@@ -33,7 +33,6 @@ export default class Widget extends Component {
     this.props.generateData();
   }
 
-
   filterSet(search, filter) {
     this.props.setFilter(new Immutable.Record({
       search,
@@ -163,12 +162,16 @@ export default class Widget extends Component {
                 <a className="nav-link">New</a>
               </li>
               <li className="nav-item">
-                <button className="nav-link dropdown-toggle"
-                   data-toggle="dropdown"
-                   aria-haspopup="true"
-                   aria-expanded="false">
-                   Tags
-               </button>
+                <button className="nav-link" onClick={() => {
+                    setFilter(new Immutable.Record({
+                      searchField: 'labels',
+                      field: filter.title || 'title',
+                      search: '',
+                      asc: filter.asc || true
+                    }));
+                  }}>
+                  All
+                </button>
               </li>
               <li className="nav-item btn-group">
                 <button
@@ -194,10 +197,8 @@ export default class Widget extends Component {
                   Technologies
                 </a></li>
               <li className="nav-item">
-                <button
-                  className="btn btn-sm"
-                  onClick={()=>  generateData()}>
-                  getPlugins</button></li>
+                <button className="btn btn-sm" onClick={()=>  generateData()}>refresh plugins</button>
+              </li>
             </ul>
 
             <ul className="pull-xs-right nav navbar-nav">

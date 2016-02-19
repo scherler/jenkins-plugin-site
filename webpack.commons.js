@@ -46,7 +46,7 @@ function getLoader(dirname) {
       loaders: ['style', 'css?modules&importLoaders=1', 'cssnext'],
       exclude: path.join(dirname, 'node_modules')
     }
-  ]
+  ];
 }
 
 const
@@ -86,7 +86,7 @@ const
   extensions = ['', '.js', '.jsx']
 ;
 
-function getPlugins (environment) {
+function getPlugins(environment) {
   return plugins.commons.concat(plugins[environment]);
 }
 

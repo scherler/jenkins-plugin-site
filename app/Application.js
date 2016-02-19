@@ -44,6 +44,7 @@ export default function Application({
         setFilter={setFilter}
         getVisiblePlugins={filterVisibleList}
         totalSize={totalSize}
+        isFetching = {isFetching}
         searchData={searchPluginData}
         getVisiblePluginsLabels={getVisiblePluginsLabels}
         labelFilter={labelFilter}

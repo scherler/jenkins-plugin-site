@@ -5,6 +5,7 @@ import styles from './Widget.css';
 import LabelWidget from './Labels';
 import React, { PropTypes, Component } from 'react';
 import {cleanTitle, getMaintainers, getScoreClassName} from '../../helper';
+import Spinner from '../../commons/spinner';
 import { VirtualScroll } from 'react-virtualized';
 import classNames from 'classnames';
 
@@ -15,6 +16,7 @@ export default class Widget extends Component {
     setFilter: PropTypes.func.isRequired,
     totalSize: PropTypes.any.isRequired,
     getVisiblePlugins: PropTypes.any.isRequired,
+    isFetching: PropTypes.bool.isRequired,
     getVisiblePluginsLabels: PropTypes.any.isRequired,
     searchData: PropTypes.func.isRequired,
     labelFilter: PropTypes.any.isRequired
@@ -26,6 +28,11 @@ export default class Widget extends Component {
     sort: 'title',
     category: 'all'
   };
+
+  componentWillMount() {
+    this.props.generateData();
+  }
+
 
   filterSet(search, filter) {
     this.props.setFilter(new Immutable.Record({
@@ -54,6 +61,7 @@ export default class Widget extends Component {
       setFilter,
       searchData,
       totalSize,
+      isFetching,
       getVisiblePlugins,
       getVisiblePluginsLabels,
       labelFilter
@@ -277,6 +285,8 @@ export default class Widget extends Component {
 
           <div id="cb-item-finder-grid-box" className={classNames(styles.GridBox, 'grid-box')} >
             <div className={classNames(styles.Grid, 'grid')} >
+
+              {isFetching && <Spinner>loading</Spinner>}
 
               {totalSize > 0 && getVisiblePlugins.valueSeq().map(plugin => {
                 return (<Entry

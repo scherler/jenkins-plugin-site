@@ -4,8 +4,8 @@ This is a simple rendering of the plugin list as taken from updates.jenkins-ci.o
 ### Run with Docker
 
 ```
-docker build -t jenkins-plugin-site .
-docker run -d -p 5000:5000 --name plugins jenkins-plugin-site
+docker build -t jenkinsciinfra/plugin-site .
+docker run -d -p 5000:5000 --name plugin-site jenkinsciinfra/plugin-site
 Point to http://0.0.0.0:5000/
 ```
 
@@ -29,7 +29,7 @@ To make sure you do not push faulty code we create as well a pre-push hook which
 You can activate it with:
 
 ```
-ln -s ./pre-push.sh .git/hooks/pre-push
+ln -s `pwd`/pre-push.sh .git/hooks/pre-push
 ```
 
 ### Linting with npm

@@ -1,9 +1,12 @@
+// Only a couple of es6 feature are supported!!!
 /* eslint-disable no-console */ //This is because we are using console log for communications
 const express = require('express');
 const dns = require('dns');
 const request = require('request');
 const portServer = 3000;
 const portClient = 5000;
+
+const runningMode = process.env.NODE_ENV || 'development';
 
 const content = `<ul>
     <li><a href="update-center.json">update-center.json</a></li>
@@ -31,11 +34,10 @@ dns.resolve4(host, (err, addresses) => {
   });
 });
 
-
 var
   webpack = require('webpack'),
   WebpackDevServer = require('webpack-dev-server'),
-  config = require('./webpack.config');
+  config = require(`./webpack.config.${runningMode}`);
 
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,

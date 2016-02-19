@@ -1,31 +1,29 @@
 const webpackCommons = require('./webpack.commons');
 
 const
+  path = webpackCommons.path,
   entryDirectory = webpackCommons.entryDirectory,
   getPlugins = webpackCommons.getPlugins,
-  getLoader = webpackCommons.getLoader,
   getOutput = webpackCommons.getOutput,
   extensions = webpackCommons.extensions,
-  loaders = webpackCommons.loaders;
+  getLoaders = webpackCommons.loaders;
 
 module.exports = {
-  debug: true,
+  debug: false,
+  devtool: 'eval',
   devServer: {
-    contentBase: 'build',
+    contentBase: 'css',
     port: 5000
   },
-  devtool: 'source-map',
   entry: [
-    'webpack-dev-server/client?http://localhost:5000',
-    'webpack/hot/dev-server',
     'babel-polyfill',
     `./${entryDirectory}/index`
   ],
-  output: getOutput(__dirname),
+  output: getOutput(path.join(__dirname, 'dist')),
   resolve: {
     extensions
   },
-  plugins: getPlugins('development'),
+  plugins: getPlugins('production'),
   module: {
     loaders: getLoader(__dirname)
   }

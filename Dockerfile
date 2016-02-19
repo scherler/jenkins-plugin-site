@@ -1,16 +1,18 @@
 FROM node:slim
 
-RUN mkdir /pepito
-COPY ./.babelrc /pepito/
-COPY ./package.json /pepito/
-COPY ./server.js /pepito/
-COPY ./webpack.config.js /pepito/
-COPY ./webpack.config.production.js /pepito/
-COPY ./index.html /pepito/
-WORKDIR /pepito
-
-EXPOSE 5000
+RUN mkdir /plugins
+COPY ./.babelrc /plugins/
+COPY ./package.json /plugins/
+COPY ./server.js /plugins/
+COPY ./server/ /plugins/server/
+COPY ./webpack.commons.js /plugins/
+COPY ./webpack.config.docker.js /plugins/
+COPY ./index.html /plugins/
+COPY ./app/ /plugins/app/
+COPY ./css/ /plugins/css/
+WORKDIR /plugins
 
 RUN npm install
-CMD cd /pepito; npm start
-COPY ./scripts /pepito/scripts
+CMD cd /plugins; npm run integrity; npm run docker
+
+EXPOSE 5000

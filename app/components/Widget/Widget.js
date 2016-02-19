@@ -33,7 +33,7 @@ export default class Widget extends Component {
     this.props.generateData();
   }
 
-  filterSet (search, filter) {
+  filterSet(search, filter) {
     this.props.setFilter(new Immutable.Record({
       search,
       searchField: 'labels',
@@ -60,7 +60,6 @@ export default class Widget extends Component {
       setFilter,
       searchData,
       isFetching,
-      title,
       totalSize,
       getVisiblePlugins,
       getVisiblePluginsLabels,
@@ -169,7 +168,7 @@ export default class Widget extends Component {
                       field: filter.title || 'title',
                       search: '',
                       asc: filter.asc || true
-                    }))
+                    }));
                   }}>
                   All
                 </button>

@@ -8,7 +8,6 @@ import {cleanTitle, getMaintainers, getScoreClassName} from '../../helper';
 import Spinner from '../../commons/spinner';
 import { VirtualScroll } from 'react-virtualized';
 import classNames from 'classnames';
-import Spinner from '../../commons/spinner';
 
 export default class Widget extends Component {
 

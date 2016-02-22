@@ -4,7 +4,7 @@ node {
    // Get some code from a GitHub repository
    // FIME: should be ... ?
    //git url: 'https://github.com/scherler/jenkins-plugin-site.git', branch: 'issue/WEBSITE-87'
-   git url: '...'
+   checkout scm
    // Mark the code build 'stage'....
    stage 'Build'
    sh '/usr/local/bin/npm install'

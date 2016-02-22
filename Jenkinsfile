@@ -12,5 +12,7 @@ node {
   sh '/usr/local/bin/npm run test'
   stage 'depoly'
   // Build Docker file
-  docker.build('jenkinsciinfra/plugin-site')
+  docker.build('jenkinsciinfra/plugin-site').inside('-p 5000:5000'){
+    curl -sSfI 0.0.0.0:5000
+  }
 }

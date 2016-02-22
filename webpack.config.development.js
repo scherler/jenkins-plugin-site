@@ -5,8 +5,7 @@ const
   getPlugins = webpackCommons.getPlugins,
   getLoader = webpackCommons.getLoader,
   getOutput = webpackCommons.getOutput,
-  extensions = webpackCommons.extensions,
-  loaders = webpackCommons.loaders;
+  extensions = webpackCommons.extensions;
 
 module.exports = {
   debug: true,

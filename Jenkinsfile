@@ -12,6 +12,6 @@ node {
   stage 'depoly'
   // Build Docker file, run it and smoke test it
   docker.build('jenkinsciinfra/plugin-site').inside(){
-    curl -sSfI http://0.0.0.0:5000
+    sh 'curl -sSfI 0.0.0.0:5000'
   }
 }

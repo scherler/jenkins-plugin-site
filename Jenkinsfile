@@ -8,7 +8,8 @@ node {
    stage 'Build'
    sh '/usr/local/bin/npm install'
    stage 'Test'
-   sh '/usr/local/bin/npm run integrity'
+   sh './node_modules/.bin/eslint .'
+   sh '/usr/local/bin/npm run test'
    stage 'depoly'
    // Build Docker file
    docker.build('jenkinsciinfra/plugin-site')

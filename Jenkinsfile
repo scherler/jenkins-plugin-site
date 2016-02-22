@@ -13,5 +13,5 @@ node {
   // Build Docker file, run it and smoke test it
   docker.build('jenkinsciinfra/plugin-site')
   stage 'smoke'
-  //sh 'curl -sSfI http://0.0.0.0:5000'
+  echo 'Test whether you can start it'
 }

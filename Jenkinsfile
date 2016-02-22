@@ -6,9 +6,9 @@ node {
    git url: 'https://github.com/scherler/jenkins-plugin-site.git', branch: 'issue/WEBSITE-87'
    // Mark the code build 'stage'....
    stage 'Build'
-   sh: 'npm install'
+   sh '/usr/local/bin/npm install'
    stage 'Test'
-   sh: 'npm run integrity'
+   sh '/usr/local/bin/npm run integrity'
    stage 'depoly'
    // Build Docker file
    docker.build('jenkinsciinfra/plugin-site')

@@ -1,18 +1,17 @@
 node {
   // Mark the code checkout 'stage'....
   stage 'Checkout'
-  // Get some code from a GitHub repository
-  // FIME: should be ... ?
-  git url: 'https://github.com/scherler/jenkins-plugin-site.git', branch: 'issue/WEBSITE-87'
+  // Get code from a scm repository
+  checkout scm
   // Mark the code build 'stage'....
   stage 'Build'
   sh '/usr/local/bin/npm install'
   stage 'Test'
   sh './node_modules/.bin/eslint .'
   sh '/usr/local/bin/npm run test'
-  stage 'depoly'
-  // Build Docker file
-  docker.build('jenkinsciinfra/plugin-site').inside(){
-    curl -sSfI 0.0.0.0:5000
-  }
+  stage 'deploy'
+  // Build Docker file, run it and smoke test it
+  docker.build('jenkinsciinfra/plugin-site')
+  stage 'smoke'
+  //sh 'curl -sSfI http://0.0.0.0:5000'
 }

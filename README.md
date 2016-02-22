@@ -3,13 +3,20 @@ This is a simple rendering of the plugin list as taken from updates.jenkins-ci.o
 
 ### Run with Docker
 
+Since we are using in the Jenkinsfile to build the project in a pipeline and the docker image
+is to be run on jenkins infrastructure, you need to run 'npm install' before the docker build!
+
+We are reusing the 'npm install' in the docker image!
+
 ```
+npm i
 docker build -t jenkinsciinfra/plugin-site .
 docker run -d -p 5000:5000 --name plugin-site jenkinsciinfra/plugin-site
 Point to http://0.0.0.0:5000/
 ```
 
 ### Usage with npm
+
 
 ```
 npm install

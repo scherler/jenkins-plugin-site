@@ -32,8 +32,10 @@ To test the integrity of our code base we are using a compination of eslint and 
 npm run integrity
 ```
 
-To make sure you do not push faulty code we create as well a pre-push hook which will call the test.
-You can activate it with:
+To make sure you do not push faulty code we create as well a pre-push hook which will call the test. However since we
+are using the Jenkinsfile to describe our deploy pipeline, we added the check in the commit stage.
+
+However fell free to activate it with:
 
 ```
 ln -s `pwd`/pre-push.sh .git/hooks/pre-push

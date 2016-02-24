@@ -11,4 +11,7 @@ if (env.isBrowser && window.appSettings) {
   env.NODE_ENV = process.env.NODE_ENV;
 }
 
-module.exports = env;
+// revision info is gathered during webpack build and set to "process.env" (display this in development footer)
+env.revisionInfo = process.env.buildRevisionInfo;
+
+export default env;

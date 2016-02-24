@@ -17,6 +17,7 @@ import React, { PropTypes } from 'react';
 import Widget from './components/Widget';
 import Highlighter from 'react-highlight-words';
 import styles from './Application.css';
+import DevelopmentFooter from './commons/developmentFooter';
 
 Application.propTypes = {
   generatePluginData: PropTypes.func.isRequired,
@@ -38,7 +39,8 @@ export default function Application({
   labelFilter,
   getVisiblePluginsLabels
 }) {
-  return (
+  return (<div>
+      <DevelopmentFooter />
       <Widget
         generateData={generatePluginData}
         setFilter={setFilter}
@@ -49,7 +51,7 @@ export default function Application({
         getVisiblePluginsLabels={getVisiblePluginsLabels}
         labelFilter={labelFilter}
       />
-
+  </div>
   );
 }
 

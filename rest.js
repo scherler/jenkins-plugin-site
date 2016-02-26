@@ -63,11 +63,18 @@ function getOptions(req) {
 
 function search(query, req, callback) {
   const options = getOptions(req);
-  Plugin.paginate({}, options, callback);
+  Plugin.paginate(query, options, callback);
 }
 
 function getAll(req, callback) {
-  search({}, req, callback);
+  var q = req.query && req.query.q? {
+    $or: [
+      {excerpt: new RegExp(req.query.q)},
+      {name: new RegExp(req.query.q)},
+      {title: new RegExp(req.query.q)}
+    ]
+  } : {};
+  search(q, req, callback);
 }
 
 function setRestHeader(res) {

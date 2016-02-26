@@ -4,6 +4,7 @@ import Entry from './Entry';
 import styles from './Widget.css';
 import LabelWidget from './Labels';
 import Pagination from './Pagination';
+import Searchbox from './Searchbox';
 import React, { PropTypes, Component } from 'react';
 import {cleanTitle, getMaintainers, getScoreClassName} from '../../helper';
 import Spinner from '../../commons/spinner';
@@ -69,7 +70,11 @@ export default class Widget extends Component {
       labelFilter
     } = this.props;
 
-    const filter = this.getFilter(labelFilter);
+    const
+      filter = this.getFilter(labelFilter),
+      toRange = searchOptions.limit * Number(searchOptions.page) <= Number(searchOptions.total) ?
+        searchOptions.limit * Number(searchOptions.page) : Number(searchOptions.total),
+      fromRange = (searchOptions.limit) * (Number(searchOptions.page) - 1);
 
     const { clicked } = this.state;
 
@@ -200,7 +205,9 @@ export default class Widget extends Component {
                   Technologies
                 </a></li>
               <li className="nav-item">
-                <button className="btn btn-sm" onClick={()=>  generateData()}>refresh plugins</button>
+                <Searchbox browserHistory={browserHistory}
+                          location={location}
+                          limit={Number(searchOptions.limit)}/>
               </li>
             </ul>
 
@@ -208,7 +215,8 @@ export default class Widget extends Component {
               <li className="nav-item">
                 {totalSize > 0 &&
                   <span className="nav-link">
-                    {filteredSize} of {totalSize}
+                    {fromRange} to&nbsp;
+                    {toRange} of {totalSize}
                   </span>
                 }
               </li>
@@ -292,7 +300,6 @@ export default class Widget extends Component {
 
               {isFetching && <Spinner>loading</Spinner>}
               {!isFetching && totalSize > 0 && <Pagination
-                generateData={this.props.generateData}
                 browserHistory={browserHistory}
                 location={location}
                 total={Number(searchOptions.total)}

@@ -156,7 +156,7 @@ export const actions = {
   generatePluginData(query={}) {
     return (dispatch, getState) => {
       logger.warn(query);
-      const url = `${PLUGINS_URL}?page=${query.page || 1}&limit=${query.limit || 10}`;
+      const url = `${PLUGINS_URL}?page=${query.page || 1}&limit=${query.limit || 10}&q=${query.q || ''}`;
       logger.warn(query, url);
       dispatch(actions.clearPluginData());
       dispatch(actions.fetchPluginData());

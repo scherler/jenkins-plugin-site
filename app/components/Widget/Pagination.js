@@ -4,7 +4,6 @@ import { logger } from '../../commons';
 export default class Pagination extends Component {
 
   static propTypes = {
-    generateData: PropTypes.func.isRequired,
     browserHistory: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     total: PropTypes.number.isRequired,

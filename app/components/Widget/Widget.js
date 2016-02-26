@@ -15,7 +15,8 @@ export default class Widget extends Component {
   static propTypes = {
     generateData: PropTypes.func.isRequired,
     setFilter: PropTypes.func.isRequired,
-    browserHistory: PropTypes.func.isRequired,
+    browserHistory: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
     totalSize: PropTypes.any.isRequired,
     getVisiblePlugins: PropTypes.any.isRequired,
     searchOptions: PropTypes.any.isRequired,
@@ -67,10 +68,6 @@ export default class Widget extends Component {
       location,
       labelFilter
     } = this.props;
-
-    if (searchOptions && searchOptions.toJS) {
-      console.log(searchOptions.toJS())
-    }
 
     const filter = this.getFilter(labelFilter);
 

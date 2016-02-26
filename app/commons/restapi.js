@@ -1,9 +1,9 @@
 import logger from './logger';
 import env from './env';
 
-let calledRoutes = {};
+const calledRoutes = {};
 
-let api = {
+const api = {
 
   app: {
     settings: {}
@@ -31,7 +31,7 @@ let api = {
   },
 
   replaceParams: function (route, callback) {
-    let self = this;
+    const self = this;
 
     function finished(err, r) {
       if (err) {
@@ -40,15 +40,13 @@ let api = {
       }
 
       // warning
-      let ignoreWarningFor = ['/usercontext'];
+      const ignoreWarningFor = ['/usercontext'];
       if (ignoreWarningFor.indexOf(r) < 0) {
-        let called = calledRoutes[r];
-        let now = new Date();
+        const called = calledRoutes[r];
+        const now = new Date();
 
         if (called && now - called < 1000) {
-          logger.warn('restapi: route "' + r +
-           '" was called multiple times in one second. ' +
-           ' Please check loading behaviour of data.');
+          logger.warn(`restapi: route "${r}" was called multiple times in one second.`);
         }
         calledRoutes[r] = now;
       }
@@ -58,14 +56,14 @@ let api = {
         if (r.indexOf('?') > 0) {
           sep = '&';
         }
-        r += sep + 'timestamp=' + (new Date()).getTime();
+        r += `${sep} timestamp=${(new Date()).getTime()}`;
       }
       callback(err, r);
     }
 
     if (route.indexOf('/:') < 0) {
       if (env.debug && this.options.latency) {
-        setTimeout(function () {
+        setTimeout(() => {
           finished(null, route);
         }, this.options.latency);
       } else {
@@ -93,12 +91,12 @@ let api = {
         setTimeout(tryReplace, timeout);
 
       } else {
-        finished('could not resolve params in api route: ' + route);
+        finished(`could not resolve params in api route:${route}`);
       }
     }
 
     if (env.debug && this.options.latency) {
-      setTimeout(function () {
+      setTimeout( () => {
         tryReplace();
       }, this.options.latency);
     } else {
@@ -106,16 +104,6 @@ let api = {
     }
 
   },
-
-  // assertHasUser: function (callback) {
-  //   if (!this.app.userStore.isLoggedIn()) {
-  //     this.app.userStore.emitter.once('change', function () {
-  //       callback();
-  //     });
-  //   } else {
-  //     callback();
-  //   }
-  // },
 
   getJSON: function (route, partial, callback) {
     if (typeof partial === 'function') {
@@ -125,7 +113,7 @@ let api = {
 
 
     function get(url) {
-      let xhr = new XMLHttpRequest();
+      const xhr = new XMLHttpRequest();
       xhr.open('GET', url, true);
 
       xhr.onreadystatechange = function () {
@@ -143,7 +131,7 @@ let api = {
         }
 
         if (xhr.status !== 200) {
-          callback(new Error('Status code ' + xhr.status + url),
+          callback(new Error(`Status code ${xhr.status} ${url}`),
            responseData.response ? responseData.response : responseData);
         }
 
@@ -160,7 +148,7 @@ let api = {
       xhr.send();
     }
 
-    this.replaceParams(route, function (err, url) {
+    this.replaceParams(route, (err, url) => {
       if (err) {
         return callback(err);
       }
@@ -175,7 +163,7 @@ let api = {
     }
 
     function post(url) {
-      let xhr = new XMLHttpRequest();
+      const xhr = new XMLHttpRequest();
       xhr.open(method, url, true);
       xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
@@ -194,7 +182,7 @@ let api = {
         }
 
         if (xhr.status !== 200) {
-           callback(new Error('Status code ' + xhr.status + url),
+          callback(new Error(`Status code ${xhr.status} ${url}`),
             responseData.response ? responseData.response : responseData);
         }
 
@@ -211,7 +199,7 @@ let api = {
       xhr.send(JSON.stringify(data));
     }
 
-    this.replaceParams(route, function (err, url) {
+    this.replaceParams(route, (err, url) => {
       if (err) {return callback(err); }
       post(url);
     });
@@ -227,7 +215,7 @@ let api = {
 
   delete: function (route, callback) {
     function del(url) {
-      let xhr = new XMLHttpRequest();
+      const xhr = new XMLHttpRequest();
       xhr.open('DELETE', url, true);
 
       xhr.onreadystatechange = function () {
@@ -241,7 +229,7 @@ let api = {
         }
 
         if (xhr.status !== 200) {
-          callback(new Error('Status code ' + xhr.status + url),
+          callback(new Error(`Status code ${xhr.status} ${url}`),
            responseData.response ? responseData.response : responseData);
         }
 
@@ -251,7 +239,7 @@ let api = {
       xhr.send();
     }
 
-    this.replaceParams(route, function (err, url) {
+    this.replaceParams(route, (err, url) => {
       if (err) {return callback(err); }
       del(url);
     });
@@ -267,12 +255,12 @@ let api = {
    */
    postOrPutFormData: function (method, route, formData, callback, progress) {
     function post(url) {
-      let xhr = new XMLHttpRequest();
+      const xhr = new XMLHttpRequest();
       if (xhr.upload) {
         xhr.upload.onprogress = function (oEvent) {
           if (oEvent.lengthComputable) {
-            let percentComplete = oEvent.loaded / oEvent.total * 100;
-            logger.log(method + ': ' + url + ' - percentComplete: ' + percentComplete);
+            const percentComplete = oEvent.loaded / oEvent.total * 100;
+            logger.log(`${method}:${url} - percentComplete: ${percentComplete}`);
             if (progress) {
               progress(percentComplete);
             }
@@ -296,7 +284,7 @@ let api = {
         }
 
         if (xhr.status !== 200) {
-          callback(new Error('Status code ' + xhr.status + url),
+          callback(new Error(`Status code ${xhr.status} ${url}`),
            responseData.response ? responseData.response : responseData);
         }
 
@@ -306,7 +294,7 @@ let api = {
       xhr.send(formData);
     }
 
-    this.replaceParams(route, function (err, url) {
+    this.replaceParams(route, (err, url) => {
       if (err) {
         return callback(err);
       }

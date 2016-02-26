@@ -4,14 +4,13 @@ import { Router, Route, browserHistory} from 'react-router';
 import { render } from 'react-dom';
 import Application from './Application';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 const store = createAppStore();
 
 class App extends Component {
 
   render() {
-  console.log('crrrr', this.props.location)
     return (
       <div>
         <Provider store={store}>
@@ -22,6 +21,9 @@ class App extends Component {
   }
 }
 
+App.propTypes = {
+  location: PropTypes.object.isRequired
+};
 
 render((
     <Router history={browserHistory}>

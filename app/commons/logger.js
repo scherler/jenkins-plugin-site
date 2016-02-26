@@ -1,6 +1,6 @@
-let env = require('./env');
+const env = require('./env');
 
-let consoleLogger = {
+const consoleLogger = {
 
   log: function (args) {
     this._output('log', args);

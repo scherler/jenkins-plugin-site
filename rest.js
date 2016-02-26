@@ -17,31 +17,31 @@ const
 var Plugin;
 
 connection.on('error', console.error);
-connection.once('open', function() {
+connection.once('open', () => {
   const pluginSchema = new Schema({
-    "buildDate": Date,
-    "dependencies": [],
-    "developers": [{
-      "developerId": String,
-      "email": String,
-      "name": String
+    'buildDate': Date,
+    'dependencies': [],
+    'developers': [{
+      'developerId': String,
+      'email': String,
+      'name': String
     }],
-    "excerpt": String,
-    "gav": String,
-    "labels": [String],
-    "name": String,
-    "_updated": {type: Date, default: Date.now},
-    "_created": {type: Date, default: Date.now},
-    "previousTimestamp": Date,
-    "previousVersion": String,
-    "releaseTimestamp": Date,
-    "requiredCore": String,
-    "scm": String,
-    "sha1": String,
-    "title": String,
-    "url": String,
-    "version": String,
-    "wiki": String
+    'excerpt': String,
+    'gav': String,
+    'labels': [String],
+    'name': String,
+    '_updated': {type: Date, default: Date.now},
+    '_created': {type: Date, default: Date.now},
+    'previousTimestamp': Date,
+    'previousVersion': String,
+    'releaseTimestamp': Date,
+    'requiredCore': String,
+    'scm': String,
+    'sha1': String,
+    'title': String,
+    'url': String,
+    'version': String,
+    'wiki': String
   });
 
   pluginSchema.plugin(mongoosePaginate);
@@ -53,7 +53,7 @@ function getOptions(req) {
   var page = req.query ? req.query.page : 1;
   var limit = req.query ? req.query.limit : 10;
   return options = {
-    lean:  true,
+    lean: true,
     select: 'title name, version requiredCore wiki developers sha1 excerpt',
     sort: { name: 1 },
     page: page || 1,
@@ -63,7 +63,7 @@ function getOptions(req) {
 
 function search(query, req, callback) {
   const options = getOptions(req);
-  Plugin.paginate({}, options, callback)
+  Plugin.paginate({}, options, callback);
 }
 
 function getAll(req, callback) {
@@ -72,12 +72,12 @@ function getAll(req, callback) {
 
 function setRestHeader(res) {
   res
-    .header("Access-Control-Allow-Origin", "*")
-    .header("Access-Control-Allow-Headers", "X-Requested-With");
+    .header('Access-Control-Allow-Origin', '*')
+    .header('Access-Control-Allow-Headers', 'X-Requested-With');
 }
 
 rest.get('/', (req, res) => {
-  res.send("<a href='/plugins'>Show plugins</a><a href='/indexDb'>Index db</a>");
+  res.send('<a href=\'/plugins\'>Show plugins</a><a href=\'/indexDb\'>Index db</a>');
 });
 
 /* FIXME:
@@ -88,12 +88,12 @@ rest.get('/', (req, res) => {
 rest.get('/indexDb', (req, res) => {
   // Disable caching
   res
-    .header("Cache-Control", "no-cache, no-store, must-revalidate")
-    .header("Pragma", "no-cache")
-    .header("Expires", 0);
+    .header('Cache-Control', 'no-cache, no-store, must-revalidate')
+    .header('Pragma', 'no-cache')
+    .header('Expires', 0);
 
   req
-    .pipe(request(`${url}?date=${Math.round(100000 * Math.random())}`, function(error, response, body){
+    .pipe(request(`${url}?date=${Math.round(100000 * Math.random())}`, (error, response, body) => {
     if(error) {
       console.log(error);
     } else {
@@ -105,7 +105,7 @@ rest.get('/indexDb', (req, res) => {
             if (result) {
               Plugin.create(_.values(plugins));
             }
-          })
+          });
         }
       }
     }

@@ -68,6 +68,7 @@ export default class Application extends Component {
 Application.propTypes = {
   generatePluginData: PropTypes.func.isRequired,
   setFilter: PropTypes.func.isRequired,
+  browserHistory: PropTypes.object.isRequired,
   filterVisibleList: PropTypes.any.isRequired,
   totalSize: PropTypes.any.isRequired,
   getVisiblePluginsLabels: PropTypes.any.isRequired,

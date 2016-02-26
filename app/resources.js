@@ -3,7 +3,7 @@ import { createSearchAction, getSearchSelectors } from 'redux-search';
 import faker from 'faker';
 import Immutable from 'immutable';
 import keymirror from 'keymirror';
-import { env, api } from './commons';
+import { env, api, logger } from './commons';
 import _ from 'lodash';
 import React, { PropTypes } from 'react';
 
@@ -73,7 +73,7 @@ const Record = Immutable.Record({
   dependencies: []
 });
 
-let PLUGINS_URL = 'http://0.0.0.0:3000/plugins';
+const PLUGINS_URL = 'http://0.0.0.0:3000/plugins';
 /*
 export function jsonp(url, callback) {// HACK
   const callbackName = `jsonp_callback_${Math.round(100000 * Math.random())}`;
@@ -155,9 +155,9 @@ export const actions = {
 
   generatePluginData(query={}) {
     return (dispatch, getState) => {
-      console.log(query)
+      logger.warn(query);
       const url = `${PLUGINS_URL}?page=${query.page || 1}&limit=${query.limit || 10}`;
-      console.log(query, url)
+      logger.warn(query, url);
       dispatch(actions.clearPluginData());
       dispatch(actions.fetchPluginData());
       const plugins = {};

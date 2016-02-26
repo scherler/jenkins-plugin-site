@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import { logger } from '../../commons';
 
 export default class Pagination extends Component {
 
@@ -13,12 +14,12 @@ export default class Pagination extends Component {
   };
 
   createHref(number) {
-    return `?page=${number}&limit=${this.props.limit}`
+    return `?page=${number}&limit=${this.props.limit}`;
   }
 
   handleClick = (data) => {
     this.props.location.query.page = data;
-    console.log(this.props.location)
+    logger.log(this.props.location);
     this.props.browserHistory.replace(this.props.location);
   }
 
@@ -37,8 +38,8 @@ export default class Pagination extends Component {
       end = pages,
       start = 1;
 
-    console.log(page, pages, limit, total)
-    console.log(start, previous, page, next, end)
+    logger.log(page, pages, limit, total);
+    logger.log(start, previous, page, next, end);
 
     return (
       <nav>

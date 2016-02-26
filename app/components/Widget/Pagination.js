@@ -11,10 +11,6 @@ export default class Pagination extends Component {
     pages: PropTypes.number.isRequired,
     page: PropTypes.number.isRequired,
     limit: PropTypes.number.isRequired
-  };
-
-  createHref(number) {
-    return `?page=${number}&limit=${this.props.limit}`;
   }
 
   handleClick = (data) => {

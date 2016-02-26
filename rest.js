@@ -54,7 +54,7 @@ function getOptions(req) {
   var limit = req.query ? req.query.limit : 10;
   return options = {
     lean: true,
-    select: 'title name, version requiredCore wiki developers sha1 excerpt',
+    select: 'title name, version requiredCore wiki developers sha1 excerpt labels',
     sort: { name: 1 },
     page: page || 1,
     limit: limit || 10

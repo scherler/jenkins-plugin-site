@@ -3,6 +3,7 @@ import Immutable from 'immutable';
 import Entry from './Entry';
 import styles from './Widget.css';
 import LabelWidget from './Labels';
+import Pagination from './Pagination';
 import React, { PropTypes, Component } from 'react';
 import {cleanTitle, getMaintainers, getScoreClassName} from '../../helper';
 import Spinner from '../../commons/spinner';
@@ -14,8 +15,10 @@ export default class Widget extends Component {
   static propTypes = {
     generateData: PropTypes.func.isRequired,
     setFilter: PropTypes.func.isRequired,
+    browserHistory: PropTypes.func.isRequired,
     totalSize: PropTypes.any.isRequired,
     getVisiblePlugins: PropTypes.any.isRequired,
+    searchOptions: PropTypes.any.isRequired,
     isFetching: PropTypes.bool.isRequired,
     getVisiblePluginsLabels: PropTypes.any.isRequired,
     searchData: PropTypes.func.isRequired,
@@ -28,10 +31,6 @@ export default class Widget extends Component {
     sort: 'title',
     category: 'all'
   };
-
-  componentWillMount() {
-    this.props.generateData();
-  }
 
   filterSet(search, filter) {
     this.props.setFilter(new Immutable.Record({
@@ -58,13 +57,20 @@ export default class Widget extends Component {
     const {
       generateData,
       setFilter,
+      browserHistory,
       searchData,
       totalSize,
       isFetching,
+      searchOptions,
       getVisiblePlugins,
       getVisiblePluginsLabels,
+      location,
       labelFilter
     } = this.props;
+
+    if (searchOptions && searchOptions.toJS) {
+      console.log(searchOptions.toJS())
+    }
 
     const filter = this.getFilter(labelFilter);
 
@@ -288,6 +294,16 @@ export default class Widget extends Component {
             <div className={classNames(styles.Grid, 'grid')} >
 
               {isFetching && <Spinner>loading</Spinner>}
+              {!isFetching && totalSize > 0 && <Pagination
+                generateData={this.props.generateData}
+                browserHistory={browserHistory}
+                location={location}
+                total={Number(searchOptions.total)}
+                pages={Number(searchOptions.pages)}
+                page={Number(searchOptions.page)}
+                limit={Number(searchOptions.limit)}
+              />}
+
 
               {totalSize > 0 && getVisiblePlugins.valueSeq().map(plugin => {
                 return (<Entry

@@ -3,13 +3,25 @@ import { createSearchAction, getSearchSelectors } from 'redux-search';
 import faker from 'faker';
 import Immutable from 'immutable';
 import keymirror from 'keymirror';
-import { env } from './commons';
+import { env, api } from './commons';
 import _ from 'lodash';
 import React, { PropTypes } from 'react';
+
+api.init({
+  latency: 100
+});
+
+export const SearchOptions = Immutable.Record({
+  limit: 10,
+  page: 1,
+  pages: 0,
+  total: 0
+});
 
 export const State = Immutable.Record({
   plugins: Immutable.OrderedMap(),
   isFetching: false,
+  searchOptions: SearchOptions,
   labelFilter: Immutable.Record({//fixme: that should become label: search, sort: field
     field: 'title',
     searchField: null,
@@ -22,7 +34,8 @@ export const ACTION_TYPES = keymirror({
   CLEAR_PLUGIN_DATA: null,
   FETCH_PLUGIN_DATA: null,
   SET_PLUGIN_DATA: null,
-  SET_LABEL_FILTER: null
+  SET_LABEL_FILTER: null,
+  SET_QUERY_INFO: null
 });
 /*
 buildDate: "Mar 03, 2011"
@@ -60,12 +73,8 @@ const Record = Immutable.Record({
   dependencies: []
 });
 
-let PLUGINS_URL = 'https://updates.jenkins-ci.org/current/update-center.json';
-
-if (env.debug) {
-  PLUGINS_URL = 'http://0.0.0.0:3000/update-center.json';
-}
-
+let PLUGINS_URL = 'http://0.0.0.0:3000/plugins';
+/*
 export function jsonp(url, callback) {// HACK
   const callbackName = `jsonp_callback_${Math.round(100000 * Math.random())}`;
   window.updateCenter = {
@@ -78,6 +87,16 @@ export function jsonp(url, callback) {// HACK
   document.body.appendChild(script);
 }
 
+export function getPlugins() {
+  const plugins = {};
+  api.getJson(PLUGINS_URL,data => {
+  _.forEach(data.plugins, (item) => {
+    _.set(item, 'id', item.sha1);
+    _.set(item, 'iconDom', actions.makeIcon(item.title));
+    plugins[item.id] = new Record(item);
+  })})
+}
+ */
 export function groupAndCountLabels(recordsMap) {
   const labelMap = _.map(
       _.groupBy(
@@ -134,11 +153,43 @@ export const actions = {
     };
   },
 
-  generatePluginData() {
+  generatePluginData(query={}) {
     return (dispatch, getState) => {
+      console.log(query)
+      const url = `${PLUGINS_URL}?page=${query.page || 1}&limit=${query.limit || 10}`;
+      console.log(query, url)
       dispatch(actions.clearPluginData());
       dispatch(actions.fetchPluginData());
       const plugins = {};
+
+      return api.getJSON(url,(error, data) => {
+        if (data) {
+          const searchOptions = new SearchOptions({
+            limit: data.limit,
+            page: data.page,
+            pages: data.pages,
+            total: data.total
+          });
+
+          const items = data.docs;
+          _.forEach(items, (item) => {
+            _.set(item, 'id', item.sha1);
+            _.set(item, 'iconDom', actions.makeIcon(item.title));
+            plugins[item.id] = new Record(item);
+          });
+          const recordsMap = Immutable.Map(plugins);
+          dispatch({
+            type: ACTION_TYPES.SET_PLUGIN_DATA,
+            payload: recordsMap
+          });
+          dispatch({
+            type: ACTION_TYPES.SET_QUERY_INFO,
+            payload: searchOptions
+          });
+          dispatch(actions.fetchPluginData());
+        }
+      });
+      /*
       return jsonp(PLUGINS_URL, data => {
         _.forEach(data.plugins, (item) => {
           _.set(item, 'id', item.sha1);
@@ -151,7 +202,7 @@ export const actions = {
           payload: recordsMap
         });
         dispatch(actions.fetchPluginData());
-      });
+      });*/
     };
   },
   searchPluginData: createSearchAction('plugins')
@@ -169,12 +220,16 @@ export const actionHandlers = {
   },
   [ACTION_TYPES.SET_LABEL_FILTER](state, { payload }): State {
     return state.set('labelFilter', payload);
+  },
+  [ACTION_TYPES.SET_QUERY_INFO](state, { payload }): State {
+    return state.set('searchOptions', payload);
   }
 };
 
 export const resources = state => state.resources;
 export const resourceSelector = (resourceName, state) => state.resources.get(resourceName);
 export const plugins = createSelector([resources], resources => resources.plugins);
+export const searchOptions = createSelector([resources], resources => resources.searchOptions);
 
 export const isFetching = createSelector([resources], resources => resources.isFetching);
 export const labelFilter = createSelector([resources], resources => resources.labelFilter);
@@ -194,9 +249,9 @@ export const getVisiblePlugins = createSelector(
 );
 
 export const totalSize = createSelector(
-  [ plugins ],
-  ( plugins ) => {
-    return plugins.size;
+  [ searchOptions ],
+  ( searchOptions ) => {
+    return searchOptions.total || 0;
   }
 );
 

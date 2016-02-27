@@ -9,10 +9,10 @@ import Pagination from '../app/components/Widget/Pagination';
 const testElement = (<Pagination
   browserHistory={{
     replace: (location) => {
-      expect(location.query.q).toBe('extrem')
+      expect(location.query.q).toBe('extrem');
     }}
   }
-  location={{query:{q:'extrem'}}}
+  location={{query: {q: 'extrem'}}}
   limit={10}
   total={100}
   pages={10}

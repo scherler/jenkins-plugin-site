@@ -7,7 +7,7 @@ import { assert} from 'chai';
 import Searchbox from '../app/components/Widget/Searchbox';
 
 const testElement = (<Searchbox browserHistory={{}}
-  location={{query:{q:'extrem'}}}
+  location={{query: {q: 'extrem'}}}
   limit={11}/>);
 
 describe('Test whether searchbox renders correctly', () => {

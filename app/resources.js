@@ -29,14 +29,6 @@ export const State = Immutable.Record({
     search: []
   })
 });
-
-export const ACTION_TYPES = keymirror({
-  CLEAR_PLUGIN_DATA: null,
-  FETCH_PLUGIN_DATA: null,
-  SET_PLUGIN_DATA: null,
-  SET_LABEL_FILTER: null,
-  SET_QUERY_INFO: null
-});
 /*
 buildDate: "Mar 03, 2011"
 dependencies: Array[0]
@@ -74,43 +66,32 @@ const Record = Immutable.Record({
 });
 
 const PLUGINS_URL = 'http://0.0.0.0:3000/plugins';
-/*
-export function jsonp(url, callback) {// HACK
-  const callbackName = `jsonp_callback_${Math.round(100000 * Math.random())}`;
-  window.updateCenter = {
-    post(data) {
-      callback(data);
-    }
-  };
-  const script = document.createElement('script');
-  script.src = `${url}${url.indexOf('?') >= 0 ? '&' : '?'}callback=${callbackName}`;
-  document.body.appendChild(script);
-}
 
-export function getPlugins() {
-  const plugins = {};
-  api.getJson(PLUGINS_URL,data => {
-  _.forEach(data.plugins, (item) => {
-    _.set(item, 'id', item.sha1);
-    _.set(item, 'iconDom', actions.makeIcon(item.title));
-    plugins[item.id] = new Record(item);
-  })})
-}
- */
-export function groupAndCountLabels(recordsMap) {
-  const labelMap = _.map(
-      _.groupBy(
-        _.flatten(recordsMap.toArray().map((a) => a.labels)
-      )
-    ), (array, item) => {
-      return {
-        value: array.length,
-        key: item
-      };
-    }
-  );
-  return Immutable.List(labelMap);
-}
+export const ACTION_TYPES = keymirror({
+  CLEAR_PLUGIN_DATA: null,
+  FETCH_PLUGIN_DATA: null,
+  SET_PLUGIN_DATA: null,
+  SET_LABEL_FILTER: null,
+  SET_QUERY_INFO: null
+});
+
+export const actionHandlers = {
+  [ACTION_TYPES.CLEAR_PLUGIN_DATA](state) {
+    return state.set('plugins', Immutable.Map());
+  },
+  [ACTION_TYPES.FETCH_PLUGIN_DATA](state, {}): State {
+    return state.set('isFetching', !state.isFetching);
+  },
+  [ACTION_TYPES.SET_PLUGIN_DATA](state, { payload }): State {
+    return state.set('plugins', payload);
+  },
+  [ACTION_TYPES.SET_LABEL_FILTER](state, { payload }): State {
+    return state.set('labelFilter', payload);
+  },
+  [ACTION_TYPES.SET_QUERY_INFO](state, { payload }): State {
+    return state.set('searchOptions', payload);
+  }
+};
 
 export const actions = {
     //FIXME: This should not inject React DOM here, but.... hack...
@@ -189,42 +170,25 @@ export const actions = {
           dispatch(actions.fetchPluginData());
         }
       });
-      /*
-      return jsonp(PLUGINS_URL, data => {
-        _.forEach(data.plugins, (item) => {
-          _.set(item, 'id', item.sha1);
-          _.set(item, 'iconDom', actions.makeIcon(item.title));
-          plugins[item.id] = new Record(item);
-        });
-        const recordsMap = Immutable.Map(plugins);
-        dispatch({
-          type: ACTION_TYPES.SET_PLUGIN_DATA,
-          payload: recordsMap
-        });
-        dispatch(actions.fetchPluginData());
-      });*/
     };
   },
   searchPluginData: createSearchAction('plugins')
 };
 
-export const actionHandlers = {
-  [ACTION_TYPES.CLEAR_PLUGIN_DATA](state) {
-    return state.set('plugins', Immutable.Map());
-  },
-  [ACTION_TYPES.FETCH_PLUGIN_DATA](state, {}): State {
-    return state.set('isFetching', !state.isFetching);
-  },
-  [ACTION_TYPES.SET_PLUGIN_DATA](state, { payload }): State {
-    return state.set('plugins', payload);
-  },
-  [ACTION_TYPES.SET_LABEL_FILTER](state, { payload }): State {
-    return state.set('labelFilter', payload);
-  },
-  [ACTION_TYPES.SET_QUERY_INFO](state, { payload }): State {
-    return state.set('searchOptions', payload);
-  }
-};
+export function groupAndCountLabels(recordsMap) {
+  const labelMap = _.map(
+      _.groupBy(
+        _.flatten(recordsMap.toArray().map((a) => a.labels)
+      )
+    ), (array, item) => {
+      return {
+        value: array.length,
+        key: item
+      };
+    }
+  );
+  return Immutable.List(labelMap);
+}
 
 export const resources = state => state.resources;
 export const resourceSelector = (resourceName, state) => state.resources.get(resourceName);

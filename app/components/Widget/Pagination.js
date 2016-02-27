@@ -33,9 +33,6 @@ export default class Pagination extends Component {
       end = pages,
       start = 1;
 
-    logger.log(page, pages, limit, total);
-    logger.log(start, previous, page, next, end);
-
     return (
       <nav>
         <ul className="pagination">

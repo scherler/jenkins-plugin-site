@@ -3,8 +3,6 @@ const express = require('express');
 const dns = require('dns');
 const request = require('request');
 
-require('./rest');
-
 const portClient = 5000;
 
 const content = `<ul>

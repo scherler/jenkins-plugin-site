@@ -3,6 +3,8 @@ const
   express = require('express'),
   request = require('request'),
   mongoose = require('mongoose'),
+  fs = require('fs'),
+  async = require('async'),
   _ = require('lodash'),
   mongoosePaginate = require('mongoose-paginate');
 
@@ -45,7 +47,6 @@ connection.once('open', () => {
   });
 
   pluginSchema.plugin(mongoosePaginate);
-
   Plugin = mongoose.model('Plugin', pluginSchema);
 });
 
@@ -83,8 +84,38 @@ function setRestHeader(res) {
     .header('Access-Control-Allow-Headers', 'X-Requested-With');
 }
 
-rest.get('/', (req, res) => {
-  res.send('<a href=\'/plugins\'>Show plugins</a><a href=\'/indexDb\'>Index db</a>');
+rest.get('/getCategories', (req, res) => {
+  setRestHeader(res);
+  const id = req.query ? req.query.id : '';
+  fs.readFile('./server/static/featured-service.json', 'utf8', function(err, contents) {
+    const categories = _.values(JSON.parse(contents));
+    if (id) {
+      const elementPos = categories
+        .map(function(x) {return x.id; })
+        .indexOf(id);
+      if (elementPos < 0) {
+        return res.send('no category with that id found!');
+      }
+      const pluginsId = categories[elementPos].plugins;
+      Plugin.find({
+        name: { $in: pluginsId}
+      }, function(err, docs){
+        return res.send(docs);
+      });
+    } else {
+      var response = {};
+      async.forEach(categories, (category, callback) => {
+        Plugin.find({
+          name: { $in: category.plugins}
+        }, function(err, docs){
+          response[category.id] = docs;
+          callback(err);
+        });
+      }, (err) => {
+        res.send(response);
+      });
+    }
+   });
 });
 
 /* FIXME:
@@ -98,7 +129,6 @@ rest.get('/indexDb', (req, res) => {
     .header('Cache-Control', 'no-cache, no-store, must-revalidate')
     .header('Pragma', 'no-cache')
     .header('Expires', 0);
-
   req
     .pipe(request(`${url}?date=${Math.round(100000 * Math.random())}`, (error, response, body) => {
     if(error) {
@@ -122,11 +152,15 @@ rest.get('/indexDb', (req, res) => {
 
 rest.get('/plugins', (req, res) => {
   setRestHeader(res);
-
   getAll(req, (err, result) => {
     res.json(result);
   });
 });
+
+rest.get('/', (req, res) => {
+  res.send('<a href=\'/plugins\'>Show plugins</a><a href=\'/indexDb\'>Index db</a>');
+});
+
 //FIXME: Adopt when moving to docker
 mongoose.connect('mongodb://localhost/plugins');
 rest.listen(backendPort, () => {

@@ -55,6 +55,7 @@
   },
   "homepage": "http://plugins.jenkins-ci.org/",
   "dependencies": {
+    "async": "^1.5.2",
     "classnames": "2.2.3",
     "history": "^2.0.0",
     "immutable": "3.7.6",

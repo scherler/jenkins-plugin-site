@@ -260,7 +260,7 @@ export const filterVisibleList = createSelector (
         return plugin.localeCompare(nextPlugin);
       }
     });
-    logger.warn(`xxx ${list}`)
+    logger.warn(`xxx ${list}`);
     return list;
   }
 );

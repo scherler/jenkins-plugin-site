@@ -259,9 +259,8 @@ export const filterVisibleList = createSelector (
       } else {
         return plugin.localeCompare(nextPlugin);
       }
-    }
-
-    );
+    });
+    logger.warn(`xxx ${list}`)
     return list;
   }
 );

@@ -5,6 +5,7 @@ import styles from './Widget.css';
 import LabelWidget from './Labels';
 import Pagination from './Pagination';
 import Searchbox from './Searchbox';
+import Categories from './Categories';
 import React, { PropTypes, Component } from 'react';
 import {cleanTitle, getMaintainers, getScoreClassName} from '../../helper';
 import Spinner from '../../commons/spinner';
@@ -30,8 +31,7 @@ export default class Widget extends Component {
   state = {
     clicked: false,
     view: 'tiles',
-    sort: 'title',
-    category: 'all'
+    sort: 'title'
   };
 
   filterSet(search, filter) {
@@ -88,64 +88,10 @@ export default class Widget extends Component {
     return (
       <div className={classNames(styles.ItemFinder, this.state.view, 'item-finder')} >
         <div className={classNames(styles.CategoriesBox, 'categories-box col-md-2')} >
-          <ul className="list-group">
-            <li className={classNames(styles.title, 'label')}>
-              <div className={classNames(styles.li, 'list-group-item')}>Categories</div></li>
-            <li className={classNames(styles.scm, 'scm')}>
-              <a
-                href="#category=scm"
-                className={classNames(styles.li, 'list-group-item', (this.state.category === 'scm')?'active':'')}
-                onClick={()=>
-                  {
-                    {this.state.category = 'scm';}
-                    {this.filterSet(['scm-related', 'scm'], labelFilter);}
-                  }
-                }
-              >SCM connectors</a></li>
-            <li className={classNames(styles.build, 'build')}>
-              <a href="#category=build"
-                className={classNames(styles.li, 'list-group-item', (this.state.category === 'build')?'active':'')}
-              onClick={()=>
-                {
-                  {this.state.category = 'build';}
-                  {this.filterSet(['builder', 'buildwrapper'], labelFilter);}
-                }
-              }
-              >Build and analytics</a></li>
-            <li className={classNames(styles.deployment, 'deployment')}>
-              <a href="#category=deployment"
-                 className={classNames(styles.li, 'list-group-item', (this.state.category === 'deployment')?'active':'')}
-              onClick={()=>
-              {
-                {this.state.category = 'deployment';}
-                {this.filterSet(['cli', 'deployment'], labelFilter);}
-              }
-            }>Deployment</a></li>
-            <li className={classNames(styles.pipelines, 'pipelines')}>
-              <a href="#category=pipelines"
-                className={classNames(styles.li, 'list-group-item')}>
-                Pipelines</a>
-            </li>
-            <li className={classNames(styles.containers, 'containers')}>
-              <a href="#category=containers"
-                 className={classNames(styles.li, 'list-group-item')}>
-                 Containers
-              </a></li>
-            <li className={classNames(styles.security, 'security')}>
-              <a href="#category=security"
-                className={classNames(styles.li, 'list-group-item', (this.state.category === 'security')?'active':'')}
-              onClick={()=>
-              {
-                {this.state.category = 'security';}
-                {this.filterSet(['user', 'security'], labelFilter);}
-              }
-            }>Users and security</a></li>
-            <li className={classNames(styles.general, 'general')}>
-              <a href="#category=general"
-                className={classNames(styles.li, 'list-group-item')}>
-                General purpose</a>
-            </li>
-          </ul>
+          <Categories
+            browserHistory={browserHistory}
+            location={location}
+            />
           { totalSize > 0 && <LabelWidget
             labels={getVisiblePluginsLabels}
             onClick={(event)=>  {
@@ -167,7 +113,14 @@ export default class Widget extends Component {
                 <a className="nav-link">Featured</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link">New</a>
+                <a className="nav-link" onClick={() => {
+                  delete this.props.location.query.q;
+                  delete this.props.location.query.page;
+                  delete this.props.location.query.limit;
+                  delete this.props.location.query.category;
+                  this.props.location.query.latest = 'latest';
+                  this.props.browserHistory.replace(this.props.location);
+                }}>New</a>
               </li>
               <li className="nav-item">
                 <button className="nav-link" onClick={() => {
@@ -299,10 +252,9 @@ export default class Widget extends Component {
             <div className={classNames(styles.Grid, 'grid')} >
 
               {isFetching && <Spinner>loading</Spinner>}
-              {!isFetching && totalSize > 0 && <Pagination
+              {!isFetching && totalSize > 0 && !location.query.category && !location.query.latest && <Pagination
                 browserHistory={browserHistory}
                 location={location}
-                total={Number(searchOptions.total)}
                 pages={Number(searchOptions.pages)}
                 page={Number(searchOptions.page)}
                 limit={Number(searchOptions.limit)}

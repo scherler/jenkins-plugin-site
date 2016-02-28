@@ -1,9 +1,11 @@
 import React from 'react'
 
 export default function LabelWidgetItem({index, item, onClick}) {
+  /*
   let href = `#key=${item.key}`;
-  return (<a
     href={href}
+   */
+  return (<a
     key={index}
     className="dropdown-item"
     onClick={onClick}>

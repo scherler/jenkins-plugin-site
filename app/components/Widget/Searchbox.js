@@ -10,10 +10,10 @@ export default class Searchbox extends Component {
   }
 
   handleClick = (data, limit) => {
+    delete this.props.location.query.category;
     this.props.location.query.q = data.value;
     this.props.location.query.limit = limit.value;
-
-    logger.warn(this.props.location);
+    logger.log(this.props.location);
     this.props.browserHistory.replace(this.props.location);
   }
 

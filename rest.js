@@ -62,6 +62,16 @@ function getOptions(req) {
   };
 }
 
+function createResponseResults(docs){
+  return {
+    docs,
+    limit: docs.length,
+    total: docs.length,
+    page: 1,
+    pages: 1
+  };
+}
+
 function search(query, req, callback) {
   const options = getOptions(req);
   Plugin.paginate(query, options, callback);
@@ -87,11 +97,11 @@ function setRestHeader(res) {
 rest.get('/getCategories', (req, res) => {
   setRestHeader(res);
   const id = req.query ? req.query.id : '';
-  fs.readFile('./server/static/featured-service.json', 'utf8', function(err, contents) {
+  fs.readFile('./server/static/category-plugins.json', 'utf8',  (err, contents) => {
     const categories = _.values(JSON.parse(contents));
     if (id) {
       const elementPos = categories
-        .map(function(x) {return x.id; })
+        .map((x) => {return x.id; })
         .indexOf(id);
       if (elementPos < 0) {
         return res.send('no category with that id found!');
@@ -99,15 +109,15 @@ rest.get('/getCategories', (req, res) => {
       const pluginsId = categories[elementPos].plugins;
       Plugin.find({
         name: { $in: pluginsId}
-      }, function(err, docs){
-        return res.send(docs);
+      }, (err, docs) => {
+        return res.send(createResponseResults(docs));
       });
     } else {
       var response = {};
       async.forEach(categories, (category, callback) => {
         Plugin.find({
           name: { $in: category.plugins}
-        }, function(err, docs){
+        }, (err, docs) => {
           response[category.id] = docs;
           callback(err);
         });
@@ -148,6 +158,13 @@ rest.get('/indexDb', (req, res) => {
     }
     }))
     .pipe(res);
+});
+
+rest.get('/latest', (req, res) => {
+  setRestHeader(res);
+  Plugin.find({}).sort({buildDate: -1}).limit(10).exec((err, docs) => {
+    res.send(createResponseResults(docs));
+  });
 });
 
 rest.get('/plugins', (req, res) => {

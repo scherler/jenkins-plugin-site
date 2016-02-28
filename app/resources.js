@@ -65,7 +65,6 @@ const Record = Immutable.Record({
   dependencies: []
 });
 
-const PLUGINS_URL = 'http://0.0.0.0:3000/plugins';
 
 export const ACTION_TYPES = keymirror({
   CLEAR_PLUGIN_DATA: null,
@@ -137,8 +136,17 @@ export const actions = {
   generatePluginData(query={}) {
     return (dispatch, getState) => {
       logger.warn(query);
-      const url = `${PLUGINS_URL}?page=${query.page || 1}&limit=${query.limit || 10}&q=${query.q || ''}`;
-      logger.warn(query, url);
+      let url;
+      if (query.category) {
+        const CATEGORY_URL = 'http://0.0.0.0:3000/getCategories';
+        url = `${CATEGORY_URL}?id=${query.category}`;
+      }else if(query.latest){
+        url = 'http://0.0.0.0:3000/latest';
+      }else {
+        const PLUGINS_URL = 'http://0.0.0.0:3000/plugins';
+        url = `${PLUGINS_URL}?page=${query.page || 1}&limit=${query.limit || 10}&q=${query.q || ''}`;
+      }
+      logger.log(query, url);
       dispatch(actions.clearPluginData());
       dispatch(actions.fetchPluginData());
       const plugins = {};

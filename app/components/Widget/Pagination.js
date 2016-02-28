@@ -6,7 +6,6 @@ export default class Pagination extends Component {
   static propTypes = {
     browserHistory: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
-    total: PropTypes.number.isRequired,
     pages: PropTypes.number.isRequired,
     page: PropTypes.number.isRequired,
     limit: PropTypes.number.isRequired
@@ -22,8 +21,7 @@ export default class Pagination extends Component {
     const {
       page,
       pages,
-      limit,
-      total
+      limit
     } = this.props;
 
     const

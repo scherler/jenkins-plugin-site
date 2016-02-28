@@ -5,6 +5,8 @@ const request = require('request');
 
 const portClient = 5000;
 
+require('./rest');
+
 const content = `<ul>
     <li><a href="update-center.json">update-center.json</a></li>
     <li><a href="featured-service.json">featured-service.json</a></li>

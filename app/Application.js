@@ -18,6 +18,7 @@ import React, { PropTypes, Component } from 'react';
 import Widget from './components/Widget';
 import Highlighter from 'react-highlight-words';
 import styles from './Application.css';
+import DevelopmentFooter from './commons/developmentFooter';
 
 export default class Application extends Component {
 
@@ -47,21 +48,22 @@ export default class Application extends Component {
       labelFilter
     } = this.props;
 
-    return (
-        <Widget
-          searchOptions={searchOptions}
-          location={location}
-          generateData={generatePluginData}
-          browserHistory={browserHistory}
-          setFilter={setFilter}
-          getVisiblePlugins={filterVisibleList}
-          totalSize={totalSize}
-          isFetching = {isFetching}
-          searchData={searchPluginData}
-          getVisiblePluginsLabels={getVisiblePluginsLabels}
-          labelFilter={labelFilter}
+    return (<div>
+      <DevelopmentFooter />
+      <Widget
+        searchOptions={searchOptions}
+        location={location}
+        generateData={generatePluginData}
+        browserHistory={browserHistory}
+        setFilter={setFilter}
+        getVisiblePlugins={filterVisibleList}
+        totalSize={totalSize}
+        isFetching = {isFetching}
+        searchData={searchPluginData}
+        getVisiblePluginsLabels={getVisiblePluginsLabels}
+        labelFilter={labelFilter}
         />
-    );
+    </div>);
   }
 }
 

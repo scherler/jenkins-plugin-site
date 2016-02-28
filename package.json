@@ -4,13 +4,13 @@
   "description": "Boilerplate for kick starting a React Project with ES6 (Babel) and Hot reloader using Webpack.",
   "main": "index.js",
   "scripts": {
-    "start": "node server",
+    "start": "node server.js",
+    "docker": "NODE_ENV=docker npm start",
     "test": "mocha --require ignore-styles --compilers js:babel-core/register --recursive",
     "test:debug": "npm test -- --debug-brk",
     "test:watch": "npm test -- --watch --reporter min",
     "clean": "rm npm-debug.log.*",
     "integrity": "npm run lint && npm test",
-    "build": "./node_modules/.bin/webpack --config webpack.config.production.js",
     "lint": "./node_modules/.bin/eslint .",
     "lint:fix": "npm run lint -- --fix",
     "watch": "watch -b -n 15 npm run lint"

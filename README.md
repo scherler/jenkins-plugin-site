@@ -3,13 +3,20 @@ This is a simple rendering of the plugin list as taken from updates.jenkins-ci.o
 
 ### Run with Docker
 
+Since we are using in the Jenkinsfile to build the project in a pipeline and the docker image
+is to be run on jenkins infrastructure, you need to run 'npm install' before the docker build!
+
+We are reusing the 'npm install' in the docker image!
+
 ```
-docker build -t jenkins-plugin-site .
-docker run -d -p 5000:5000 --name plugins jenkins-plugin-site
+npm i
+docker build -t jenkinsciinfra/plugin-site .
+docker run -d -p 5000:5000 --name plugin-site jenkinsciinfra/plugin-site
 Point to http://0.0.0.0:5000/
 ```
 
 ### Usage with npm
+
 
 ```
 npm install
@@ -25,11 +32,13 @@ To test the integrity of our code base we are using a compination of eslint and 
 npm run integrity
 ```
 
-To make sure you do not push faulty code we create as well a pre-push hook which will call the test.
-You can activate it with:
+To make sure you do not push faulty code we create as well a pre-push hook which will call the test. However since we
+are using the Jenkinsfile to describe our deploy pipeline, we added the check in the commit stage.
+
+However fell free to activate it with:
 
 ```
-ln -s ./pre-push.sh .git/hooks/pre-push
+ln -s `pwd`/pre-push.sh .git/hooks/pre-push
 ```
 
 ### Linting with npm

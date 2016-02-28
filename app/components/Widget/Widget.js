@@ -114,11 +114,7 @@ export default class Widget extends Component {
               </li>
               <li className="nav-item">
                 <a className="nav-link" onClick={() => {
-                  delete this.props.location.query.q;
-                  delete this.props.location.query.page;
-                  delete this.props.location.query.limit;
-                  delete this.props.location.query.category;
-                  this.props.location.query.latest = 'latest';
+                  this.props.location.query= {latest: 'latest'};
                   this.props.browserHistory.replace(this.props.location);
                 }}>New</a>
               </li>
@@ -252,7 +248,8 @@ export default class Widget extends Component {
             <div className={classNames(styles.Grid, 'grid')} >
 
               {isFetching && <Spinner>loading</Spinner>}
-              {!isFetching && totalSize > 0 && !location.query.category && !location.query.latest && <Pagination
+              {!isFetching && totalSize > 0 && !location.query.category
+                && !location.query.latest && searchOptions.limit <= searchOptions.total &&<Pagination
                 browserHistory={browserHistory}
                 location={location}
                 pages={Number(searchOptions.pages)}

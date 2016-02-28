@@ -135,7 +135,7 @@ export const actions = {
 
   generatePluginData(query={}) {
     return (dispatch, getState) => {
-      logger.warn(query);
+      logger.log(query);
       let url;
       if (query.category) {
         const CATEGORY_URL = 'http://0.0.0.0:3000/getCategories';

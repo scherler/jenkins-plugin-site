@@ -73,10 +73,9 @@ export default class Categories extends Component {
             active={(this.state.category === item.id)?'active':''}
             onClick={()=> {
                 this.state.category = item.id;
-                delete this.props.location.query.q;
-                delete this.props.location.query.page;
-                delete this.props.location.query.limit;
-                this.props.location.query.category = item.id;
+                this.props.location.query= {
+                  category: item.id
+                };
                 logger.log(this.props.location);
                 this.props.browserHistory.replace(this.props.location);
               }

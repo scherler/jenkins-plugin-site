@@ -79,6 +79,7 @@ body .item-finder.tiles a.item .Icon>i,
   margin: -1px 0 0 -1px;
   text-shadow: rgba(0, 0, 0, .5) 1px 2px 1px
 }
+body .item-finder.tiles a.item .Icon>i {margin-bottom:1rem}
 body .item-finder a.item .Score,
 .Tile .Score {
   margin: 0 0 .67rem

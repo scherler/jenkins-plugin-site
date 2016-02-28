@@ -23,9 +23,6 @@ export default class Entry extends Component {
             {plugin.get('iconDom')}
           </div>
 
-          <div className={classNames(styles.Score,'Score')}>
-            <span className={getScoreClassName()}></span>
-          </div>
           <div className={classNames(styles.Title,'Title')}>
             <h4>{cleanTitle(plugin.get('title'))}</h4>
           </div>

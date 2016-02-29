@@ -177,8 +177,16 @@ rest.get('/', (req, res) => {
   res.send('<a href=\'/plugins\'>Show plugins</a><a href=\'/indexDb\'>Index db</a>');
 });
 
-//FIXME: Adopt when moving to docker
-mongoose.connect('mongodb://localhost/plugins');
+//Adopted for docker
+const
+  dbConnectionHost = process.env.MONGODB_PORT_27017_TCP_ADDR || process.env.MONGODB_HOST || 'localhost',
+  dbConnectionPort = process.env.MONGODB_PORT_27017_TCP_PORT || process.env.MONGODB_PORT || 27017,
+  dbConnection = `mongodb://${dbConnectionHost}:${dbConnectionPort}/plugins`;
+
+console.log(dbConnection)
+
+mongoose.connect(dbConnection);
+
 rest.listen(backendPort, () => {
   console.log('Listening backend port', backendPort);
 });

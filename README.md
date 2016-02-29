@@ -10,8 +10,11 @@ We are reusing the 'npm install' in the docker image!
 
 ```
 npm i
+docker pull mongo
+docker run -d --name pluginDB mongo
+
 docker build -t jenkinsciinfra/plugin-site .
-docker run -d -p 5000:5000 --name plugin-site jenkinsciinfra/plugin-site
+docker run -d -p 5000:5000 --name plugin-site jenkinsciinfra/plugin-site --link=pluginDB:mongodb
 Point to http://0.0.0.0:5000/
 ```
 

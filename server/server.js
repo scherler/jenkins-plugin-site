@@ -18,7 +18,7 @@ const content = `<ul>
 var
   webpack = require('webpack'),
   WebpackDevServer = require('webpack-dev-server'),
-  config = require(`./webpack.config.${runningMode}`);
+  config = require(`../webpack.config.${runningMode}`);
 
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,

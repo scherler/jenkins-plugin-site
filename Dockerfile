@@ -3,7 +3,6 @@ FROM node:slim
 RUN mkdir /plugins
 COPY ./.babelrc /plugins/
 COPY ./package.json /plugins/
-COPY ./server.js /plugins/
 COPY ./server/ /plugins/server/
 COPY ./node_modules/ /plugins/node_modules/
 COPY ./webpack.commons.js /plugins/

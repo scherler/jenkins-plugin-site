@@ -4,7 +4,7 @@
   "description": "Boilerplate for kick starting a React Project with ES6 (Babel) and Hot reloader using Webpack.",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node server/server.js",
     "docker": "NODE_ENV=docker npm start",
     "test": "mocha --require ignore-styles --compilers js:babel-core/register --recursive",
     "test:debug": "npm test -- --debug-brk",

@@ -183,7 +183,7 @@ const
   dbConnectionPort = process.env.MONGODB_PORT_27017_TCP_PORT || process.env.MONGODB_PORT || 27017,
   dbConnection = `mongodb://${dbConnectionHost}:${dbConnectionPort}/plugins`;
 
-console.log(dbConnection)
+console.log(dbConnection);
 
 mongoose.connect(dbConnection);
 

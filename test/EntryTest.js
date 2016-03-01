@@ -58,8 +58,8 @@ describe('Test whether one plugin entry renders correctly', () => {
     expect(result.props.className).toBe('Entry-box');
     expect(children.props.children.length).toBe(6);
 
-    expect(children.props.children[2].props.className).toBe('Title');
-    expect(children.props.children[2].props.children.props.children).toBe('Adaptive DSL');
+    expect(children.props.children[1].props.className).toBe('Title');
+    expect(children.props.children[1].props.children.props.children).toBe('Adaptive DSL');
 
   });
 

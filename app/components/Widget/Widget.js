@@ -249,7 +249,7 @@ export default class Widget extends Component {
 
               {isFetching && <Spinner>loading</Spinner>}
               {!isFetching && totalSize > 0 && !location.query.category
-                && !location.query.latest && searchOptions.limit <= searchOptions.total &&<Pagination
+                && !location.query.latest && Number(searchOptions.pages) > 1 && <Pagination
                 browserHistory={browserHistory}
                 location={location}
                 pages={Number(searchOptions.pages)}

@@ -3,6 +3,7 @@ const
   express = require('express'),
   request = require('request'),
   mongoose = require('mongoose'),
+  schedule = require('node-schedule'),
   fs = require('fs'),
   async = require('async'),
   _ = require('lodash'),
@@ -17,6 +18,12 @@ const
   connection = mongoose.connection;
 
 var Plugin;
+
+var j = schedule.scheduleJob('1 1 1 * *', () => {
+  request('http://0.0.0.0:3000/indexDb', (error, response, body) => {
+    console.log('response were', body, 'error:', error);
+  });
+});
 
 connection.on('error', console.error);
 connection.once('open', () => {
@@ -48,11 +55,15 @@ connection.once('open', () => {
 
   pluginSchema.plugin(mongoosePaginate);
   Plugin = mongoose.model('Plugin', pluginSchema);
+  console.log('requesting the initial indexing of the plugins');
+  request('http://0.0.0.0:3000/indexDb', (error, response, body) => {
+    console.log('response were', body, 'error:', error);
+  });
 });
 
 function getOptions(req) {
-  var page = req.query ? req.query.page : 1;
-  var limit = req.query ? req.query.limit : 10;
+  var page = req.query ? Number(req.query.page) : 1;
+  var limit = req.query ? Number(req.query.limit) : 10;
   return options = {
     lean: true,
     sort: { name: 1 },
@@ -138,25 +149,40 @@ rest.get('/indexDb', (req, res) => {
     .header('Cache-Control', 'no-cache, no-store, must-revalidate')
     .header('Pragma', 'no-cache')
     .header('Expires', 0);
-  req
-    .pipe(request(`${url}?date=${Math.round(100000 * Math.random())}`, (error, response, body) => {
-    if(error) {
-      console.log(error);
-    } else {
-      if(body) {
-        var lines = body.split('\n');
+  var local = {};
+  async.series([
+    (callback) => {
+      request(`${url}?date=${Math.round(100000 * Math.random())}`, (error, response, body) => {
+        local.body = body;
+        callback(error);
+      });
+    },
+    (callback) => {
+      if(local.body) {
+        var lines = local.body.split('\n');
         if(lines.length >= 1){
           var plugins = JSON.parse(lines[1]).plugins;
           connection.db.dropCollection('plugins', (err, result)=> {
-            if (result) {
-              Plugin.create(_.values(plugins));
-            }
+            Plugin.create(_.values(plugins), (dbError, docs) => {
+              callback(dbError);
+            });
           });
+        }else {
+          callback(`The result was not as we expected, please check the url ${url}`);
         }
+      } else {
+        callback();
       }
+
     }
-    }))
-    .pipe(res);
+  ], (err) => {
+    if (err){
+      res.send(err);
+    } else {
+      res.send('<p> That was a success. Please review <a href=\'/plugins\'>plugins</a> collection </p>');
+    }
+  });
+
 });
 
 rest.get('/latest', (req, res) => {

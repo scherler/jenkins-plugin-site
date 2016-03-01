@@ -14,7 +14,7 @@ docker pull mongo
 docker run -d --name pluginDB mongo
 
 docker build -t jenkinsciinfra/plugin-site .
-docker run -d -p 5000:5000 --name plugin-site jenkinsciinfra/plugin-site --link=pluginDB:mongodb
+docker run -d -p 5000:5000 --link=pluginDB:mongodb --name plugin-site jenkinsciinfra/plugin-site
 Point to http://0.0.0.0:5000/
 ```
 

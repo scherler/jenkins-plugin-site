@@ -66,6 +66,7 @@
     "moment": "2.11.1",
     "mongoose": "^4.4.4",
     "mongoose-paginate": "^5.0.0",
+    "node-schedule": "^1.0.0",
     "react": "0.14.5",
     "react-addons-css-transition-group": "0.14.6",
     "react-bootstrap": "0.28.2",

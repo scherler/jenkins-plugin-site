@@ -4,9 +4,12 @@ const express = require('express');
 const dns = require('dns');
 const request = require('request');
 
-const portClient = 5000;
-
 require('./rest');
+
+const ip = '0.0.0.0';
+const portClient = 5000;
+const portBackend = 3000;
+const backend = `http://${ip}:${portBackend}`;
 
 const runningMode = process.env.NODE_ENV || 'development';
 
@@ -23,10 +26,16 @@ var
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
   hot: true,
-  historyApiFallback: true
-}).listen(portClient, '0.0.0.0', (err) => {
+  historyApiFallback: true,
+  proxy: {
+    '/plugin*': backend,
+    '/latest*': backend,
+    '/getCategories*': backend
+  }
+}).listen(portClient, ip, (err) => {
   if (err) {
     console.error(err);
   }
   console.log('Listening at port:', portClient);
+  console.log('using backEnd:', backend);
 });

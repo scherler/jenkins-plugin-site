@@ -138,12 +138,12 @@ export const actions = {
       logger.log(query);
       let url;
       if (query.category) {
-        const CATEGORY_URL = 'http://0.0.0.0:3000/getCategories';
+        const CATEGORY_URL = '/getCategories';
         url = `${CATEGORY_URL}?id=${query.category}`;
       }else if(query.latest){
-        url = 'http://0.0.0.0:3000/latest';
+        url = '/latest';
       }else {
-        const PLUGINS_URL = 'http://0.0.0.0:3000/plugins';
+        const PLUGINS_URL = '/plugins';
         url = `${PLUGINS_URL}?page=${query.page || 1}&limit=${query.limit || 10}&q=${query.q || ''}`;
       }
       logger.log(query, url);

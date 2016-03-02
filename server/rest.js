@@ -19,7 +19,7 @@ const
 
 var Plugin;
 
-var j = schedule.scheduleJob('1 1 1 * *', () => {
+schedule.scheduleJob('1 1 1 * *', () => {
   request('http://0.0.0.0:3000/indexDb', (error, response, body) => {
     console.log('response were', body, 'error:', error);
   });
@@ -132,7 +132,7 @@ rest.get('/getCategories', (req, res) => {
           callback(err);
         });
       }, (err) => {
-        res.send(response);
+        res.send(err || response);
       });
     }
    });
@@ -162,8 +162,8 @@ rest.get('/indexDb', (req, res) => {
         var lines = local.body.split('\n');
         if(lines.length >= 1){
           var plugins = JSON.parse(lines[1]).plugins;
-          connection.db.dropCollection('plugins', (err, result)=> {
-            Plugin.create(_.values(plugins), (dbError, docs) => {
+          connection.db.dropCollection('plugins', ()=> {
+            Plugin.create(_.values(plugins), (dbError) => {
               callback(dbError);
             });
           });

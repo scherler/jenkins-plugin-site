@@ -1,8 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {createRenderer} from 'react-addons-test-utils';
 import expect from 'expect';
-import { assert} from 'chai';
 
 import Pagination from '../app/components/Widget/Pagination';
 

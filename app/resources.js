@@ -1,11 +1,10 @@
 import { createSelector } from 'reselect';
 import { createSearchAction, getSearchSelectors } from 'redux-search';
-import faker from 'faker';
 import Immutable from 'immutable';
 import keymirror from 'keymirror';
-import { env, api, logger } from './commons';
+import { api, logger } from './commons';
 import _ from 'lodash';
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 api.init({
   latency: 100
@@ -135,7 +134,7 @@ export const actions = {
   },
 
   generatePluginData(query={}) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
       logger.log(query);
       let url;
       if (query.category) {

@@ -10,14 +10,8 @@ import {
 } from './resources';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { Card, CardWrapper } from './components/Card';
-import Footer from './components/Footer';
-import Header from './components/Header';
-import Immutable from 'immutable';
 import React, { PropTypes, Component } from 'react';
 import Widget from './components/Widget';
-import Highlighter from 'react-highlight-words';
-import styles from './Application.css';
 import DevelopmentFooter from './commons/developmentFooter';
 
 export default class Application extends Component {
@@ -35,7 +29,6 @@ export default class Application extends Component {
 
   render() {
     const {
-      generatePluginData,
       setFilter,
       filterVisibleList,
       browserHistory,
@@ -53,7 +46,6 @@ export default class Application extends Component {
       <Widget
         searchOptions={searchOptions}
         location={location}
-        generateData={generatePluginData}
         browserHistory={browserHistory}
         setFilter={setFilter}
         getVisiblePlugins={filterVisibleList}

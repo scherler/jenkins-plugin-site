@@ -1,10 +1,11 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes} from 'react';
 import styles from './Widget.css';
-import {cleanTitle, getMaintainers, getScoreClassName} from '../../helper';
+import {cleanTitle, getMaintainers  } from '../../helper';
+import PureComponent from 'react-pure-render/component';
 import classNames from 'classnames';
 
 
-export default class Entry extends Component {
+export default class Entry extends PureComponent {
 
   static propTypes = {
     plugin: PropTypes.any.isRequired

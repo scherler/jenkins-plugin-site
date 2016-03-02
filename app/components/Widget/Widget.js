@@ -6,16 +6,14 @@ import LabelWidget from './Labels';
 import Pagination from './Pagination';
 import Searchbox from './Searchbox';
 import Categories from './Categories';
-import React, { PropTypes, Component } from 'react';
-import {cleanTitle, getMaintainers, getScoreClassName} from '../../helper';
+import React, { PropTypes } from 'react';
 import Spinner from '../../commons/spinner';
-import { VirtualScroll } from 'react-virtualized';
 import classNames from 'classnames';
+import PureComponent from 'react-pure-render/component';
 
-export default class Widget extends Component {
+export default class Widget extends PureComponent {
 
   static propTypes = {
-    generateData: PropTypes.func.isRequired,
     setFilter: PropTypes.func.isRequired,
     browserHistory: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
@@ -29,7 +27,6 @@ export default class Widget extends Component {
   };
 
   state = {
-    clicked: false,
     view: 'tiles',
     sort: 'title'
   };
@@ -57,7 +54,6 @@ export default class Widget extends Component {
   render() {
 
     const {
-      generateData,
       setFilter,
       browserHistory,
       searchData,
@@ -75,15 +71,6 @@ export default class Widget extends Component {
       toRange = searchOptions.limit * Number(searchOptions.page) <= Number(searchOptions.total) ?
         searchOptions.limit * Number(searchOptions.page) : Number(searchOptions.total),
       fromRange = (searchOptions.limit) * (Number(searchOptions.page) - 1);
-
-    const { clicked } = this.state;
-
-    const filteredSize = getVisiblePlugins instanceof Immutable.Collection
-      ? getVisiblePlugins.size
-      : getVisiblePlugins.length;
-
-    const viewClass = styles[this.state.view];
-
 
     return (
       <div className={classNames(styles.ItemFinder, this.state.view, 'item-finder')} >
@@ -244,7 +231,6 @@ export default class Widget extends Component {
                 location={location}
                 pages={Number(searchOptions.pages)}
                 page={Number(searchOptions.page)}
-                limit={Number(searchOptions.limit)}
               />}
 
 

@@ -1,7 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
-import TestUtils, {createRenderer} from 'react-addons-test-utils';
+import {createRenderer} from 'react-addons-test-utils';
 import { assert} from 'chai';
 import expect from 'expect';
 

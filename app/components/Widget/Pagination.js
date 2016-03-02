@@ -1,14 +1,14 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 import { logger } from '../../commons';
+import PureComponent from 'react-pure-render/component';
 
-export default class Pagination extends Component {
+export default class Pagination extends PureComponent {
 
   static propTypes = {
     browserHistory: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     pages: PropTypes.number.isRequired,
-    page: PropTypes.number.isRequired,
-    limit: PropTypes.number.isRequired
+    page: PropTypes.number.isRequired
   }
 
   handleClick = (data) => {
@@ -20,8 +20,7 @@ export default class Pagination extends Component {
   render() {
     const {
       page,
-      pages,
-      limit
+      pages
     } = this.props;
 
     const

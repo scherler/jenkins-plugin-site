@@ -1,7 +1,8 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import styles from './Widget.css';
 import { logger } from '../../commons';
+import PureComponent from 'react-pure-render/component';
 
 const categories = [{
   "id": "scm",
@@ -27,7 +28,7 @@ const categories = [{
   "title": "General Purpose"
 }];
 
-export class Category extends Component {
+export class Category extends PureComponent {
 
   static propTypes = {
     onClick: PropTypes.func.isRequired,
@@ -48,7 +49,7 @@ export class Category extends Component {
   }
 }
 
-export default class Categories extends Component {
+export default class Categories extends PureComponent {
 
   static propTypes = {
     browserHistory: PropTypes.object.isRequired,

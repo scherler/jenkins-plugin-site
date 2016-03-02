@@ -1,7 +1,8 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 import { logger } from '../../commons';
+import PureComponent from 'react-pure-render/component';
 
-export default class Searchbox extends Component {
+export default class Searchbox extends PureComponent {
 
   static propTypes = {
     browserHistory: PropTypes.object.isRequired,

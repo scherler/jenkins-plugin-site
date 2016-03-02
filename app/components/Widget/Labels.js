@@ -1,8 +1,9 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 import LabelWidgetItem from './LabelWidgetItem';
 import Immutable from 'immutable';
+import PureComponent from 'react-pure-render/component';
 
-export default class LabelWidget extends Component {
+export default class LabelWidget extends PureComponent {
 
   state = {
     field: 'key',

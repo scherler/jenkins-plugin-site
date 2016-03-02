@@ -1,8 +1,5 @@
 // Only a couple of es6 feature are supported!!!
 /* eslint-disable no-console */ //This is because we are using console log for communications
-const express = require('express');
-const dns = require('dns');
-const request = require('request');
 
 require('./rest');
 
@@ -12,11 +9,6 @@ const portBackend = 3000;
 const backend = `http://${ip}:${portBackend}`;
 
 const runningMode = process.env.NODE_ENV || 'development';
-
-const content = `<ul>
-    <li><a href="update-center.json">update-center.json</a></li>
-    <li><a href="featured-service.json">featured-service.json</a></li>
-  </ul>`;
 
 var
   webpack = require('webpack'),

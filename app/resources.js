@@ -1,28 +1,32 @@
 import { createSelector } from 'reselect';
 import { createSearchAction, getSearchSelectors } from 'redux-search';
-import faker from 'faker';
 import Immutable from 'immutable';
 import keymirror from 'keymirror';
-import { env } from './commons';
+import { api, logger } from './commons';
 import _ from 'lodash';
-import React, { PropTypes } from 'react';
+import React from 'react';
+
+api.init({
+  latency: 100
+});
+
+export const SearchOptions = Immutable.Record({
+  limit: 10,
+  page: 1,
+  pages: 0,
+  total: 0
+});
 
 export const State = Immutable.Record({
   plugins: Immutable.OrderedMap(),
   isFetching: false,
+  searchOptions: SearchOptions,
   labelFilter: Immutable.Record({//fixme: that should become label: search, sort: field
     field: 'title',
     searchField: null,
     asc: false,
     search: []
   })
-});
-
-export const ACTION_TYPES = keymirror({
-  CLEAR_PLUGIN_DATA: null,
-  FETCH_PLUGIN_DATA: null,
-  SET_PLUGIN_DATA: null,
-  SET_LABEL_FILTER: null
 });
 /*
 buildDate: "Mar 03, 2011"
@@ -60,38 +64,32 @@ const Record = Immutable.Record({
   dependencies: []
 });
 
-let PLUGINS_URL = 'https://updates.jenkins-ci.org/current/update-center.json';
 
-if (env.debug) {
-  PLUGINS_URL = 'http://0.0.0.0:3000/update-center.json';
-}
+export const ACTION_TYPES = keymirror({
+  CLEAR_PLUGIN_DATA: null,
+  FETCH_PLUGIN_DATA: null,
+  SET_PLUGIN_DATA: null,
+  SET_LABEL_FILTER: null,
+  SET_QUERY_INFO: null
+});
 
-export function jsonp(url, callback) {// HACK
-  const callbackName = `jsonp_callback_${Math.round(100000 * Math.random())}`;
-  window.updateCenter = {
-    post(data) {
-      callback(data);
-    }
-  };
-  const script = document.createElement('script');
-  script.src = `${url}${url.indexOf('?') >= 0 ? '&' : '?'}callback=${callbackName}`;
-  document.body.appendChild(script);
-}
-
-export function groupAndCountLabels(recordsMap) {
-  const labelMap = _.map(
-      _.groupBy(
-        _.flatten(recordsMap.toArray().map((a) => a.labels)
-      )
-    ), (array, item) => {
-      return {
-        value: array.length,
-        key: item
-      };
-    }
-  );
-  return Immutable.List(labelMap);
-}
+export const actionHandlers = {
+  [ACTION_TYPES.CLEAR_PLUGIN_DATA](state) {
+    return state.set('plugins', Immutable.Map());
+  },
+  [ACTION_TYPES.FETCH_PLUGIN_DATA](state, {}): State {
+    return state.set('isFetching', !state.isFetching);
+  },
+  [ACTION_TYPES.SET_PLUGIN_DATA](state, { payload }): State {
+    return state.set('plugins', payload);
+  },
+  [ACTION_TYPES.SET_LABEL_FILTER](state, { payload }): State {
+    return state.set('labelFilter', payload);
+  },
+  [ACTION_TYPES.SET_QUERY_INFO](state, { payload }): State {
+    return state.set('searchOptions', payload);
+  }
+};
 
 export const actions = {
     //FIXME: This should not inject React DOM here, but.... hack...
@@ -104,8 +102,9 @@ export const actions = {
       .replace(' lugin','');
     type = type || '';
     const colors = ['#6D6B6D','#DCD9D8','#D33833','#335061','#81B0C4','#709aaa','#000'];
-    const color = colors[Math.floor(Math.random() * (colors.length - 1))];
-    const iconClass=`i ${type}  color${color}`;
+    const color = colors[(title.length % 7)]; //pick color based on chars in the name to make semi-random, but fixed color per-plugin
+    const iconClass=`i ${type};
+    color = ${color}`;
 
     const firstLetter = title.substring(0,1).toUpperCase();
     const firstSpace = title.indexOf(' ') + 1;
@@ -114,7 +113,7 @@ export const actions = {
     const nextLetter = title.substring(nextIndx,nextIndx + 1);
 
     return (
-      <i className={iconClass} style={{background: 'color'}}>
+      <i className={iconClass} style={{background: color}}>
         <span className="first">{firstLetter}</span>
         <span className="next">{nextLetter}</span>
       </i>
@@ -134,47 +133,75 @@ export const actions = {
     };
   },
 
-  generatePluginData() {
-    return (dispatch, getState) => {
+  generatePluginData(query={}) {
+    return (dispatch) => {
+      logger.log(query);
+      let url;
+      if (query.category) {
+        const CATEGORY_URL = '/getCategories';
+        url = `${CATEGORY_URL}?id=${query.category}`;
+      }else if(query.latest){
+        url = '/latest';
+      }else {
+        const PLUGINS_URL = '/plugins';
+        url = `${PLUGINS_URL}?page=${query.page || 1}&limit=${query.limit || 10}&q=${query.q || ''}`;
+      }
+      logger.log(query, url);
       dispatch(actions.clearPluginData());
       dispatch(actions.fetchPluginData());
       const plugins = {};
-      return jsonp(PLUGINS_URL, data => {
-        _.forEach(data.plugins, (item) => {
-          _.set(item, 'id', item.sha1);
-          _.set(item, 'iconDom', actions.makeIcon(item.title));
-          plugins[item.id] = new Record(item);
-        });
-        const recordsMap = Immutable.Map(plugins);
-        dispatch({
-          type: ACTION_TYPES.SET_PLUGIN_DATA,
-          payload: recordsMap
-        });
-        dispatch(actions.fetchPluginData());
+
+      return api.getJSON(url,(error, data) => {
+        if (data) {
+          const searchOptions = new SearchOptions({
+            limit: data.limit,
+            page: data.page,
+            pages: data.pages,
+            total: data.total
+          });
+
+          const items = data.docs;
+          _.forEach(items, (item) => {
+            _.set(item, 'id', item.sha1);
+            _.set(item, 'iconDom', actions.makeIcon(item.title));
+            plugins[item.id] = new Record(item);
+          });
+          const recordsMap = Immutable.Map(plugins);
+          dispatch({
+            type: ACTION_TYPES.SET_PLUGIN_DATA,
+            payload: recordsMap
+          });
+          dispatch({
+            type: ACTION_TYPES.SET_QUERY_INFO,
+            payload: searchOptions
+          });
+          dispatch(actions.fetchPluginData());
+        }
       });
     };
   },
   searchPluginData: createSearchAction('plugins')
 };
 
-export const actionHandlers = {
-  [ACTION_TYPES.CLEAR_PLUGIN_DATA](state) {
-    return state.set('plugins', Immutable.Map());
-  },
-  [ACTION_TYPES.FETCH_PLUGIN_DATA](state, {}): State {
-    return state.set('isFetching', !state.isFetching);
-  },
-  [ACTION_TYPES.SET_PLUGIN_DATA](state, { payload }): State {
-    return state.set('plugins', payload);
-  },
-  [ACTION_TYPES.SET_LABEL_FILTER](state, { payload }): State {
-    return state.set('labelFilter', payload);
-  }
-};
+export function groupAndCountLabels(recordsMap) {
+  const labelMap = _.map(
+      _.groupBy(
+        _.flatten(recordsMap.toArray().map((a) => a.labels)
+      )
+    ), (array, item) => {
+      return {
+        value: array.length,
+        key: item
+      };
+    }
+  );
+  return Immutable.List(labelMap);
+}
 
 export const resources = state => state.resources;
 export const resourceSelector = (resourceName, state) => state.resources.get(resourceName);
 export const plugins = createSelector([resources], resources => resources.plugins);
+export const searchOptions = createSelector([resources], resources => resources.searchOptions);
 
 export const isFetching = createSelector([resources], resources => resources.isFetching);
 export const labelFilter = createSelector([resources], resources => resources.labelFilter);
@@ -194,9 +221,9 @@ export const getVisiblePlugins = createSelector(
 );
 
 export const totalSize = createSelector(
-  [ plugins ],
-  ( plugins ) => {
-    return plugins.size;
+  [ searchOptions ],
+  ( searchOptions ) => {
+    return searchOptions.total || 0;
   }
 );
 
@@ -232,9 +259,8 @@ export const filterVisibleList = createSelector (
       } else {
         return plugin.localeCompare(nextPlugin);
       }
-    }
-
-    );
+    });
+    logger.warn(`xxx ${list}`);
     return list;
   }
 );

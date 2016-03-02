@@ -4,45 +4,49 @@ import {
   totalSize,
   isFetching,
   labelFilter,
+  searchOptions,
   filterVisibleList,
   getVisiblePluginsLabels
 } from './resources';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { Card, CardWrapper } from './components/Card';
-import Footer from './components/Footer';
-import Header from './components/Header';
-import Immutable from 'immutable';
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import Widget from './components/Widget';
-import Highlighter from 'react-highlight-words';
-import styles from './Application.css';
 import DevelopmentFooter from './commons/developmentFooter';
 
-Application.propTypes = {
-  generatePluginData: PropTypes.func.isRequired,
-  setFilter: PropTypes.func.isRequired,
-  filterVisibleList: PropTypes.any.isRequired,
-  totalSize: PropTypes.any.isRequired,
-  getVisiblePluginsLabels: PropTypes.any.isRequired,
-  searchPluginData: PropTypes.func.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  labelFilter: PropTypes.any.isRequired
-};
-export default function Application({
-  generatePluginData,
-  setFilter,
-  filterVisibleList,
-  totalSize,
-  searchPluginData,
-  isFetching,
-  labelFilter,
-  getVisiblePluginsLabels
-}) {
-  return (<div>
+export default class Application extends Component {
+
+  componentWillMount() {
+    const { location } = this.props;
+    this.props.generatePluginData(location.query);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.location.query !== this.props.location.query) {
+      this.props.generatePluginData(nextProps.location.query);
+    }
+  }
+
+  render() {
+    const {
+      setFilter,
+      filterVisibleList,
+      browserHistory,
+      totalSize,
+      searchOptions,
+      getVisiblePluginsLabels,
+      searchPluginData,
+      isFetching,
+      location,
+      labelFilter
+    } = this.props;
+
+    return (<div>
       <DevelopmentFooter />
       <Widget
-        generateData={generatePluginData}
+        searchOptions={searchOptions}
+        location={location}
+        browserHistory={browserHistory}
         setFilter={setFilter}
         getVisiblePlugins={filterVisibleList}
         totalSize={totalSize}
@@ -50,19 +54,34 @@ export default function Application({
         searchData={searchPluginData}
         getVisiblePluginsLabels={getVisiblePluginsLabels}
         labelFilter={labelFilter}
-      />
-  </div>
-  );
+        />
+    </div>);
+  }
 }
 
+Application.propTypes = {
+  generatePluginData: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
+  browserHistory: PropTypes.object.isRequired,
+  filterVisibleList: PropTypes.any.isRequired,
+  totalSize: PropTypes.any.isRequired,
+  getVisiblePluginsLabels: PropTypes.any.isRequired,
+  searchOptions: PropTypes.any.isRequired,
+  searchPluginData: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  location: PropTypes.object.isRequired,
+  labelFilter: PropTypes.any.isRequired
+};
+
 const selectors = createSelector(
-  [ totalSize, isFetching, labelFilter, filterVisibleList, getVisiblePluginsLabels],
-  ( totalSize, isFetching, labelFilter, filterVisibleList, getVisiblePluginsLabels) => ({
+  [ totalSize, isFetching, labelFilter, filterVisibleList, getVisiblePluginsLabels, searchOptions],
+  ( totalSize, isFetching, labelFilter, filterVisibleList, getVisiblePluginsLabels, searchOptions) => ({
     totalSize,
     isFetching,
     labelFilter,
     filterVisibleList,
-    getVisiblePluginsLabels
+    getVisiblePluginsLabels,
+    searchOptions
   })
 );
 

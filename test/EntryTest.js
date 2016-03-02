@@ -1,7 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
-import TestUtils, {createRenderer} from 'react-addons-test-utils';
+import {createRenderer} from 'react-addons-test-utils';
 import { assert} from 'chai';
 import expect from 'expect';
 
@@ -56,10 +55,10 @@ describe('Test whether one plugin entry renders correctly', () => {
       children = result.props.children;
     expect(result.type).toBe('div');
     expect(result.props.className).toBe('Entry-box');
-    expect(children.props.children.length).toBe(7);
+    expect(children.props.children.length).toBe(6);
 
-    expect(children.props.children[2].props.className).toBe('Title');
-    expect(children.props.children[2].props.children.props.children).toBe('Adaptive DSL');
+    expect(children.props.children[1].props.className).toBe('Title');
+    expect(children.props.children[1].props.children.props.children).toBe('Adaptive DSL');
 
   });
 

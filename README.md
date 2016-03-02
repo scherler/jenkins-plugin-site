@@ -69,7 +69,7 @@ npm run lint
 ```
 
 You can use the command lint:fix and it will try to fix all
-offenses, whoever there maybe some more that you need to fix manually.
+offenses, however there maybe some more that you need to fix manually.
 
 Remember:
 

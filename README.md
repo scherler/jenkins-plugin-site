@@ -1,6 +1,28 @@
 # Jenkins plugin site
 This is a simple rendering of the plugin list as taken from updates.jenkins-ci.org/current/update-center.json.
 
+# Architecture in deploy
+
+![alt text](./architecture.png "architecture")
+
+We have 2 docker images, one is a vanilla mongodb image and the other our plugin-site (see below how to 
+build it with docker).
+
+Under the hood we have two services running one on port 3000 and another on 5000 on our docker image.
+ 
+The 3000 is communicating with mongo and doing the indexing work of the plugins. In the initial connect of that service 
+with the db we are requesting the jsonp from the official site and indexing our mongodb with it. 
+We further created a cron job in that server to index the plugins once a day at 1:1:1. 
+On the port 5000 service we created a proxy to mask the other service (port 3000) and to make it impossible to trigger 
+the re-index of the plugins from outside (magic url -> /indexDb). 
+
+The only visible service it the react app served from a webpack server (and some proxy magic to access
+[plugins, getCategories, latest] without exposing the backend). 
+
+Besides the docker images there is nothing to be installed on any hosting service only a http proxy 
+to do plugins.xxx.io -> x.x.x.x:5000 ...and of course docker.
+
+
 ### Run with Docker
 
 ```

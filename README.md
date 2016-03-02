@@ -1,5 +1,11 @@
 # Jenkins plugin site
-This is a simple rendering of the plugin list as taken from updates.jenkins-ci.org/current/update-center.json.
+This is a simple rendering of the plugin list as taken from updates.jenkins-ci.org/current/update-center.json to make
+the information of plugins searchable and filterable.
+
+# Help wanted
+
+We welcome any enhancements and bugfixes, please see our [guidelines](CONTRIBUTING.md) on how you can 
+[contribute](CONTRIBUTING.md).
 
 # Architecture in deploy
 

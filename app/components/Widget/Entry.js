@@ -4,7 +4,6 @@ import {cleanTitle, getMaintainers  } from '../../helper';
 import PureComponent from 'react-pure-render/component';
 import classNames from 'classnames';
 
-
 export default class Entry extends PureComponent {
 
   static propTypes = {

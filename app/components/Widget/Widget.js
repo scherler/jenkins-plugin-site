@@ -89,7 +89,7 @@ export default class Widget extends PureComponent {
         <div className={classNames(styles.ItemsList, 'items-box col-md-10')}>
 
           <nav id="cb-grid-toolbar"
-             className='navbar navbar-light bg-faded'>
+             className="navbar navbar-light bg-faded">
             <ul className="nav navbar-nav">
               <li className="nav-item active">
                 <a className="nav-link">Featured</a>
@@ -147,13 +147,13 @@ export default class Widget extends PureComponent {
                 }
               </li>
               <li className="nav-item">
-                <form className="form-inline pull-xs-right" action='#'>
+                <form className="form-inline pull-xs-right" action="#">
                 <input
                   disabled={totalSize === 0}
                   className={classNames(styles.SearchInput, 'form-control nav-link')}
                   onChange={event => searchData(event.target.value)}
                   onSubmit={event => searchData(event.target.value)}
-                  placeholder='Filter...'
+                  placeholder="Filter..."
                 />
                 </form>
               </li>

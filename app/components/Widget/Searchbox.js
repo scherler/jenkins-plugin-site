@@ -23,14 +23,14 @@ export default class Searchbox extends PureComponent {
     return (
       <div>
         <input
-          ref='searchInput'
+          ref="searchInput"
           defaultValue={this.props.location.query.q}
-          placeholder='search...'
+          placeholder="search..."
           />
         {this.props.limit && <input
-          ref='limit'
+          ref="limit"
           defaultValue={this.props.limit}
-          placeholder='limit...'
+          placeholder="limit..."
           />}
         <button onClick={this.handleClick.bind(null, this.refs.searchInput, this.refs.limit)}>
           search

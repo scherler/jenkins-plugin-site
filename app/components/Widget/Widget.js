@@ -94,13 +94,8 @@ export default class Widget extends Component {
             />
           { totalSize > 0 && <LabelWidget
             labels={getVisiblePluginsLabels}
-            onClick={(event)=>  {
-              setFilter(new Immutable.Record({
-                searchField: 'labels',
-                field: filter.title || 'title',
-                search: [event.target.innerText],
-                asc: filter.asc || true
-              }));}}
+            setFilter={setFilter}
+            filter={filter}
             /> }
         </div>
 
@@ -140,13 +135,8 @@ export default class Widget extends Component {
                 </button>
                 { totalSize > 0 && <LabelWidget
                   labels={getVisiblePluginsLabels}
-                  onClick={(event)=>  {
-                    setFilter(new Immutable.Record({
-                      searchField: 'labels',
-                      field: filter.title || 'title',
-                      search: [event.target.innerText],
-                      asc: filter.asc || true
-                    }));}}
+                  setFilter={setFilter}
+                  filter={filter}
                   /> }
               </li>
               <li className="nav-item btn-group">

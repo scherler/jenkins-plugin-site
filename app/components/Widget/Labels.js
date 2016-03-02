@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import LabelWidgetItem from './LabelWidgetItem';
+import Immutable from 'immutable';
 
 export default class LabelWidget extends Component {
 
@@ -10,11 +11,21 @@ export default class LabelWidget extends Component {
 
   static propTypes = {
     labels: PropTypes.any.isRequired,
-    onClick: PropTypes.func
-  };
+    filter: PropTypes.any.isRequired,
+    setFilter: PropTypes.func.isRequired
+  }
+
+  handleClick = (data) => {
+    this.props.setFilter(new Immutable.Record({
+      searchField: 'labels',
+      field: this.props.filter.title || 'title',
+      search: [data],
+      asc: this.props.filter.asc || true
+    }));
+  }
 
   render() {
-    const { labels, onClick } = this.props;
+    const { labels } = this.props;
     const { field, asc } = this.state;
     const sortedLabels = labels.sortBy(
       label => {
@@ -46,7 +57,7 @@ export default class LabelWidget extends Component {
       {
         sortedLabels.valueSeq().map(
         (item, index) => {
-          return (<LabelWidgetItem key={index} index={index} item={item} onClick={onClick}/>);
+          return (<LabelWidgetItem key={index} index={index} item={item} onClick={this.handleClick.bind(null, item.key)}/>);
         })
       }
       </div>);

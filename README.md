@@ -3,13 +3,7 @@ This is a simple rendering of the plugin list as taken from updates.jenkins-ci.o
 
 ### Run with Docker
 
-Since we are using in the Jenkinsfile to build the project in a pipeline and the docker image
-is to be run on jenkins infrastructure, you need to run 'npm install' before the docker build!
-
-We are reusing the 'npm install' in the docker image!
-
 ```
-npm i
 docker pull mongo
 docker run -d --name pluginDB mongo
 

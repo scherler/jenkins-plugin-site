@@ -1,44 +1,47 @@
 /** @flow */
-import Immutable from 'immutable'
-import Entry from './Entry'
-import styles from './Widget.css'
-import LabelWidget from './Labels'
-import React, { PropTypes, Component } from 'react'
-import {cleanTitle, getMaintainers, getScoreClassName} from '../../helper'
-import { VirtualScroll } from 'react-virtualized'
-import classNames from 'classnames'
+import Immutable from 'immutable';
+import Entry from './Entry';
+import styles from './Widget.css';
+import LabelWidget from './Labels';
+import Pagination from './Pagination';
+import Searchbox from './Searchbox';
+import Categories from './Categories';
+import React, { PropTypes } from 'react';
+import Spinner from '../../commons/spinner';
+import classNames from 'classnames';
+import PureComponent from 'react-pure-render/component';
 
-export default class Widget extends Component {
+export default class Widget extends PureComponent {
 
   static propTypes = {
-    generateData: PropTypes.func.isRequired,
     setFilter: PropTypes.func.isRequired,
+    browserHistory: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
     totalSize: PropTypes.any.isRequired,
     getVisiblePlugins: PropTypes.any.isRequired,
+    searchOptions: PropTypes.any.isRequired,
+    isFetching: PropTypes.bool.isRequired,
     getVisiblePluginsLabels: PropTypes.any.isRequired,
     searchData: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired,
     labelFilter: PropTypes.any.isRequired
   };
 
   state = {
-    clicked: false,
-    view:'tiles',
-    sort:'title',
-    category:'all'
+    view: 'tiles',
+    sort: 'title'
   };
 
-  filterSet (search, filter) {
+  filterSet(search, filter) {
     this.props.setFilter(new Immutable.Record({
+      search,
       searchField: 'labels',
       field: filter.title || 'title',
-      search: search,
       asc: filter.asc || true
-    }))
+    }));
 
-  };
+  }
 
-  getFilter (labelFilter) {
+  getFilter(labelFilter) {
     let filter;
     if (labelFilter instanceof Function) {
       filter = labelFilter();
@@ -46,176 +49,163 @@ export default class Widget extends Component {
       filter = labelFilter;
     }
     return filter;
-  };
+  }
 
-  render () {
+  render() {
 
     const {
-      generateData,
       setFilter,
-      rowRenderer,
+      browserHistory,
       searchData,
-      title,
       totalSize,
+      isFetching,
+      searchOptions,
       getVisiblePlugins,
       getVisiblePluginsLabels,
+      location,
       labelFilter
     } = this.props;
 
-    const filter = this.getFilter(labelFilter);
-
-    const { clicked } = this.state;
-
-    const filteredSize = getVisiblePlugins instanceof Immutable.Collection
-      ? getVisiblePlugins.size
-      : getVisiblePlugins.length
-
-    const viewClass = styles[this.state.view]
-
+    const
+      filter = this.getFilter(labelFilter),
+      toRange = searchOptions.limit * Number(searchOptions.page) <= Number(searchOptions.total) ?
+        searchOptions.limit * Number(searchOptions.page) : Number(searchOptions.total),
+      fromRange = (searchOptions.limit) * (Number(searchOptions.page) - 1);
 
     return (
       <div className={classNames(styles.ItemFinder, this.state.view, 'item-finder')} >
         <div className={classNames(styles.CategoriesBox, 'categories-box col-md-2')} >
-          <ul className="list-group">
-            <li className={classNames(styles.title, 'label')}>
-              <div className={classNames(styles.li, 'list-group-item')}>Categories</div></li>
-            <li className={classNames(styles.scm, 'scm')}>
-              <a href="#category=scm" className={classNames(styles.li, 'list-group-item', (this.state.category === 'scm')?'active':'')}
-                onClick={()=>
-                  {
-                    {this.state.category = 'scm'}
-                    {this.filterSet(['scm-related', 'scm'], labelFilter)}
-                  }
-                }
-              >SCM connectors</a></li>
-            <li className={classNames(styles.build, 'build')}>
-              <a href="#category=build" className={classNames(styles.li, 'list-group-item', (this.state.category === 'build')?'active':'')}
-              onClick={()=>
-                {
-                  {this.state.category = 'build'}
-                  {this.filterSet(['builder', 'buildwrapper'], labelFilter)}
-                }
-              }
-              >Build and analytics</a></li>
-            <li className={classNames(styles.deployment, 'deployment')}>
-              <a href="#category=deployment" className={classNames(styles.li, 'list-group-item', (this.state.category === 'deployment')?'active':'')}
-              onClick={()=>
-              {
-                {this.state.category = 'deployment'}
-                {this.filterSet(['cli', 'deployment'], labelFilter)}
-              }
-            }>Deployment</a></li>
-            <li className={classNames(styles.pipelines, 'pipelines')}>
-              <a href="#category=pipelines" className={classNames(styles.li, 'list-group-item')}>Pipelines</a></li>
-            <li className={classNames(styles.containers, 'containers')}>
-              <a href="#category=containers" className={classNames(styles.li, 'list-group-item')}>Containers</a></li>
-            <li className={classNames(styles.security, 'security')}>
-              <a href="#category=security" className={classNames(styles.li, 'list-group-item', (this.state.category === 'security')?'active':'')}
-              onClick={()=>
-              {
-                {this.state.category = 'security'}
-                {this.filterSet(['user', 'security'], labelFilter)}
-              }
-            }>Users and security</a></li>
-            <li className={classNames(styles.general, 'general')}>
-              <a href="#category=general" className={classNames(styles.li, 'list-group-item')}>General purpose</a></li>
-          </ul>
+          <Categories
+            browserHistory={browserHistory}
+            location={location}
+            />
           { totalSize > 0 && <LabelWidget
             labels={getVisiblePluginsLabels}
-            onClick={(event)=>  {
-              setFilter(new Immutable.Record({
-                searchField: 'labels',
-                field: filter.title || 'title',
-                search: [event.target.innerText],
-                asc: filter.asc || true
-              }))}}
+            setFilter={setFilter}
+            filter={filter}
             /> }
         </div>
 
         <div className={classNames(styles.ItemsList, 'items-box col-md-10')}>
 
-          <nav id="cb-grid-toolbar" className='navbar navbar-light bg-faded'>
+          <nav id="cb-grid-toolbar"
+             className="navbar navbar-light bg-faded">
             <ul className="nav navbar-nav">
-              <li className="nav-item active"><a className="nav-link">Featured</a></li>
-              <li className="nav-item"><a className="nav-link">New</a></li>
-              <li className="nav-item">
-                <button className="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tags</button>
+              <li className="nav-item active">
+                <a className="nav-link">Featured</a>
               </li>
-              <li className="nav-item btn-group">
-                <button className="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tags</button>
-                { totalSize > 0 && <LabelWidget
-                  labels={getVisiblePluginsLabels}
-                  onClick={(event)=>  {
+              <li className="nav-item">
+                <a className="nav-link" onClick={() => {
+                  this.props.location.query= {latest: 'latest'};
+                  this.props.browserHistory.replace(this.props.location);
+                }}>New</a>
+              </li>
+              <li className="nav-item">
+                <button className="nav-link" onClick={() => {
                     setFilter(new Immutable.Record({
                       searchField: 'labels',
                       field: filter.title || 'title',
-                      search: [event.target.innerText],
+                      search: '',
                       asc: filter.asc || true
-                    }))}}
+                    }));
+                  }}>
+                  All
+                </button>
+              </li>
+              <li className="nav-item btn-group">
+                <button
+                  className="nav-link dropdown-toggle"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false">
+                  Tags
+                </button>
+                { totalSize > 0 && <LabelWidget
+                  labels={getVisiblePluginsLabels}
+                  setFilter={setFilter}
+                  filter={filter}
                   /> }
               </li>
-              <li className="nav-item btn-group"><a className="nav-link dropdown-toggle">Technologies</a></li>
-              <li className="nav-item"><button className="btn btn-sm" onClick={()=>  generateData()}>getPlugins</button></li>
+              <li className="nav-item btn-group">
+                <a className="nav-link dropdown-toggle">
+                  Technologies
+                </a></li>
+              <li className="nav-item">
+                <Searchbox browserHistory={browserHistory}
+                          location={location}
+                          limit={Number(searchOptions.limit)}/>
+              </li>
             </ul>
 
             <ul className="pull-xs-right nav navbar-nav">
               <li className="nav-item">
                 {totalSize > 0 &&
                   <span className="nav-link">
-                    {filteredSize} of {totalSize}
+                    {fromRange} to&nbsp;
+                    {toRange} of {totalSize}
                   </span>
                 }
               </li>
               <li className="nav-item">
-                <form className="form-inline pull-xs-right" action='#'>
+                <form className="form-inline pull-xs-right" action="#">
                 <input
                   disabled={totalSize === 0}
-                  className={classNames(styles.SearchInput, "form-control nav-link")}
+                  className={classNames(styles.SearchInput, 'form-control nav-link')}
                   onChange={event => searchData(event.target.value)}
                   onSubmit={event => searchData(event.target.value)}
-                  placeholder='Filter...'
+                  placeholder="Filter..."
                 />
                 </form>
               </li>
               <li className="nav-item btn-group">
-                <button className="nav-link dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button
+                  className="nav-link dropdown-toggle"
+                  type="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false">
                   sort: <b>{this.state.sort}</b></button>
                 <div className="dropdown-menu">
                   <a className="dropdown-item" href="#sort=name"
                     onClick={()=> {
-                    this.setState({ sort: 'name' })
+                    this.setState({ sort: 'name' });
                     setFilter(new Immutable.Record({
                       field: 'name',
                       asc: !filter.asc
-                    }))}}>Name</a>
+                    }));}}>Name</a>
                   <a className="dropdown-item" href="#sort=version"
                     onClick={()=> {
-                    this.setState({ sort: 'core' })
+                    this.setState({ sort: 'core' });
                     setFilter(new Immutable.Record({
                       field: 'requiredCore',
                       asc: !filter.asc
-                    }))}}>Core version</a>
+                    }));}}>Core version</a>
                   <a className="dropdown-item" href="#sort=table"
                     onClick={()=>  {this.setState({ sort: 'rating' });}}>Ratings</a>
                   <a className="dropdown-item" href="#sort=buildDate"
                     onClick={()=> {
-                      this.setState({ sort: 'updated' })
+                      this.setState({ sort: 'updated' });
                       setFilter(new Immutable.Record({
                         field: 'buildDate',
                         asc: !filter.asc
-                      }))}}>Updated</a>
+                      }));}}>Updated</a>
                   <a className="dropdown-item" href="#sort=releaseTimestamp"
                     onClick={()=> {
-                      this.setState({ sort: 'created' })
+                      this.setState({ sort: 'created' });
                       setFilter(new Immutable.Record({
                         field: 'releaseTimestamp',
                         asc: !filter.asc
-                      }))}}>Created</a>
+                      }));}}>Created</a>
                 </div>
               </li>
 
               <li className="nav-item dropdown">
-                <button className="nav-link  dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button
+                  className="nav-link  dropdown-toggle"
+                  type="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false">
                   view: <b>{this.state.view}</b>
                 </button>
               <div className="dropdown-menu">
@@ -228,20 +218,27 @@ export default class Widget extends Component {
               </div>
             </li>
 
-
-
-
             </ul>
           </nav>
 
           <div id="cb-item-finder-grid-box" className={classNames(styles.GridBox, 'grid-box')} >
             <div className={classNames(styles.Grid, 'grid')} >
 
+              {isFetching && <Spinner>loading</Spinner>}
+              {!isFetching && totalSize > 0 && !location.query.category
+                && !location.query.latest && Number(searchOptions.pages) > 1 && <Pagination
+                browserHistory={browserHistory}
+                location={location}
+                pages={Number(searchOptions.pages)}
+                page={Number(searchOptions.page)}
+              />}
+
+
               {totalSize > 0 && getVisiblePlugins.valueSeq().map(plugin => {
-                return <Entry
+                return (<Entry
                   className="Entry"
                   key={plugin.id}
-                  plugin={plugin} />
+                  plugin={plugin} />);
               })}
 
             </div>
@@ -252,7 +249,7 @@ export default class Widget extends Component {
         </div>
 
       </div>
-      )
-  };
+      );
+  }
 
 }

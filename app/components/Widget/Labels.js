@@ -1,17 +1,9 @@
-import React, { PropTypes, Component } from 'react'
+import React, { PropTypes } from 'react';
+import LabelWidgetItem from './LabelWidgetItem';
+import Immutable from 'immutable';
+import PureComponent from 'react-pure-render/component';
 
-export function LabelWidgetItem ({index, item, onClick}) {
-  var href = "#key=" + item.key;
-  return (<a
-    href={href}
-    key={index}
-    className="dropdown-item"
-    onClick={onClick}>
-      <span className="key">{item.key}</span> <span className="count">{item.value}</span>
-    </a>);
-}
-
-export default class LabelWidget extends Component {
+export default class LabelWidget extends PureComponent {
 
   state = {
     field: 'key',
@@ -20,11 +12,21 @@ export default class LabelWidget extends Component {
 
   static propTypes = {
     labels: PropTypes.any.isRequired,
-    onClick: PropTypes.func
-  };
+    filter: PropTypes.any.isRequired,
+    setFilter: PropTypes.func.isRequired
+  }
 
-  render () {
-    const { labels, onClick } = this.props;
+  handleClick = (data) => {
+    this.props.setFilter(new Immutable.Record({
+      searchField: 'labels',
+      field: this.props.filter.title || 'title',
+      search: [data],
+      asc: this.props.filter.asc || true
+    }));
+  }
+
+  render() {
+    const { labels } = this.props;
     const { field, asc } = this.state;
     const sortedLabels = labels.sortBy(
       label => {
@@ -56,7 +58,7 @@ export default class LabelWidget extends Component {
       {
         sortedLabels.valueSeq().map(
         (item, index) => {
-          return (<LabelWidgetItem key={index} index={index} item={item} onClick={onClick}/>)
+          return (<LabelWidgetItem key={index} index={index} item={item} onClick={this.handleClick.bind(null, item.key)}/>);
         })
       }
       </div>);

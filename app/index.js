@@ -28,7 +28,7 @@ App.propTypes = {
 render((
     <Router history={browserHistory}>
       <Route component={App} path="/" component={App}>
-        <Route name="search" path="?query:query&limit=:limit&pageSize=:pageSize" component={App}/>
+        <Route name="search" path="?query:query&limit=:limit&page=:page&category=:category&latest=:latest" component={App}/>
       </Route>
     </Router>
   ),

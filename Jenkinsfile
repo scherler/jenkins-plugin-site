@@ -5,6 +5,7 @@ node {
   checkout scm
   // Mark the code build 'stage'....
   stage 'commit - Build'
+  // FIXME: after chat with ctennis the 'ni' - npm i should be in the container
   sh '/usr/local/bin/npm install'
   stage 'commit - Test'
   sh './node_modules/.bin/eslint .'

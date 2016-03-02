@@ -9,7 +9,7 @@ COPY ./webpack.commons.js /plugins/
 COPY ./webpack.config.docker.js /plugins/
 COPY ./server/ /plugins/server/
 COPY ./app/ /plugins/app/
-COPY ./node_modules/ /plugins/node_modules/
+RUN cd /plugins/ && npm install
 WORKDIR /plugins
 
 CMD npm run docker

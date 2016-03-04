@@ -1,26 +1,26 @@
-import React, { PropTypes } from 'react'
-import styles from './Widget.css'
-import {cleanTitle, getMaintainers, getScoreClassName} from '../../helper'
-import classNames from 'classnames'
+import React, { PropTypes} from 'react';
+import styles from './Widget.css';
+import {cleanTitle, getMaintainers  } from '../../helper';
+import PureComponent from 'react-pure-render/component';
+import classNames from 'classnames';
 
-Entry.propTypes = {
-  plugin: PropTypes.any.isRequired
-}
+export default class Entry extends PureComponent {
 
-export default function Entry ({plugin}) {
-  return (
-    <div
+  static propTypes = {
+    plugin: PropTypes.any.isRequired
+  };
+
+  render() {
+    const {plugin} = this.props;
+    return (
+      <div
         key={plugin.get('sha1')}
         className={classNames(styles.Item,'Entry-box')}
-      >
+        >
 
         <a href={plugin.get('wiki')} className={classNames('item','Entry',styles.Tile)}>
           <div className={classNames(styles.Icon,'Icon')}>
             {plugin.get('iconDom')}
-          </div>
-
-          <div className={classNames(styles.Score,'Score')}>
-            <span className={getScoreClassName()}></span>
           </div>
           <div className={classNames(styles.Title,'Title')}>
             <h4>{cleanTitle(plugin.get('title'))}</h4>
@@ -47,5 +47,6 @@ export default function Entry ({plugin}) {
 
         </a>
       </div>
-  )
+    );
+  }
 }

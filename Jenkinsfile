@@ -12,7 +12,7 @@ node {
   sh '/usr/local/bin/npm run test'
   stage 'deploy'
   // Build Docker file, run it and smoke test it
-  #docker.build('jenkinsciinfra/plugin-site')
+  //docker.build('jenkinsciinfra/plugin-site')
   stage 'smoke'
   echo 'Test whether you can start it'
 }

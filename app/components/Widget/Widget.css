@@ -96,7 +96,8 @@ nav form {
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
   box-shadow: 0 3px 2px -1px rgba(0, 0, 0, .1);
-  margin-top: -1px
+  margin-top: -1px;
+  padding:.25rem 1rem;
 }
 
 .CategoriesBox {

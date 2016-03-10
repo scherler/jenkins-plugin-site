@@ -28,7 +28,8 @@ export default class Widget extends PureComponent {
 
   state = {
     view: 'tiles',
-    sort: 'title'
+    sort: 'title',
+    show: 'featured'
   };
 
   filterSet(search, filter) {
@@ -85,23 +86,27 @@ export default class Widget extends PureComponent {
             filter={filter}
             /> }
         </div>
-
+        
         <div className={classNames(styles.ItemsList, 'items-box col-md-10')}>
 
           <nav id="cb-grid-toolbar"
              className="navbar navbar-light bg-faded">
             <ul className="nav navbar-nav">
-              <li className="nav-item active">
-                <a className="nav-link">Featured</a>
-              </li>
-              <li className="nav-item">
+              <li className={"nav-item " + (this.state.show === 'featured'?'active':'')}>
                 <a className="nav-link" onClick={() => {
+                  this.setState({show:'featured'});
+                }}>Featured</a>
+              </li>
+              <li className={"nav-item " + (this.state.show === 'new'?'active':'')}>
+                <a className="nav-link" onClick={() => {
+                  this.setState({show:'new'});
                   this.props.location.query= {latest: 'latest'};
                   this.props.browserHistory.replace(this.props.location);
                 }}>New</a>
               </li>
-              <li className="nav-item">
-                <button className="nav-link" onClick={() => {
+              <li className={"nav-item " + (this.state.show === 'all'?'active':'')}>
+                <a className="nav-link" onClick={() => {
+                    this.setState({show:'all'});
                     setFilter(new Immutable.Record({
                       searchField: 'labels',
                       field: filter.title || 'title',
@@ -110,7 +115,7 @@ export default class Widget extends PureComponent {
                     }));
                   }}>
                   All
-                </button>
+                </a>
               </li>
               <li className="nav-item btn-group">
                 <button
@@ -126,37 +131,9 @@ export default class Widget extends PureComponent {
                   filter={filter}
                   /> }
               </li>
-              <li className="nav-item btn-group">
-                <a className="nav-link dropdown-toggle">
-                  Technologies
-                </a></li>
-              <li className="nav-item">
-                <Searchbox browserHistory={browserHistory}
-                          location={location}
-                          limit={Number(searchOptions.limit)}/>
-              </li>
             </ul>
 
             <ul className="pull-xs-right nav navbar-nav">
-              <li className="nav-item">
-                {totalSize > 0 &&
-                  <span className="nav-link">
-                    {fromRange} to&nbsp;
-                    {toRange} of {totalSize}
-                  </span>
-                }
-              </li>
-              <li className="nav-item">
-                <form className="form-inline pull-xs-right" action="#">
-                <input
-                  disabled={totalSize === 0}
-                  className={classNames(styles.SearchInput, 'form-control nav-link')}
-                  onChange={event => searchData(event.target.value)}
-                  onSubmit={event => searchData(event.target.value)}
-                  placeholder="Filter..."
-                />
-                </form>
-              </li>
               <li className="nav-item btn-group">
                 <button
                   className="nav-link dropdown-toggle"
@@ -220,27 +197,56 @@ export default class Widget extends PureComponent {
 
             </ul>
           </nav>
+          <nav className="page-controls">
+          <ul className="nav navbar-nav">
+            <li className="nav-item filter">
+              <form className="form-inline pull-xs-right" action="#">
+              <input
+                disabled={totalSize === 0}
+                className={classNames(styles.SearchInput, 'form-control nav-link')}
+                onChange={event => searchData(event.target.value)}
+                onSubmit={event => searchData(event.target.value)}
+                placeholder="Filter..."
+              />
+              </form>
+            </li>
+          <li className="nav-item page-picker">
+            {!isFetching && totalSize > 0 && !location.query.category
+              && !location.query.latest && Number(searchOptions.pages) > 1 && <Pagination
+              browserHistory={browserHistory}
+              location={location}
+              pages={Number(searchOptions.pages)}
+              page={Number(searchOptions.page)}
+            />}
+          </li>
+          <li className="nav-item count">
+            {totalSize > 0 &&
+              <span className="nav-link">
+                {fromRange} to&nbsp;
+                {toRange} of {totalSize}
+              </span>
+            }
+          </li>
 
-          <div id="cb-item-finder-grid-box" className={classNames(styles.GridBox, 'grid-box')} >
-            <div className={classNames(styles.Grid, 'grid')} >
-
-              {isFetching && <Spinner>loading</Spinner>}
-              {!isFetching && totalSize > 0 && !location.query.category
-                && !location.query.latest && Number(searchOptions.pages) > 1 && <Pagination
-                browserHistory={browserHistory}
-                location={location}
-                pages={Number(searchOptions.pages)}
-                page={Number(searchOptions.page)}
-              />}
+          </ul>
 
 
-              {totalSize > 0 && getVisiblePlugins.valueSeq().map(plugin => {
-                return (<Entry
-                  className="Entry"
-                  key={plugin.id}
-                  plugin={plugin} />);
-              })}
+          </nav>
+          <div className="padded-box">
+            <div id="cb-item-finder-grid-box" className={classNames(styles.GridBox, 'grid-box')} >
+              <div className={classNames(styles.Grid, 'grid')} >
+    
+                {isFetching && <Spinner>loading</Spinner>}
 
+    
+    
+                {totalSize > 0 && getVisiblePlugins.valueSeq().map(plugin => {
+                  return (<Entry
+                    className="Entry"
+                    key={plugin.id}
+                    plugin={plugin} />);
+                })}
+              </div>
             </div>
           </div>
 

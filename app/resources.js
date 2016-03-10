@@ -11,7 +11,7 @@ api.init({
 });
 
 export const SearchOptions = Immutable.Record({
-  limit: 10,
+  limit: 100,
   page: 1,
   pages: 0,
   total: 0

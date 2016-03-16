@@ -10,7 +10,8 @@ const
 
 module.exports = {
   debug: false,
-  devtool: 'eval',
+  cache: true,
+  devtool: 'cheap-source-map',
   devServer: {
     contentBase: 'css',
     port: 5000

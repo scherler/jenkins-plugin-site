@@ -23,18 +23,16 @@ describe('Test whether pagination renders correctly', () => {
     const renderer = createRenderer();
     renderer.render(testElement);
     const result = renderer.getRenderOutput();
-    expect(result.type).toBe('nav');
-    expect(result.props.children.type).toBe('ul');
-    expect(result.props.children.props.children.length).toBe(5);
-    expect(result.props.children.props.children[3].type).toBe('li');
-    expect(result.props.children.props.children[3].props.children.type).toBe('a');
+    expect(result.type).toBe('ul');
+    expect(result.props.children.length).toBe(13);
   });
-
   it('Should not throw an exception onClick', () => {
     const renderer = createRenderer();
     renderer.render(testElement);
     const result = renderer.getRenderOutput();
-    result.props.children.props.children[3].props.children.props.onClick();
+    result.props.children[0].props.children.props.onClick();
   });
+
+
 
 });

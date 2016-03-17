@@ -144,7 +144,7 @@ export const actions = {
         url = '/latest';
       }else {
         const PLUGINS_URL = '/plugins';
-        url = `${PLUGINS_URL}?page=${query.page || 1}&limit=${query.limit || 10}&q=${query.q || ''}`;
+        url = `${PLUGINS_URL}?page=${query.page || 1}&limit=${query.limit || 100}&q=${query.q || ''}`;
       }
       logger.log(query, url);
       dispatch(actions.clearPluginData());

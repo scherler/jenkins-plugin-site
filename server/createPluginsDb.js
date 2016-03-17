@@ -4,6 +4,7 @@ const request = require('request');
 
 const host = 'updates.jenkins-ci.org';
 const url = `https://${host}/current/update-center.json`;
+/* eslint-disable no-console */ //This is because we are using console log for communications
 
 module.exports = createPluginDb = (destination, cb) => {
     var local = {};
@@ -23,7 +24,7 @@ module.exports = createPluginDb = (destination, cb) => {
                 var lines = local.body.split('\n');
                 if (lines.length >= 1) {
                     var plugins = JSON.parse(lines[1]).plugins;
-                    fs.writeFile(destination, JSON.stringify(plugins), function (err) {
+                    fs.writeFile(destination, JSON.stringify(plugins), (err) => {
                         if (err) {
                             return console.log(err);
                         }

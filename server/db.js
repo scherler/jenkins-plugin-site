@@ -19,7 +19,7 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
     var dbStore;
     async.series([
         (cb) => {
-            fs.readFile(filename, {encoding: 'utf8'}, function (err, data) {
+            fs.readFile(filename, {encoding: 'utf8'}, (err, data) => {
                 if (err)
                     return cb(err, null);
 
@@ -36,11 +36,11 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
                 dbStore.search = (query, options, caback) => {
                     options = options || {};
                     var
-                        limit = options.limit || 1,
+                        limit = options.limit || 20,
                         page = options.page || 1,
                         start = (page - 1) * limit,
                         end = limit * (page),
-                        pages, total, docs;
+                        pages, total;
 
                     var result = dbStore;
 
@@ -114,7 +114,7 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
                 cb();
             });
         }
-    ], (err) => {
+    ], () => {
         // Make _filename and save non-enumerable so that they dont mess up dbStore.length
         Object.defineProperties(dbStore, {
             '_filename': {

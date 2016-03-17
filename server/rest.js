@@ -1,9 +1,7 @@
 /* eslint-disable no-console */ //This is because we are using console log for communications
 const
   express = require('express'),
-  request = require('request'),
   schedule = require('node-schedule'),
-  fs = require('fs'),
   async = require('async');
 
 const flatDb = require('./db');
@@ -11,8 +9,6 @@ const createPluginDb = require('./createPluginsDb');
 
 const db = '/tmp/plugin-site';
 const categoryFile = '/home/thorsten/src/cloudbees/jenkins-infra/plugin-site/server/static/category-plugins.json';
-
-var dbStore;
 
 const
   rest = express(),
@@ -29,7 +25,7 @@ schedule.scheduleJob('1 1 1 * *', () => {
         callback(err);
       }
       this.dbStore = data;
-    })
+    });
   });
 });
 
@@ -87,16 +83,22 @@ async.series([
         }
         this.dbStore = data;
         callback();
-      })
-    })
+      });
+    });
   },
   (callback) => {
     rest.listen(backendPort, () => {
       console.log('Listening backend port', backendPort);
+      callback();
     });
   }
 ], (err) => {
-console.log(err);
+  if (err) {
+    console.log(err);
+  } else {
+    console.log('finished');
+  }
+
 });
 
 

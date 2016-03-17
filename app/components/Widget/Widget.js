@@ -4,7 +4,6 @@ import Entry from './Entry';
 import styles from './Widget.css';
 import LabelWidget from './Labels';
 import Pagination from './Pagination';
-import Searchbox from './Searchbox';
 import Categories from './Categories';
 import React, { PropTypes } from 'react';
 import Spinner from '../../commons/spinner';
@@ -92,21 +91,21 @@ export default class Widget extends PureComponent {
           <nav id="cb-grid-toolbar"
              className="navbar navbar-light bg-faded">
             <ul className="nav navbar-nav">
-              <li className={"nav-item " + (this.state.show === 'featured'?'active':'')}>
+              <li className={`nav-item ${this.state.show === 'featured'?'active':''}`}>
                 <a className="nav-link" onClick={() => {
-                  this.setState({show:'featured'});
+                  this.setState({show: 'featured'});
                 }}>Featured</a>
               </li>
-              <li className={"nav-item " + (this.state.show === 'new'?'active':'')}>
+              <li className={`nav-item ${this.state.show === 'new'?'active':''}`}>
                 <a className="nav-link" onClick={() => {
-                  this.setState({show:'new'});
+                  this.setState({show: 'new'});
                   this.props.location.query= {latest: 'latest'};
                   this.props.browserHistory.replace(this.props.location);
                 }}>New</a>
               </li>
-              <li className={"nav-item " + (this.state.show === 'all'?'active':'')}>
+              <li className={`nav-item ${this.state.show === 'all'?'active':''}`}>
                 <a className="nav-link" onClick={() => {
-                    this.setState({show:'all'});
+                    this.setState({show: 'all'});
                     setFilter(new Immutable.Record({
                       searchField: 'labels',
                       field: filter.title || 'title',

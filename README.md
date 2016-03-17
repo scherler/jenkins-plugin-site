@@ -11,32 +11,25 @@ We welcome any enhancements and bugfixes, please see our [guidelines](CONTRIBUTI
 
 ![alt text](./architecture.png "architecture")
 
-We have 2 docker images, one is a vanilla mongodb image and the other our plugin-site (see below how to 
-build it with docker).
-
-Under the hood we have two services running one on port 3000 and another on 5000 on our docker image.
+Under the hood on our docker image we have two services running one on port 3000 and another on 5000.
  
-The 3000 is communicating with mongo and doing the indexing work of the plugins. In the initial connect of that service 
-with the db we are requesting the jsonp from the official site and indexing our mongodb with it. 
+The 3000 is doing the indexing work of the plugins and create a store for them. In the initial connect of that service 
+we are requesting the jsonp from the official site and indexing our storeDb with it. 
 We further created a cron job in that server to index the plugins once a day at 1:1:1. 
-On the port 5000 service we created a proxy to mask the other service (port 3000) and to make it impossible to trigger 
-the re-index of the plugins from outside (magic url -> /indexDb). 
+On the port 5000 service we created a proxy to mask the other service (port 3000). 
 
 The only visible service it the react app served from a webpack server (and some proxy magic to access
 [plugins, getCategories, latest] without exposing the backend). 
 
-Besides the docker images there is nothing to be installed on any hosting service only a http proxy 
+Besides the docker image there is nothing to be installed on any hosting service only a http proxy 
 to do plugins.xxx.io -> x.x.x.x:5000 ...and of course docker.
 
 
 ### Run with Docker
 
 ```
-docker pull mongo
-docker run -d --name pluginDB mongo
-
 docker build -t jenkinsciinfra/plugin-site .
-docker run -d -p 5000:5000 --link=pluginDB:mongodb --name plugin-site jenkinsciinfra/plugin-site
+docker run -d -p 5000:5000 --name plugin-site jenkinsciinfra/plugin-site
 Point to http://0.0.0.0:5000/
 ```
 

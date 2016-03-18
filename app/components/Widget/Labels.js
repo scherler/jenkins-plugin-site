@@ -13,6 +13,7 @@ export default class LabelWidget extends PureComponent {
   static propTypes = {
     labels: PropTypes.any.isRequired,
     filter: PropTypes.any.isRequired,
+    changeActiveNavState: PropTypes.func.isRequired,
     setFilter: PropTypes.func.isRequired
   }
 
@@ -23,6 +24,7 @@ export default class LabelWidget extends PureComponent {
       search: [data],
       asc: this.props.filter.asc || true
     }));
+    this.props.changeActiveNavState();
   }
 
   render() {

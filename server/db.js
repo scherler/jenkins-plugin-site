@@ -44,14 +44,14 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
 
                     var result = dbStore;
 
-                    if (query && query.q) {
+                    if (query ) {
                         result = result.filter((item) => {
-                            return queryFields.map(field => item[field].includes(query.q)).indexOf(true) > -1;
+                            return queryFields.map(field => item[field].includes(query)).indexOf(true) > -1;
                         });
 
                     }
                     total = result.length;
-                    pages = Math.floor(total / limit);
+                    pages = Math.floor(total / limit) || 1;
                     caback(null, {
                         limit,
                         start,

@@ -5,27 +5,27 @@ import { logger } from '../../commons';
 import PureComponent from 'react-pure-render/component';
 
 const categories = [{
-  "id": "scm",
-  "title": "SCM Connectors"
+  id: 'scm',
+  title: 'SCM Connectors'
 }, {
-  "id": "build",
-  "title": "Build and Analysis"
+  id: 'build',
+  title: 'Build and Analysis'
 }, {
-  "id": "deployment",
-  "title": "Deployment"
+  id: 'deployment',
+  title: 'Deployment'
 }, {
-  "id": "pipelines",
-  "title": "Pipelines"
+  id: 'pipelines',
+  title: 'Pipelines'
 }, {
 
-  "id": "containers",
-  "title": "Containers"
+  id: 'containers',
+  title: 'Containers'
 }, {
-  "id": "security",
-  "title": "Users and Security"
+  id: 'security',
+  title: 'Users and Security'
 }, {
-  "id": "general",
-  "title": "General Purpose"
+  id: 'general',
+  title: 'General Purpose'
 }];
 
 export class Category extends PureComponent {
@@ -61,7 +61,7 @@ export default class Categories extends PureComponent {
   };
 
   render() {
-    return (<ul className="list-group">
+    return (<ul className='list-group'>
       <li className={classNames(styles.title, 'label')}>
         <div className={classNames(styles.li, 'list-group-item')}>Categories</div>
       </li>

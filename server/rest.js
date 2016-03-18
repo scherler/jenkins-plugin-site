@@ -14,10 +14,10 @@ const
   rest = express(),
   backendPort = '3000';
 
-schedule.scheduleJob('1 1 1 * *', () => {
+schedule.scheduleJob('1 1 1 * * *', () => {
+  console.log('scheduled indexing started');
   createPluginDb(db, (err) => {
     if (err) {
-
       callback(err);
     }
     flatDb(db, categoryFile, (err, data)=> {
@@ -25,6 +25,7 @@ schedule.scheduleJob('1 1 1 * *', () => {
         callback(err);
       }
       this.dbStore = data;
+      console.log('scheduled indexing finished');
     });
   });
 });
@@ -60,7 +61,7 @@ rest.get('/latest', (req, res) => {
 
 rest.get('/plugins', (req, res) => {
   setRestHeader(res);
-  var q = req.query && req.query.q ? req.query.q : {};
+  var q = req.query && req.query.q ? req.query.q : null;
   const options = getOptions(req);
   this.dbStore.search(q, options, (err, result) => {
     res.json(result);

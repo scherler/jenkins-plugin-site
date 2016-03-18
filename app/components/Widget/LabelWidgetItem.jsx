@@ -10,6 +10,6 @@ export default function LabelWidgetItem({index, item, onClick}) {
     key={index}
     className="dropdown-item"
     onClick={onClick}>
-      <span className="key">{item.key}</span> <span className="count">{item.value}</span>
+      <span className="key">{item.key}</span>
     </a>);
 }

@@ -8,7 +8,7 @@ const flatDb = require('./db');
 const createPluginDb = require('./createPluginsDb');
 
 const db = '/tmp/plugin-site';
-const categoryFile = '/home/thorsten/src/cloudbees/jenkins-infra/plugin-site/server/static/category-plugins.json';
+const categoryFile = `${__dirname}/static/category-plugins.json`;
 
 const
   rest = express(),

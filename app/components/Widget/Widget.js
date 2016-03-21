@@ -4,12 +4,18 @@ import Entry from './Entry';
 import styles from './Widget.css';
 import LabelWidget from './Labels';
 import Pagination from './Pagination';
-import Searchbox from './Searchbox';
 import Categories from './Categories';
 import React, { PropTypes } from 'react';
 import Spinner from '../../commons/spinner';
 import classNames from 'classnames';
 import PureComponent from 'react-pure-render/component';
+
+const record = new Immutable.Record({
+  search: null,
+  searchField: null,
+  field: 'title',
+  asc: true
+});
 
 export default class Widget extends PureComponent {
 
@@ -33,7 +39,7 @@ export default class Widget extends PureComponent {
   };
 
   filterSet(search, filter) {
-    this.props.setFilter(new Immutable.Record({
+    this.props.setFilter(new record({
       search,
       searchField: 'labels',
       field: filter.title || 'title',
@@ -80,11 +86,6 @@ export default class Widget extends PureComponent {
             browserHistory={browserHistory}
             location={location}
             />
-          { totalSize > 0 && <LabelWidget
-            labels={getVisiblePluginsLabels}
-            setFilter={setFilter}
-            filter={filter}
-            /> }
         </div>
         
         <div className={classNames(styles.ItemsList, 'items-box col-md-10')}>
@@ -92,45 +93,48 @@ export default class Widget extends PureComponent {
           <nav id="cb-grid-toolbar"
              className="navbar navbar-light bg-faded">
             <ul className="nav navbar-nav">
-              <li className={"nav-item " + (this.state.show === 'featured'?'active':'')}>
+              <li className={`nav-item ${this.state.show === 'featured'?'active':''}`}>
                 <a className="nav-link" onClick={() => {
-                  this.setState({show:'featured'});
+                  this.setState({show: 'featured'});
+                  location.query={};
+                  browserHistory.replace(location);
                 }}>Featured</a>
               </li>
-              <li className={"nav-item " + (this.state.show === 'new'?'active':'')}>
+              <li className={`nav-item ${this.state.show === 'new' ? 'active' : ''}`}>
                 <a className="nav-link" onClick={() => {
-                  this.setState({show:'new'});
-                  this.props.location.query= {latest: 'latest'};
-                  this.props.browserHistory.replace(this.props.location);
+                  this.setState({show: 'new'});
+                  location.query= {latest: 'latest'};
+                  browserHistory.replace(location);
                 }}>New</a>
               </li>
-              <li className={"nav-item " + (this.state.show === 'all'?'active':'')}>
-                <a className="nav-link" onClick={() => {
-                    this.setState({show:'all'});
-                    setFilter(new Immutable.Record({
-                      searchField: 'labels',
-                      field: filter.title || 'title',
-                      search: '',
-                      asc: filter.asc || true
-                    }));
-                  }}>
-                  All
-                </a>
-              </li>
-              <li className="nav-item btn-group">
+              <li className={`nav-item btn-group`}>
                 <button
-                  className="nav-link dropdown-toggle"
+                  className={`nav-link dropdown-toggle ${ this.state.show === 'filter' ? 'btn-primary':''}`}
                   data-toggle="dropdown"
                   aria-haspopup="true"
                   aria-expanded="false">
                   Tags
                 </button>
                 { totalSize > 0 && <LabelWidget
+                  changeActiveNavState={() => this.setState({show: 'filter'})}
                   labels={getVisiblePluginsLabels}
                   setFilter={setFilter}
                   filter={filter}
                   /> }
               </li>
+              {this.state.show === 'filter' && <li className={`nav-item active`}>
+                <a className="nav-link" onClick={() => {
+                    this.setState({show: location.query.latest ? 'new' : 'featured'});
+                    setFilter(new record({
+                      searchField: 'labels',
+                      field: filter.title || 'title',
+                      search: '',
+                      asc: filter.asc || true
+                    }));
+                  }}>
+                  remove Filter
+                </a>
+              </li>}
             </ul>
 
             <ul className="pull-xs-right nav navbar-nav">
@@ -146,14 +150,14 @@ export default class Widget extends PureComponent {
                   <a className="dropdown-item" href="#sort=name"
                     onClick={()=> {
                     this.setState({ sort: 'name' });
-                    setFilter(new Immutable.Record({
+                    setFilter(new record({
                       field: 'name',
                       asc: !filter.asc
                     }));}}>Name</a>
                   <a className="dropdown-item" href="#sort=version"
                     onClick={()=> {
                     this.setState({ sort: 'core' });
-                    setFilter(new Immutable.Record({
+                    setFilter(new record({
                       field: 'requiredCore',
                       asc: !filter.asc
                     }));}}>Core version</a>
@@ -162,14 +166,14 @@ export default class Widget extends PureComponent {
                   <a className="dropdown-item" href="#sort=buildDate"
                     onClick={()=> {
                       this.setState({ sort: 'updated' });
-                      setFilter(new Immutable.Record({
+                      setFilter(new record({
                         field: 'buildDate',
                         asc: !filter.asc
                       }));}}>Updated</a>
                   <a className="dropdown-item" href="#sort=releaseTimestamp"
                     onClick={()=> {
                       this.setState({ sort: 'created' });
-                      setFilter(new Immutable.Record({
+                      setFilter(new record({
                         field: 'releaseTimestamp',
                         asc: !filter.asc
                       }));}}>Created</a>
@@ -200,12 +204,27 @@ export default class Widget extends PureComponent {
           <nav className="page-controls">
           <ul className="nav navbar-nav">
             <li className="nav-item filter">
-              <form className="form-inline pull-xs-right" action="#">
+              <form
+                className="form-inline pull-xs-right" action="#"
+                onSubmit={event => {
+                  event.preventDefault();
+                  location.query = {
+                    q: event.target[0].value,
+                    limit: searchOptions.limit,
+                  };
+                  browserHistory.replace(location);
+                }}
+              >
               <input
-                disabled={totalSize === 0}
+                defaultValue={location.query.q}
                 className={classNames(styles.SearchInput, 'form-control nav-link')}
-                onChange={event => searchData(event.target.value)}
-                onSubmit={event => searchData(event.target.value)}
+                onChange={event => {
+                  location.query = {
+                    q: event.target.value,
+                    limit: searchOptions.limit,
+                  };
+                  browserHistory.replace(location);
+                }}
                 placeholder="Filter..."
               />
               </form>
@@ -237,8 +256,6 @@ export default class Widget extends PureComponent {
               <div className={classNames(styles.Grid, 'grid')} >
     
                 {isFetching && <Spinner>loading</Spinner>}
-
-    
     
                 {totalSize > 0 && getVisiblePlugins.valueSeq().map(plugin => {
                   return (<Entry

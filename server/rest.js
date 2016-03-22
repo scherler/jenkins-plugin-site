@@ -35,10 +35,10 @@ function getOptions(req) {
   var page = req.query ? Number(req.query.page) : 1;
   var limit = req.query ? Number(req.query.limit) : 10;
   var sort =  req.query ? req.query.sort : 'name';
-  var asc =  req.query && req.query.asc? Boolean(req.query.asc) : true;
+  var asc =  req.query && req.query.asc? req.query.asc === 'true' : true;
   return options = {
     sort: sort,
-    asc: asc || true,
+    asc: asc,
     page: page || 1,
     limit: limit || 10
   };

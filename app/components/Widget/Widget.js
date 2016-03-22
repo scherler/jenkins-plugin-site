@@ -1,4 +1,3 @@
-/** @flow */
 import Immutable from 'immutable';
 import Entry from './Entry';
 import styles from './Widget.css';
@@ -29,7 +28,6 @@ export default class Widget extends PureComponent {
     searchOptions: PropTypes.any.isRequired,
     isFetching: PropTypes.bool.isRequired,
     getVisiblePluginsLabels: PropTypes.any.isRequired,
-    searchData: PropTypes.func.isRequired,
     labelFilter: PropTypes.any.isRequired
   };
 
@@ -64,7 +62,6 @@ export default class Widget extends PureComponent {
     const {
       setFilter,
       browserHistory,
-      searchData,
       totalSize,
       isFetching,
       searchOptions,
@@ -224,7 +221,7 @@ export default class Widget extends PureComponent {
                 {totalSize > 0 && getVisiblePlugins.valueSeq().map(plugin => {
                   return (<Entry
                     className="Entry"
-                    key={plugin.id}
+                    key={plugin.name}
                     plugin={plugin} />);
                 })}
               </div>

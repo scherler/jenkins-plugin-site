@@ -37,7 +37,7 @@ export class Category extends PureComponent {
     active: PropTypes.any.isRequired
   };
 
-  render(){
+  render() {
     const { id, onClick, active, title } = this.props;
     return (<li key={id} className={classNames(styles[id], id)}>
       <a

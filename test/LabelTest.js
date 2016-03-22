@@ -22,8 +22,8 @@ describe('Test whether label renders correctly', () => {
     renderer.render(testElement);
     const result = renderer.getRenderOutput();
     expect(result.type).toBe('a');
-    expect(result.props.children[0].type).toBe('span');
-    expect(result.props.children[0].props.children).toBe('testLabel');
+    expect(result.props.children.type).toBe('span');
+    expect(result.props.children.props.children).toBe('testLabel');
   });
 
   it('Sets the hasClicked correct onClick', () => {

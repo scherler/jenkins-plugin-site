@@ -5,6 +5,7 @@ import styles from './Widget.css';
 import LabelWidget from './Labels';
 import Pagination from './Pagination';
 import Categories from './Categories';
+import Sort from './Sort';
 import React, { PropTypes } from 'react';
 import Spinner from '../../commons/spinner';
 import classNames from 'classnames';
@@ -138,47 +139,10 @@ export default class Widget extends PureComponent {
             </ul>
 
             <ul className="pull-xs-right nav navbar-nav">
-              <li className="nav-item btn-group">
-                <button
-                  className="nav-link dropdown-toggle"
-                  type="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false">
-                  sort: <b>{this.state.sort}</b></button>
-                <div className="dropdown-menu">
-                  <a className="dropdown-item" href="#sort=name"
-                    onClick={()=> {
-                    this.setState({ sort: 'name' });
-                    setFilter(new record({
-                      field: 'name',
-                      asc: !filter.asc
-                    }));}}>Name</a>
-                  <a className="dropdown-item" href="#sort=version"
-                    onClick={()=> {
-                    this.setState({ sort: 'core' });
-                    setFilter(new record({
-                      field: 'requiredCore',
-                      asc: !filter.asc
-                    }));}}>Core version</a>
-                  <a className="dropdown-item" href="#sort=table"
-                    onClick={()=>  {this.setState({ sort: 'rating' });}}>Ratings</a>
-                  <a className="dropdown-item" href="#sort=buildDate"
-                    onClick={()=> {
-                      this.setState({ sort: 'updated' });
-                      setFilter(new record({
-                        field: 'buildDate',
-                        asc: !filter.asc
-                      }));}}>Updated</a>
-                  <a className="dropdown-item" href="#sort=releaseTimestamp"
-                    onClick={()=> {
-                      this.setState({ sort: 'created' });
-                      setFilter(new record({
-                        field: 'releaseTimestamp',
-                        asc: !filter.asc
-                      }));}}>Created</a>
-                </div>
-              </li>
+              <Sort
+                browserHistory={browserHistory}
+                location={location}
+              />
 
               <li className="nav-item dropdown">
                 <button

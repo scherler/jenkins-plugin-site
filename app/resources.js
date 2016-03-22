@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import { createSearchAction, getSearchSelectors } from 'redux-search';
 import Immutable from 'immutable';
 import keymirror from 'keymirror';
 import { api, logger } from './commons';
@@ -144,12 +143,11 @@ export const actions = {
         url = '/latest';
       }else {
         const PLUGINS_URL = '/plugins';
-        url = `${PLUGINS_URL}?page=${query.page || 1}&limit=${query.limit || 100}&q=${query.q || ''}`;
+        url = `${PLUGINS_URL}?page=${query.page || 1}&limit=${query.limit || 100}&q=${query.q || ''}${query.sort? '&sort='+ query.sort : ''}`;
       }
       logger.log(query, url);
       dispatch(actions.clearPluginData());
       dispatch(actions.fetchPluginData());
-      const plugins = {};
 
       return api.getJSON(url,(error, data) => {
         if (data) {
@@ -160,13 +158,12 @@ export const actions = {
             total: data.total
           });
 
-          const items = data.docs;
-          _.forEach(items, (item) => {
-            _.set(item, 'id', item.sha1);
-            _.set(item, 'iconDom', actions.makeIcon(item.title));
-            plugins[item.id] = new Record(item);
+          const items = data.docs.map(item => {
+            item.id = item.sha1;
+            item.iconDom = actions.makeIcon(item.title);
+            return new Record(item);
           });
-          const recordsMap = Immutable.Map(plugins);
+          const recordsMap = Immutable.OrderedSet(items);
           dispatch({
             type: ACTION_TYPES.SET_PLUGIN_DATA,
             payload: recordsMap
@@ -180,7 +177,7 @@ export const actions = {
       });
     };
   },
-  searchPluginData: createSearchAction('plugins')
+  //searchPluginData: createSearchAction('plugins')
 };
 
 export function groupAndCountLabels(recordsMap) {
@@ -206,19 +203,10 @@ export const searchOptions = createSelector([resources], resources => resources.
 export const isFetching = createSelector([resources], resources => resources.isFetching);
 export const labelFilter = createSelector([resources], resources => resources.labelFilter);
 
-const pluginSelectors = getSearchSelectors({ resourceName: 'plugins', resourceSelector });
-export const searchText = pluginSelectors.text;
-export const filteredList = createSelector([pluginSelectors.result], result => Immutable.List(result));
-
-export const getVisiblePlugins = createSelector(
-  [ filteredList, plugins ],
-  (filteredList, plugins) => {
-    return filteredList.map(
-      (id) => {
-        return plugins.get(id);
-      });
-  }
-);
+//const pluginSelectors = getSearchSelectors({ resourceName: 'plugins', resourceSelector });
+/*export const filteredList = createSelector([plugins.result], result => {
+  return Immutable.OrderedSet(result);
+});*/
 
 export const totalSize = createSelector(
   [ searchOptions ],
@@ -228,40 +216,9 @@ export const totalSize = createSelector(
 );
 
 export const filterVisibleList = createSelector (
-  [getVisiblePlugins, labelFilter],
-  (plugins, labelFilter) => {
-
-    if (labelFilter instanceof Function) {
-      labelFilter = labelFilter();
-    }
-
-    const list  = plugins
-    .filter(
-      item => {
-        if ( !labelFilter.searchField || !labelFilter.search || !labelFilter.search.length > 0) {
-          return true;
-        }
-        const matchIndex = _.findIndex(item[labelFilter.searchField], (i) => {
-          let match = false;
-          labelFilter.search.some(searchFilter => {
-            match = (i === searchFilter);
-            return match;
-          });
-          return match;
-        });
-        return ( matchIndex >= 0);
-      }
-    )
-    .sortBy(plugin => {
-      return plugin[labelFilter.field];}, (plugin, nextPlugin) => {
-      if (labelFilter.asc) {
-        return nextPlugin.localeCompare(plugin);
-      } else {
-        return plugin.localeCompare(nextPlugin);
-      }
-    });
-    logger.warn(`xxx ${list}`);
-    return list;
+  [plugins],
+  (plugins) => {
+    return plugins;
   }
 );
 

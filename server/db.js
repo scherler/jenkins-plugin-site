@@ -41,7 +41,7 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
             category = options.category,
             sortField = options.sort || 'name',
             labelFilter = options.labelFilter,
-            asc = options.asc || true,
+            asc = options.asc,
             start = (page - 1) * limit,
             end = limit * (page),
             pages, total;

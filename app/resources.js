@@ -91,33 +91,6 @@ export const actionHandlers = {
 };
 
 export const actions = {
-    //FIXME: This should not inject React DOM here, but.... hack...
-  makeIcon(title, type){
-    title = title
-      .replace('Jenkins ','')
-      .replace('jenkins ','')
-      .replace(' Plugin','')
-      .replace(' Plug-in','')
-      .replace(' lugin','');
-    type = type || '';
-    const colors = ['#6D6B6D','#DCD9D8','#D33833','#335061','#81B0C4','#709aaa','#000'];
-    const color = colors[(title.length % 7)]; //pick color based on chars in the name to make semi-random, but fixed color per-plugin
-    const iconClass=`i ${type};
-    color = ${color}`;
-
-    const firstLetter = title.substring(0,1).toUpperCase();
-    const firstSpace = title.indexOf(' ') + 1;
-    const nextIndx = (firstSpace === 0)?
-        1: firstSpace;
-    const nextLetter = title.substring(nextIndx,nextIndx + 1);
-
-    return (
-      <i className={iconClass} style={{background: color}}>
-        <span className="first">{firstLetter}</span>
-        <span className="next">{nextLetter}</span>
-      </i>
-    );
-  },
 
   clearPluginData: () => ({ type: ACTION_TYPES.CLEAR_PLUGIN_DATA }),
 
@@ -143,7 +116,9 @@ export const actions = {
         url = '/latest';
       }else {
         const PLUGINS_URL = '/plugins';
-        url = `${PLUGINS_URL}?page=${query.page || 1}&limit=${query.limit || 100}&q=${query.q || ''}${query.sort? '&sort='+ query.sort : ''}`;
+        url = `${PLUGINS_URL}?page=${query.page || 1}&limit=${query.limit || 100}&q=${query.q || ''}`;
+        url +=  query.sort ? `&sort=${query.sort}` : '';
+        url +=  query.asc ? `&asc=${query.asc}` : '';
       }
       logger.log(query, url);
       dispatch(actions.clearPluginData());
@@ -158,11 +133,7 @@ export const actions = {
             total: data.total
           });
 
-          const items = data.docs.map(item => {
-            item.id = item.sha1;
-            item.iconDom = actions.makeIcon(item.title);
-            return new Record(item);
-          });
+          const items = data.docs.map(item => new Record(item));
           const recordsMap = Immutable.OrderedSet(items);
           dispatch({
             type: ACTION_TYPES.SET_PLUGIN_DATA,
@@ -176,8 +147,7 @@ export const actions = {
         }
       });
     };
-  },
-  //searchPluginData: createSearchAction('plugins')
+  }
 };
 
 export function groupAndCountLabels(recordsMap) {
@@ -196,17 +166,11 @@ export function groupAndCountLabels(recordsMap) {
 }
 
 export const resources = state => state.resources;
-export const resourceSelector = (resourceName, state) => state.resources.get(resourceName);
 export const plugins = createSelector([resources], resources => resources.plugins);
 export const searchOptions = createSelector([resources], resources => resources.searchOptions);
 
 export const isFetching = createSelector([resources], resources => resources.isFetching);
 export const labelFilter = createSelector([resources], resources => resources.labelFilter);
-
-//const pluginSelectors = getSearchSelectors({ resourceName: 'plugins', resourceSelector });
-/*export const filteredList = createSelector([plugins.result], result => {
-  return Immutable.OrderedSet(result);
-});*/
 
 export const totalSize = createSelector(
   [ searchOptions ],

@@ -3,16 +3,20 @@ import { logger } from '../../commons';
 import PureComponent from 'react-pure-render/component';
 
 const sortItems = [{
-  id: 'name',
+  id: 'title',
+  state: 'name',
   title: 'Name'
 }, {
   id: 'requiredCore',
+  state: 'core',
   title: 'Core version'
 }, {
   id: 'buildDate',
+  state: 'updated',
   title: 'Updated'
 }, {
   id: 'releaseTimestamp',
+  state: 'created',
   title: 'Created'
 }];
 
@@ -42,6 +46,8 @@ export default class Sort extends PureComponent {
   };
 
   render() {
+    const {location, browserHistory} = this.props;
+    const {asc = false} = location.query;
     return (<li className="nav-item btn-group">
       <button
         className="nav-link dropdown-toggle"
@@ -57,10 +63,11 @@ export default class Sort extends PureComponent {
           return (<SortItem key={index}
             title={item.title}
             onClick={()=> {
-             this.setState({ sort: item.id });
-             this.props.location.query.sort = item.id;
-             logger.log(this.props.location);
-             this.props.browserHistory.replace(this.props.location);
+             this.setState({ sort: item.state || item.id });
+             location.query.sort = item.id;
+             location.query.asc = !(asc === 'true');
+             logger.log(location);
+             browserHistory.replace(location);
             }} />);
         })}
 

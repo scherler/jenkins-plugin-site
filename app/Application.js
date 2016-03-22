@@ -35,7 +35,6 @@ export default class Application extends Component {
       totalSize,
       searchOptions,
       getVisiblePluginsLabels,
-      searchPluginData,
       isFetching,
       location,
       labelFilter
@@ -51,7 +50,6 @@ export default class Application extends Component {
         getVisiblePlugins={filterVisibleList}
         totalSize={totalSize}
         isFetching = {isFetching}
-        searchData={searchPluginData}
         getVisiblePluginsLabels={getVisiblePluginsLabels}
         labelFilter={labelFilter}
         />
@@ -67,7 +65,6 @@ Application.propTypes = {
   totalSize: PropTypes.any.isRequired,
   getVisiblePluginsLabels: PropTypes.any.isRequired,
   searchOptions: PropTypes.any.isRequired,
-  searchPluginData: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
   location: PropTypes.object.isRequired,
   labelFilter: PropTypes.any.isRequired

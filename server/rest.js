@@ -34,8 +34,11 @@ schedule.scheduleJob('1 1 1 * * *', () => {
 function getOptions(req) {
   var page = req.query ? Number(req.query.page) : 1;
   var limit = req.query ? Number(req.query.limit) : 10;
+  var sort =  req.query ? req.query.sort : 'name';
+  var asc =  req.query && req.query.asc? Boolean(req.query.asc) : true;
   return options = {
-    sort: { name: 1 },
+    sort: sort,
+    asc: asc || true,
     page: page || 1,
     limit: limit || 10
   };

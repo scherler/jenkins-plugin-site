@@ -38,11 +38,38 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
           var
             limit = options.limit || 20,
             page = options.page || 1,
+            category = options.category,
+            sortField = options.sort || 'name',
+            labelFilter = options.labelFilter,
+            asc = options.asc || true,
             start = (page - 1) * limit,
             end = limit * (page),
             pages, total;
 
-          var result = dbStore;
+          var result;
+
+          if (category) {
+            const categories = dbStore.rawCategories;
+            const elementPos = categories
+              .map((x) => {
+                return x.id;
+              })
+              .indexOf(category);
+             if (elementPos > -1) {
+               const pluginsId = categories[elementPos].plugins;
+               result = pluginsId.map((pluginName) => dbStore.filter(
+                 (plugin) => {
+                   return plugin.name === pluginName;
+                 })
+               ).map(key => key[0]);
+
+             } else  {
+               result = dbStore;
+             }
+          } else {
+            result = dbStore;
+          }
+
 
           if (query) {
             result = result.filter((item) => {
@@ -50,6 +77,20 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
             });
 
           }
+          if (labelFilter) {
+            result = result.filter((item) => {
+              return item.labels && item.labels.some(searchFilter => {
+                return ( labelFilter=== searchFilter);
+              });
+            });
+          }
+          result = result.sort((plugin, nextPlugin) => {
+            if (!asc) {
+              return nextPlugin[sortField].localeCompare(plugin[sortField]);
+            } else {
+              return plugin[sortField].localeCompare(nextPlugin[sortField]);
+            }
+          });
           total = result.length;
           pages = Math.floor(total / limit) || 1;
           caback(null, {

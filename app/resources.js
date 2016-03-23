@@ -91,12 +91,12 @@ export const actions = {
       let url;
       if(query.latest){
         url = '/latest';
-      }else {
-        const PLUGINS_URL = '/plugins';
-        url = `${PLUGINS_URL}?page=${query.page || 1}&limit=${query.limit || 100}&q=${query.q || ''}`;
-        url +=  query.sort ? `&sort=${query.sort}` : '';
-        url +=  query.asc ? `&asc=${query.asc}` : '';
-        url +=  query.category ? `&category=${query.category}` : '';
+      } else {
+        let PLUGINS_URL = `/plugins?page=${query.page}`;
+       ['limit', 'q', 'sort', 'asc', 'category', 'labelFilter']
+          .filter(item => query[item])
+          .map(item => PLUGINS_URL += `&${item}=${query[item]}`);
+        url = `${PLUGINS_URL}`;
       }
       logger.log(query, url);
       dispatch(actions.clearPluginData());

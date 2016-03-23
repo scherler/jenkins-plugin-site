@@ -15,7 +15,7 @@
 #ji-toolbar-offset {
     min-height: 3rem;
 }
-body .item-finder.tiles .Entry-box{
+body .item-finder.Tiles .Entry-box{
   display:inline-block;
 }
 .categories-box .list-group{margin-top:-2.75rem;position:relative; z-index:2; box-shadow:0 3px 2px -1px rgba(0,0,0,.1)}
@@ -28,7 +28,7 @@ body .item-finder.tiles .Entry-box{
 button.nav-link {border-radius:3px; background:#f9f9f9; border:1px solid #ccc; box-shadow:0 2px 4px -3px rgba(0,0,0,.25)}
 button.nav-link b {color:#666;}
 .form-inline > .form-control.nav-link {margin:0; width:11rem;border-radius:3px; border:1px solid #ccc; background:#f9f9f9; padding:.25rem; box-shadow:inset 0 2px 4px -2px rgba(0,0,0,.25)}
-body .item-finder.tiles a.item,
+body .item-finder.Tiles a.item,
 .Tile {
   display: block;
   border: .1rem solid #ccc;
@@ -45,28 +45,28 @@ body .item-finder.tiles a.item,
   border-radius: 3px;
   margin:.25rem;
 }
-body .item-finder.tiles .grid-box > div {padding:.5rem 0 2rem .5rem; text-align:left;}
-body .item-finder.list a.item > div,
-body .item-finder.tiles a.item > div {display:block; position:relative; width:auto; top:auto; left:auto}
-body .item-finder.tiles a.item:hover,
+body .item-finder.Tiles .grid-box > div {padding:.5rem 0 2rem .5rem; text-align:left;}
+body .item-finder.List a.item > div,
+body .item-finder.Tiles a.item > div {display:block; position:relative; width:auto; top:auto; left:auto}
+body .item-finder.Tiles a.item:hover,
 .Tile:hover {
   border: .1rem solid #999;
   opacity: 1;
 }
-body .item-finder.tiles a.item .Title:hover h4,
+body .item-finder.Tiles a.item .Title:hover h4,
 .Tile:hover h4 {
   color: #069;
   text-decoration: underline;
 }
 
-body .item-finder.tiles a.item .Icon,
+body .item-finder.Tiles a.item .Icon,
 .Tile .Icon {
   text-align: center;
   margin: .5rem 0 0;
   display:block;
 }
 
-body .item-finder.tiles a.item .Icon>i,
+body .item-finder.Tiles a.item .Icon>i,
 .Tile .Icon>i {
   display: inline-block;
   font-size: 1.33rem;
@@ -79,7 +79,7 @@ body .item-finder.tiles a.item .Icon>i,
   margin: -1px 0 0 -1px;
   text-shadow: rgba(0, 0, 0, .5) 1px 2px 1px
 }
-body .item-finder.tiles a.item .Icon>i {
+body .item-finder.Tiles a.item .Icon>i {
     margin-bottom:1rem
 }
 body .item-finder a.item .Score,
@@ -92,28 +92,28 @@ body .item-finder a.item .Score>.scr_4:after,
   display: block;
   text-align: center;
 }
-body .item-finder.tiles a.item .Version,
+body .item-finder.Tiles a.item .Version,
 .Tile .Version {
   font-size: .75rem;
   margin: -.5rem 0 .5rem;
   color: #999;
 }
-body .item-finder.tiles a.item .Version span,
+body .item-finder.Tiles a.item .Version span,
 .Tile .Version span {
   margin-right: .25rem
 }
-body .item-finder.tiles a.item .Version span.v,
+body .item-finder.Tiles a.item .Version span.v,
 .Tile .Version span.v {
   margin-right: 1rem;
   display: none;
 }
 
-body .item-finder.tiles a.item .Version span.c:after,
+body .item-finder.Tiles a.item .Version span.c:after,
 .Tile .Version span.c:after {
   content: '+'
 }
 body div .item-finder a.item > .Wiki{display:none}
-body .item-finder.tiles a.item .Excerpt,
+body .item-finder.Tiles a.item .Excerpt,
 .Tile .Excerpt {
   white-space: normal;
   line-height: 1.1rem;
@@ -124,13 +124,13 @@ body .item-finder.tiles a.item .Excerpt,
   margin: 0 0 .67rem;
 }
 
-body .item-finder.tiles a.item .Excerpt p, 
-body .item-finder.tiles a.item  .Excerpt div,
+body .item-finder.Tiles a.item .Excerpt p, 
+body .item-finder.Tiles a.item  .Excerpt div,
 .Tile .Excerpt p, .Tile .Excerpt div {
   display: inline;
 }
-body .item-finder.tiles a.item h4:after,
-body .item-finder.tiles a.item .Excerpt:after,
+body .item-finder.Tiles a.item h4:after,
+body .item-finder.Tiles a.item .Excerpt:after,
 .Tile h4:after, .Tile .Excerpt:after {
   display: block;
   content: ' ';
@@ -154,7 +154,7 @@ body .item-finder a.item h4,
   font-weight: normal;
   position: relative;
 }
-body .item-finder.tiles a.item .Authors>div,
+body .item-finder.Tiles a.item .Authors>div,
 .Tile .Authors>div {
   font-size: .75rem;
   display: block;
@@ -227,46 +227,46 @@ spinner .double-bounce1, .spinner .double-bounce2 {
 .tbody > .thead {display:table-header-group}
 .tbody > .thead > .tr {display: table-row}
 .tbody > .thead > .tr > div {display:table-cell; border-bottom:1px solid #ccc; padding:.25rem}
-body .item-finder.table .Entry-box,
+body .item-finder.Table .Entry-box,
 .tbody > .Row {display: table-row-group;}
-body .item-finder.table a.Entrty,
+body .item-finder.Table a.Entrty,
 .tbody > .Row > .Tile {display:table-row; height:auto; width:auto; margin:0; padding:0;}
 /*
-body .item-finder.table .Entry-box:nth-child(odd) > .Entry > div{background:#f9f9f9 !important}
-body .item-finder.table .Entry-box:nth-child(odd) > .Entry > div h4:after,
-body .item-finder.table .Entry-box:nth-child(odd) > .Entry > div.Excerpt{box-shadow: inset #fff -250px 0 250px -200px;}
+body .item-finder.Table .Entry-box:nth-child(odd) > .Entry > div{background:#f9f9f9 !important}
+body .item-finder.Table .Entry-box:nth-child(odd) > .Entry > div h4:after,
+body .item-finder.Table .Entry-box:nth-child(odd) > .Entry > div.Excerpt{box-shadow: inset #fff -250px 0 250px -200px;}
 */
-body .item-finder.table a.Entry > div,
+body .item-finder.Table a.Entry > div,
 .tbody > .Row > .Tile > div {display:table-cell; max-height:3.3rem; height:auto; padding:.25rem; border-bottom:1px solid #eee}
-body .item-finder.table a.Entry > div.Score {margin:0; font-size:.85rem; position:static}
-body .item-finder.table a.Entry > div.Wiki {display:none}
-body .item-finder.table a.Entry > div.Title,
+body .item-finder.Table a.Entry > div.Score {margin:0; font-size:.85rem; position:static}
+body .item-finder.Table a.Entry > div.Wiki {display:none}
+body .item-finder.Table a.Entry > div.Title,
 .tbody > .Row > .Tile > div.Title{width:20%}
-body .item-finder.table a.Entry > div.Title > h4 {font-size:.85rem; color:#369; font-weight:bold;}
-body .item-finder.table a.Entry > div.Icon,
+body .item-finder.Table a.Entry > div.Title > h4 {font-size:.85rem; color:#369; font-weight:bold;}
+body .item-finder.Table a.Entry > div.Icon,
 .tbody > .Row > .Tile > div.Icon {display:none}
-body .item-finder.table a.Entry > div.Authors > div,
+body .item-finder.Table a.Entry > div.Authors > div,
 .tbody > .Row > .Tile > div.Authors > div {white-space:nowrap}
 
 .list > .list > .thead {display:none}
-body .item-finder.list a.Entry,
+body .item-finder.List a.Entry,
 .list > .item > .Tile {  display:block;  height: auto; position:relative;
     width: auto;
     padding: .5rem .5rem .5rem 6rem;
     text-align: left;}
-body .item-finder.list a.Entry .Version,
+body .item-finder.List a.Entry .Version,
 .list > .item > .Tile > .Version {margin-bottom:.25rem}
-body .item-finder.list a.Entry .Score,
-body .item-finder.list a.Entry .Icon,    
+body .item-finder.List a.Entry .Score,
+body .item-finder.List a.Entry .Icon,    
 .list > .item > .Tile > .Score,    
 .list > .item > .Tile > .Icon {position:absolute; left:.5rem; width:5rem;}
-body .item-finder.list a.Entry .Score,
+body .item-finder.List a.Entry .Score,
 .list > .item > .Tile > .Score {top:4rem;}
-body .item-finder.list a.Entry .Excerpt,
+body .item-finder.List a.Entry .Excerpt,
 .list > .item > .Tile > .Excerpt {height:auto; max-height:3.3rem; margin-bottom:.25rem}
-body .item-finder.list a.Entry .Authors,
+body .item-finder.List a.Entry .Authors,
 .list > .item > .Tile > .Authors {margin:0}
-body .item-finder.list a.Entry .Authors > div,
+body .item-finder.List a.Entry .Authors > div,
 .list > .item > .Tile > .Authors > div {display:inline-block  }
 #ji-toolbar form {margin:0}
 #ji-toolbar.navbar-dark .navbar-nav .nav-item.active a{color:#fff}

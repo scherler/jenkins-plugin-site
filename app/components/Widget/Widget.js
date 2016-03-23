@@ -1,4 +1,3 @@
-import Immutable from 'immutable';
 import Entry from './Entry';
 import styles from './Widget.css';
 import LabelWidget from './Labels';
@@ -11,17 +10,10 @@ import Spinner from '../../commons/spinner';
 import classNames from 'classnames';
 import PureComponent from 'react-pure-render/component';
 
-const record = new Immutable.Record({
-  search: null,
-  searchField: null,
-  field: 'title',
-  asc: true
-});
 
 export default class Widget extends PureComponent {
 
   static propTypes = {
-    setFilter: PropTypes.func.isRequired,
     browserHistory: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     totalSize: PropTypes.any.isRequired,
@@ -29,52 +21,27 @@ export default class Widget extends PureComponent {
     searchOptions: PropTypes.any.isRequired,
     isFetching: PropTypes.bool.isRequired,
     getVisiblePluginsLabels: PropTypes.any.isRequired,
-    labelFilter: PropTypes.any.isRequired
   };
 
   state = {
-    view: 'tiles',
     show: 'featured'
   };
-
-  filterSet(search, filter) {
-    this.props.setFilter(new record({
-      search,
-      searchField: 'labels',
-      field: filter.title || 'title',
-      asc: filter.asc || true
-    }));
-
-  }
-
-  getFilter(labelFilter) {
-    let filter;
-    if (labelFilter instanceof Function) {
-      filter = labelFilter();
-    } else {
-      filter = labelFilter;
-    }
-    return filter;
-  }
 
   render() {
 
     const {
-      setFilter,
       browserHistory,
       totalSize,
       isFetching,
       searchOptions,
       getVisiblePlugins,
       getVisiblePluginsLabels,
-      location,
-      labelFilter
+      location
     } = this.props;
 
     const {view = 'Tiles'} = location.query;
 
     const
-      filter = this.getFilter(labelFilter),
       toRange = searchOptions.limit * Number(searchOptions.page) <= Number(searchOptions.total) ?
         searchOptions.limit * Number(searchOptions.page) : Number(searchOptions.total),
       fromRange = (searchOptions.limit) * (Number(searchOptions.page) - 1);
@@ -107,34 +74,12 @@ export default class Widget extends PureComponent {
                   browserHistory.replace(location);
                 }}>New</a>
               </li>
-              <li className="nav-item btn-group">
-                <button
-                  className={`nav-link dropdown-toggle ${ this.state.show === 'filter' ? 'btn-primary':''}`}
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false">
-                  Tags
-                </button>
-                { totalSize > 0 && <LabelWidget
-                  changeActiveNavState={() => this.setState({show: 'filter'})}
-                  labels={getVisiblePluginsLabels}
-                  setFilter={setFilter}
-                  filter={filter}
-                  /> }
-              </li>
-              {this.state.show === 'filter' && <li className="nav-item active">
-                <a className="nav-link" onClick={() => {
-                    this.setState({show: location.query.latest ? 'new' : 'featured'});
-                    setFilter(new record({
-                      searchField: 'labels',
-                      field: filter.title || 'title',
-                      search: '',
-                      asc: filter.asc || true
-                    }));
-                  }}>
-                  remove Filter
-                </a>
-              </li>}
+
+              { totalSize > 0 && <LabelWidget
+                browserHistory={browserHistory}
+                location={location}
+                labels={getVisiblePluginsLabels}
+                /> }
             </ul>
 
             <ul className="pull-xs-right nav navbar-nav">

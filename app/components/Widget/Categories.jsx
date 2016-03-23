@@ -32,19 +32,23 @@ export class Category extends PureComponent {
 
   static propTypes = {
     onClick: PropTypes.func.isRequired,
+    remove: PropTypes.func.isRequired,
     id: PropTypes.any.isRequired,
     title: PropTypes.any.isRequired,
     active: PropTypes.any.isRequired
   };
 
   render() {
-    const { id, onClick, active, title } = this.props;
+    const { id, onClick, active, title, remove } = this.props;
     return (<li key={id} className={classNames(styles[id], id)}>
+      {active && <span
+        onClick={remove}
+        className="glyphicon glyphicon-remove">remove Filter</span>}
       <a
         className={classNames(styles.li, 'list-group-item', active)}
         onClick={onClick}
-      >{title}</a>
-    </li>)
+      >{title} </a>
+    </li>);
   }
 }
 
@@ -68,8 +72,15 @@ export default class Categories extends PureComponent {
             title={item.title}
             id={item.id}
             active={(location.query.category === item.id) ? 'active' : ''}
+            remove={ (e) => {
+                e.preventDefault();
+                delete location.query.category;
+                browserHistory.replace(location);
+              }
+            }
             onClick={()=> {
                 location.query.category =  item.id;
+                delete location.query.page;
                 logger.log(location);
                 browserHistory.replace(this.props.location);
               }
@@ -77,6 +88,6 @@ export default class Categories extends PureComponent {
           />);
         }
       )}
-    </ul>)
+    </ul>);
   }
 }

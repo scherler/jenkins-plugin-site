@@ -3,7 +3,6 @@ import {
   actions,
   totalSize,
   isFetching,
-  labelFilter,
   searchOptions,
   filterVisibleList,
   getVisiblePluginsLabels
@@ -29,7 +28,6 @@ export default class Application extends Component {
 
   render() {
     const {
-      setFilter,
       filterVisibleList,
       browserHistory,
       totalSize,
@@ -37,7 +35,6 @@ export default class Application extends Component {
       getVisiblePluginsLabels,
       isFetching,
       location,
-      labelFilter
     } = this.props;
 
     return (<div>
@@ -46,12 +43,10 @@ export default class Application extends Component {
         searchOptions={searchOptions}
         location={location}
         browserHistory={browserHistory}
-        setFilter={setFilter}
         getVisiblePlugins={filterVisibleList}
         totalSize={totalSize}
         isFetching = {isFetching}
         getVisiblePluginsLabels={getVisiblePluginsLabels}
-        labelFilter={labelFilter}
         />
     </div>);
   }
@@ -59,7 +54,6 @@ export default class Application extends Component {
 
 Application.propTypes = {
   generatePluginData: PropTypes.func.isRequired,
-  setFilter: PropTypes.func.isRequired,
   browserHistory: PropTypes.object.isRequired,
   filterVisibleList: PropTypes.any.isRequired,
   totalSize: PropTypes.any.isRequired,
@@ -67,15 +61,13 @@ Application.propTypes = {
   searchOptions: PropTypes.any.isRequired,
   isFetching: PropTypes.bool.isRequired,
   location: PropTypes.object.isRequired,
-  labelFilter: PropTypes.any.isRequired
 };
 
 const selectors = createSelector(
-  [ totalSize, isFetching, labelFilter, filterVisibleList, getVisiblePluginsLabels, searchOptions],
-  ( totalSize, isFetching, labelFilter, filterVisibleList, getVisiblePluginsLabels, searchOptions) => ({
+  [ totalSize, isFetching, filterVisibleList, getVisiblePluginsLabels, searchOptions],
+  ( totalSize, isFetching, filterVisibleList, getVisiblePluginsLabels, searchOptions) => ({
     totalSize,
     isFetching,
-    labelFilter,
     filterVisibleList,
     getVisiblePluginsLabels,
     searchOptions

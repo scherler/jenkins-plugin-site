@@ -40,12 +40,14 @@ function getOptions(req) {
   var category = req.query.category || null;
   var sort =  req.query.sort || 'title';
   var labelFilter = req.query.labelFilter;
+  var latest =  req.query.latest;
   var asc =  req.query.asc? req.query.asc === 'true' : true;
   return options = {
     sort,
     asc,
     labelFilter,
     category,
+    latest,
     page: page || 1,
     limit: limit || 10
   };

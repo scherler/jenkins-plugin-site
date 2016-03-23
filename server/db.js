@@ -91,6 +91,7 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
               return plugin[sortField].localeCompare(nextPlugin[sortField]);
             }
           });
+
           total = result.length;
           pages = Math.floor(total / limit) || 1;
           caback(null, {

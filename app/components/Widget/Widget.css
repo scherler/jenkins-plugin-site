@@ -178,7 +178,7 @@ body div .GridBox>.Grid>div>a {
   
 }
 
-body div.table .GridBox>.Grid>div>a>div {
+body div.Table .GridBox>.Grid>div>a>div {
   display: table-cell;
   max-height: 4.9rem;
   height: auto;
@@ -199,7 +199,7 @@ body z .GridBox>.Grid>div>a>div.Title>h4 {font-size:.85rem; font-weight:bold; co
 body .Item{
   display:block;
 }
-body .tiles .GridBox>.Grid>div>a.item,
+body .Tiles .GridBox>.Grid>div>a.item,
 body .Tile{
     height: auto;
     position: relative;

@@ -5,6 +5,7 @@ import LabelWidget from './Labels';
 import Pagination from './Pagination';
 import Categories from './Categories';
 import Sort from './Sort';
+import Views from './Views';
 import React, { PropTypes } from 'react';
 import Spinner from '../../commons/spinner';
 import classNames from 'classnames';
@@ -33,7 +34,6 @@ export default class Widget extends PureComponent {
 
   state = {
     view: 'tiles',
-    sort: 'title',
     show: 'featured'
   };
 
@@ -71,6 +71,8 @@ export default class Widget extends PureComponent {
       labelFilter
     } = this.props;
 
+    const {view = 'Tiles'} = location.query;
+
     const
       filter = this.getFilter(labelFilter),
       toRange = searchOptions.limit * Number(searchOptions.page) <= Number(searchOptions.total) ?
@@ -78,7 +80,7 @@ export default class Widget extends PureComponent {
       fromRange = (searchOptions.limit) * (Number(searchOptions.page) - 1);
 
     return (
-      <div className={classNames(styles.ItemFinder, this.state.view, 'item-finder')} >
+      <div className={classNames(styles.ItemFinder, view, 'item-finder')} >
         <div className={classNames(styles.CategoriesBox, 'categories-box col-md-2')} >
           <Categories
             browserHistory={browserHistory}
@@ -120,7 +122,7 @@ export default class Widget extends PureComponent {
                   filter={filter}
                   /> }
               </li>
-              {this.state.show === 'filter' && <li className={`nav-item active`}>
+              {this.state.show === 'filter' && <li className="nav-item active">
                 <a className="nav-link" onClick={() => {
                     this.setState({show: location.query.latest ? 'new' : 'featured'});
                     setFilter(new record({
@@ -140,25 +142,10 @@ export default class Widget extends PureComponent {
                 browserHistory={browserHistory}
                 location={location}
               />
-
-              <li className="nav-item dropdown">
-                <button
-                  className="nav-link  dropdown-toggle"
-                  type="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false">
-                  view: <b>{this.state.view}</b>
-                </button>
-              <div className="dropdown-menu">
-                <a className="dropdown-item" href="#view=tiles"
-                  onClick={()=>  {this.setState({ view: 'tiles' });}}>Tiles</a>
-                <a className="dropdown-item" href="#view=list"
-                  onClick={()=>  {this.setState({ view: 'list' });}}>List</a>
-                <a className="dropdown-item" href="#view=table"
-                  onClick={()=>  {this.setState({ view: 'table' });}}>Table</a>
-              </div>
-            </li>
+              <Views
+                browserHistory={browserHistory}
+                location={location}
+              />
 
             </ul>
           </nav>

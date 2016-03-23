@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { logger } from '../../commons';
 import PureComponent from 'react-pure-render/component';
 
-const sortItems = [{
+const items = [{
   id: 'title',
   state: 'name',
   title: 'Name'
@@ -51,11 +51,11 @@ export default class Sort extends PureComponent {
         data-toggle="dropdown"
         aria-haspopup="true"
         aria-expanded="false">
-        sort: <b>{sortItems.find(item => item.id === sort).title}</b></button>
+        sort: <b>{items.find(item => item.id === sort).title}</b></button>
 
       <div className="dropdown-menu">
 
-        { sortItems.map((item, index) => {
+        { items.map((item, index) => {
           return (<SortItem key={index}
             title={item.title}
             onClick={()=> {

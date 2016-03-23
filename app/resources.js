@@ -3,7 +3,6 @@ import Immutable from 'immutable';
 import keymirror from 'keymirror';
 import { api, logger } from './commons';
 import _ from 'lodash';
-import React from 'react';
 
 api.init({
   latency: 100

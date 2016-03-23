@@ -107,7 +107,7 @@ export default class Widget extends PureComponent {
                   browserHistory.replace(location);
                 }}>New</a>
               </li>
-              <li className={`nav-item btn-group`}>
+              <li className="nav-item btn-group">
                 <button
                   className={`nav-link dropdown-toggle ${ this.state.show === 'filter' ? 'btn-primary':''}`}
                   data-toggle="dropdown"

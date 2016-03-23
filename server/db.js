@@ -41,6 +41,7 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
             category = options.category,
             sortField = options.sort || 'name',
             labelFilter = options.labelFilter,
+            latest = options.latest,
             asc = options.asc,
             start = (page - 1) * limit,
             end = limit * (page),
@@ -91,7 +92,12 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
               return plugin[sortField].localeCompare(nextPlugin[sortField]);
             }
           });
-
+          if (latest) {
+            result = result
+              .sort((plugin, nextPlugin) => {
+                return nextPlugin['buildDate'].localeCompare(plugin['buildDate']);
+              });
+          }
           total = result.length;
           pages = Math.floor(total / limit) || 1;
           caback(null, {

@@ -61,9 +61,6 @@ export const actionHandlers = {
   [ACTION_TYPES.SET_PLUGIN_DATA](state, { payload }): State {
     return state.set('plugins', payload);
   },
-  [ACTION_TYPES.SET_LABEL_FILTER](state, { payload }): State {
-    return state.set('labelFilter', payload);
-  },
   [ACTION_TYPES.SET_QUERY_INFO](state, { payload }): State {
     return state.set('searchOptions', payload);
   }
@@ -75,28 +72,15 @@ export const actions = {
 
   fetchPluginData: () => ({ type: ACTION_TYPES.FETCH_PLUGIN_DATA }),
 
-  setFilter(filter) {
-    return (dispatch) => {
-      dispatch({
-        type: ACTION_TYPES.SET_LABEL_FILTER,
-        payload: filter
-      });
-    };
-  },
-
   generatePluginData(query={}) {
     return (dispatch) => {
       logger.log(query);
       let url;
-      if(query.latest){
-        url = '/latest';
-      } else {
-        let PLUGINS_URL = `/plugins?page=${query.page}`;
-       ['limit', 'q', 'sort', 'asc', 'category', 'labelFilter']
-          .filter(item => query[item])
-          .map(item => PLUGINS_URL += `&${item}=${query[item]}`);
-        url = `${PLUGINS_URL}`;
-      }
+      let PLUGINS_URL = `/plugins?page=${query.page}`;
+     ['limit', 'q', 'sort', 'asc', 'category', 'labelFilter', 'latest']
+        .filter(item => query[item])
+        .map(item => PLUGINS_URL += `&${item}=${query[item]}`);
+      url = `${PLUGINS_URL}`;
       logger.log(query, url);
       dispatch(actions.clearPluginData());
       dispatch(actions.fetchPluginData());
@@ -147,7 +131,6 @@ export const plugins = createSelector([resources], resources => resources.plugin
 export const searchOptions = createSelector([resources], resources => resources.searchOptions);
 
 export const isFetching = createSelector([resources], resources => resources.isFetching);
-export const labelFilter = createSelector([resources], resources => resources.labelFilter);
 
 export const totalSize = createSelector(
   [ searchOptions ],

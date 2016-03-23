@@ -169,10 +169,8 @@ export default class Widget extends PureComponent {
                 className="form-inline pull-xs-right" action="#"
                 onSubmit={event => {
                   event.preventDefault();
-                  location.query = {
-                    q: event.target[0].value,
-                    limit: searchOptions.limit,
-                  };
+                  location.query.q = event.target[0].value;
+                  location.query.limit = searchOptions.limit;
                   browserHistory.replace(location);
                 }}
               >
@@ -180,10 +178,8 @@ export default class Widget extends PureComponent {
                 defaultValue={location.query.q}
                 className={classNames(styles.SearchInput, 'form-control nav-link')}
                 onChange={event => {
-                  location.query = {
-                    q: event.target.value,
-                    limit: searchOptions.limit,
-                  };
+                  location.query.q = event.target.value;
+                  location.query.limit = searchOptions.limit;
                   browserHistory.replace(location);
                 }}
                 placeholder="Filter..."

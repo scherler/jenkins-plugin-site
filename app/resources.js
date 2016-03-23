@@ -27,26 +27,7 @@ export const State = Immutable.Record({
     search: []
   })
 });
-/*
-buildDate: "Mar 03, 2011"
-dependencies: Array[0]
-developers: Array[1]
-excerpt: "This (experimental) plug-in exposes the jenkins build extension
- points (SCM, Build, Publish) to a groovy scripting environment that has
-  some DSL-style extensions for ease of development."
-gav: "jenkins:AdaptivePlugin:0.1"
-labels: Array[2]
-name: "AdaptivePlugin"
-releaseTimestamp: "2011-03-03T16:49:24.00Z"
-requiredCore: "1.398"
-scm: "github.com"
-sha1: "il8z91iDnqVMu78Ghj8q2swCpdk="
-title: "Jenkins Adaptive DSL Plugin"
-url: "http://updates.jenkins-ci.org/download/plugins/AdaptivePlugin/0.1/AdaptivePlugin.hpi"
-version: "0.1"
-wiki: "https://wiki.jenkins-ci.org/display/JENKINS/Jenkins+Adaptive+Plugin"
-*/
-// Immutable Data attributes must be accessible as getters
+
 const Record = Immutable.Record({
   id: null,
   name: null,
@@ -62,7 +43,6 @@ const Record = Immutable.Record({
   labels: [],
   dependencies: []
 });
-
 
 export const ACTION_TYPES = keymirror({
   CLEAR_PLUGIN_DATA: null,
@@ -109,16 +89,14 @@ export const actions = {
     return (dispatch) => {
       logger.log(query);
       let url;
-      if (query.category) {
-        const CATEGORY_URL = '/getCategories';
-        url = `${CATEGORY_URL}?id=${query.category}`;
-      }else if(query.latest){
+      if(query.latest){
         url = '/latest';
       }else {
         const PLUGINS_URL = '/plugins';
         url = `${PLUGINS_URL}?page=${query.page || 1}&limit=${query.limit || 100}&q=${query.q || ''}`;
         url +=  query.sort ? `&sort=${query.sort}` : '';
         url +=  query.asc ? `&asc=${query.asc}` : '';
+        url +=  query.category ? `&category=${query.category}` : '';
       }
       logger.log(query, url);
       dispatch(actions.clearPluginData());

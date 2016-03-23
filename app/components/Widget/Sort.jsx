@@ -36,10 +36,6 @@ export class SortItem extends PureComponent {
 
 export default class Sort extends PureComponent {
 
-  state = {
-    sort: 'title',
-  };
-
   static propTypes = {
     browserHistory: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
@@ -47,7 +43,7 @@ export default class Sort extends PureComponent {
 
   render() {
     const {location, browserHistory} = this.props;
-    const {asc = false} = location.query;
+    const {asc = false, sort = 'title'} = location.query;
     return (<li className="nav-item btn-group">
       <button
         className="nav-link dropdown-toggle"
@@ -55,7 +51,7 @@ export default class Sort extends PureComponent {
         data-toggle="dropdown"
         aria-haspopup="true"
         aria-expanded="false">
-        sort: <b>{this.state.sort}</b></button>
+        sort: <b>{sortItems.find(item => item.id === sort).title}</b></button>
 
       <div className="dropdown-menu">
 
@@ -63,7 +59,6 @@ export default class Sort extends PureComponent {
           return (<SortItem key={index}
             title={item.title}
             onClick={()=> {
-             this.setState({ sort: item.state || item.id });
              location.query.sort = item.id;
              location.query.asc = !(asc === 'true');
              logger.log(location);

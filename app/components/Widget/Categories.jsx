@@ -41,7 +41,6 @@ export class Category extends PureComponent {
     const { id, onClick, active, title } = this.props;
     return (<li key={id} className={classNames(styles[id], id)}>
       <a
-        href={`#category=${id}`}
         className={classNames(styles.li, 'list-group-item', active)}
         onClick={onClick}
       >{title}</a>
@@ -56,12 +55,9 @@ export default class Categories extends PureComponent {
     location: PropTypes.object.isRequired
   };
 
-  state = {
-    category: 'all'
-  };
-
   render() {
-    return (<ul className='list-group'>
+    const {location, browserHistory} = this.props;
+    return (<ul className="list-group">
       <li className={classNames(styles.title, 'label')}>
         <div className={classNames(styles.li, 'list-group-item')}>Categories</div>
       </li>
@@ -71,14 +67,11 @@ export default class Categories extends PureComponent {
             key={index}
             title={item.title}
             id={item.id}
-            active={(this.state.category === item.id)?'active':''}
+            active={(location.query.category === item.id) ? 'active' : ''}
             onClick={()=> {
-                this.state.category = item.id;
-                this.props.location.query= {
-                  category: item.id
-                };
-                logger.log(this.props.location);
-                this.props.browserHistory.replace(this.props.location);
+                location.query.category =  item.id;
+                logger.log(location);
+                browserHistory.replace(this.props.location);
               }
             }
           />);

@@ -75,17 +75,15 @@ export const actions = {
   generatePluginData(query={}) {
     return (dispatch) => {
       logger.log(query);
-      let url;
       let PLUGINS_URL = `/plugins?page=${query.page}`;
      ['limit', 'q', 'sort', 'asc', 'category', 'labelFilter', 'latest']
         .filter(item => query[item])
         .map(item => PLUGINS_URL += `&${item}=${query[item]}`);
-      url = `${PLUGINS_URL}`;
-      logger.log(query, url);
+      logger.log(query, `${PLUGINS_URL}`);
       dispatch(actions.clearPluginData());
       dispatch(actions.fetchPluginData());
 
-      return api.getJSON(url,(error, data) => {
+      return api.getJSON(`${PLUGINS_URL}`,(error, data) => {
         if (data) {
           const searchOptions = new SearchOptions({
             limit: data.limit,

@@ -7,8 +7,8 @@ function createResponseResults(docs) {
     docs,
     limit: docs.length,
     total: docs.length,
-    start: 0,
     end: docs.length,
+    start: 0,
     page: 1,
     pages: 1
   };
@@ -99,7 +99,7 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
               });
           }
           total = result.length;
-          pages = Math.floor(total / limit) || 1;
+          pages = Math.ceil(total / limit) || 1;
           caback(null, {
             limit,
             start,

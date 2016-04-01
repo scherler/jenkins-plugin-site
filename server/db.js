@@ -1,5 +1,7 @@
 const fs = require('fs');
 const async = require('async');
+const Parser = require('htmlparser2').Parser;
+
 const queryFields = ['excerpt', 'name', 'title'];
 
 function createResponseResults(docs) {
@@ -13,6 +15,20 @@ function createResponseResults(docs) {
     pages: 1
   };
 }
+var extract;
+var parser = new Parser({
+    onopentag: function (name, attribs) {
+      if (name === 'a' && attribs && attribs.href) {
+        extract.push(attribs.href);
+      }
+    },
+    ontext: function (text) {
+      if (text.trim() !== '') {
+        extract.push(text.trim());
+      }
+    }
+  }, {decodeEntities: true}
+);
 
 // It instantiates a local database asynchronously.
 module.exports = flatDb = (filename, categoryFile, callback) => {
@@ -20,12 +36,20 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
   async.series([
     (cb) => {
       fs.readFile(filename, {encoding: 'utf8'}, (err, data) => {
-        if (err)
+        if (err){
           return cb(err, null);
-
+        }
         // Parse data
         const rawData = JSON.parse(data);
-        dbStore = Object.keys(rawData).map(key => rawData[key]);
+        dbStore = Object.keys(rawData).map(key => {
+          extract=[];
+          const excerpt = rawData[key];
+          parser.write(excerpt.excerpt);
+          parser.end();
+          excerpt.excerpt = extract.join(' ');
+          return excerpt;
+        });
+
 
         // Adds various library-specific data handles
         dbStore._filename = filename;

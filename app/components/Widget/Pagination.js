@@ -14,7 +14,7 @@ export default class Pagination extends PureComponent {
   handleClick = (data) => {
     this.props.location.query.page = data;
     logger.log(this.props.location);
-    this.props.browserHistory.replace(this.props.location);
+    this.props.browserHistory.push(this.props.location);
   }
 
   render() {

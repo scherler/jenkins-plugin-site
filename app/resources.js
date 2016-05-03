@@ -2,7 +2,6 @@ import { createSelector } from 'reselect';
 import Immutable from 'immutable';
 import keymirror from 'keymirror';
 import { api, logger } from './commons';
-import _ from 'lodash';
 
 api.init({
   latency: 100
@@ -19,6 +18,7 @@ export const State = Immutable.Record({
   plugins: Immutable.OrderedMap(),
   isFetching: false,
   searchOptions: SearchOptions,
+  labels: [],
   labelFilter: Immutable.Record({//fixme: that should become label: search, sort: field
     field: 'title',
     searchField: null,
@@ -48,6 +48,7 @@ export const ACTION_TYPES = keymirror({
   FETCH_PLUGIN_DATA: null,
   SET_PLUGIN_DATA: null,
   SET_LABEL_FILTER: null,
+  SET_LABELS: null,
   SET_QUERY_INFO: null
 });
 
@@ -61,6 +62,9 @@ export const actionHandlers = {
   [ACTION_TYPES.SET_PLUGIN_DATA](state, { payload }): State {
     return state.set('plugins', payload);
   },
+  [ACTION_TYPES.SET_LABELS](state, { payload }): State {
+    return state.set('labels', payload);
+  },
   [ACTION_TYPES.SET_QUERY_INFO](state, { payload }): State {
     return state.set('searchOptions', payload);
   }
@@ -71,6 +75,19 @@ export const actions = {
   clearPluginData: () => ({ type: ACTION_TYPES.CLEAR_PLUGIN_DATA }),
 
   fetchPluginData: () => ({ type: ACTION_TYPES.FETCH_PLUGIN_DATA }),
+
+  generateLabelData: () => {
+    return (dispatch) => {
+      return api.getJSON('/labels',(error, data) => {
+        if (data && data.docs) {
+          dispatch({
+            type: ACTION_TYPES.SET_LABELS,
+            payload: Immutable.List(data.docs)
+          });
+        }
+      });
+    };
+  },
 
   generatePluginData(query={}) {
     return (dispatch) => {
@@ -109,23 +126,9 @@ export const actions = {
   }
 };
 
-export function groupAndCountLabels(recordsMap) {
-  const labelMap = _.map(
-      _.groupBy(
-        _.flatten(recordsMap.toArray().map((a) => a.labels)
-      )
-    ), (array, item) => {
-      return {
-        value: array.length,
-        key: item
-      };
-    }
-  );
-  return Immutable.List(labelMap);
-}
-
 export const resources = state => state.resources;
 export const plugins = createSelector([resources], resources => resources.plugins);
+export const labels = createSelector([resources], resources => resources.labels);
 export const searchOptions = createSelector([resources], resources => resources.searchOptions);
 
 export const isFetching = createSelector([resources], resources => resources.isFetching);
@@ -141,13 +144,6 @@ export const filterVisibleList = createSelector (
   [plugins],
   (plugins) => {
     return plugins;
-  }
-);
-
-export const getVisiblePluginsLabels = createSelector(
-  [ filterVisibleList ],
-  ( plugins ) => {
-    return groupAndCountLabels(plugins);
   }
 );
 

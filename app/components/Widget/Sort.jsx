@@ -62,7 +62,7 @@ export default class Sort extends PureComponent {
              location.query.sort = item.id;
              location.query.asc = !(asc === 'true');
              logger.log(location);
-             browserHistory.replace(location);
+             browserHistory.push(location);
             }} />);
         })}
 

@@ -17,10 +17,10 @@ export default class Widget extends PureComponent {
     browserHistory: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     totalSize: PropTypes.any.isRequired,
+    labels: PropTypes.any.isRequired,
     getVisiblePlugins: PropTypes.any.isRequired,
     searchOptions: PropTypes.any.isRequired,
     isFetching: PropTypes.bool.isRequired,
-    getVisiblePluginsLabels: PropTypes.any.isRequired,
   };
 
   state = {
@@ -35,7 +35,7 @@ export default class Widget extends PureComponent {
       isFetching,
       searchOptions,
       getVisiblePlugins,
-      getVisiblePluginsLabels,
+      labels,
       location
     } = this.props;
 
@@ -64,21 +64,21 @@ export default class Widget extends PureComponent {
                 <a className="nav-link" onClick={() => {
                   this.setState({show: 'featured'});
                   location.query={};
-                  browserHistory.replace(location);
+                  browserHistory.push(location);
                 }}>Featured</a>
               </li>
               <li className={`nav-item ${this.state.show === 'new' ? 'active' : ''}`}>
                 <a className="nav-link" onClick={() => {
                   this.setState({show: 'new'});
                   location.query= {latest: 'latest'};
-                  browserHistory.replace(location);
+                  browserHistory.push(location);
                 }}>New</a>
               </li>
 
               { totalSize > 0 && <LabelWidget
                 browserHistory={browserHistory}
                 location={location}
-                labels={getVisiblePluginsLabels}
+                labels={labels}
                 /> }
             </ul>
 
@@ -103,7 +103,7 @@ export default class Widget extends PureComponent {
                   event.preventDefault();
                   location.query.q = event.target[0].value;
                   location.query.limit = searchOptions.limit;
-                  browserHistory.replace(location);
+                  browserHistory.push(location);
                 }}
               >
               <input
@@ -112,7 +112,7 @@ export default class Widget extends PureComponent {
                 onChange={event => {
                   location.query.q = event.target.value;
                   location.query.limit = searchOptions.limit;
-                  browserHistory.replace(location);
+                  browserHistory.push(location);
                 }}
                 placeholder="Filter..."
               />

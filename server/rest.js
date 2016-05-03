@@ -14,6 +14,8 @@ const
   rest = express(),
   backendPort = '3000';
 
+var lastModified = new Date();
+
 schedule.scheduleJob('1 1 1 * * *', () => {
   console.log('scheduled indexing started');
   createPluginDb(db, (err) => {
@@ -25,6 +27,7 @@ schedule.scheduleJob('1 1 1 * * *', () => {
         callback(err);
       }
       this.dbStore = data;
+      lastModified = new Date();
       console.log('scheduled indexing finished');
     });
   });
@@ -56,7 +59,9 @@ function getOptions(req) {
 function setRestHeader(res) {
   res
     .header('Access-Control-Allow-Origin', '*')
-    .header('Access-Control-Allow-Headers', 'X-Requested-With');
+    .header('Access-Control-Allow-Headers', 'X-Requested-With')
+    .header('Last-modified', lastModified)
+  ;
 }
 rest.get('/getCategories', (req, res) => {
   setRestHeader(res);
@@ -69,6 +74,11 @@ rest.get('/getCategories', (req, res) => {
 rest.get('/latest', (req, res) => {
   setRestHeader(res);
   res.send(this.dbStore.latest());
+});
+
+rest.get('/labels', (req, res) => {
+  setRestHeader(res);
+  res.send(this.dbStore.labels());
 });
 
 rest.get('/plugins', (req, res) => {

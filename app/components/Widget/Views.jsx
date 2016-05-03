@@ -42,7 +42,7 @@ export default class Views extends PureComponent {
                           title={item}
                           onClick={()=> {
              location.query.view = item;
-             browserHistory.replace(location);
+             browserHistory.push(location);
             }}/>);
           })}
         </div>

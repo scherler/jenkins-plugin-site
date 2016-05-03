@@ -27,7 +27,7 @@ export default class Searchbox extends PureComponent {
             q: this.refs.searchInput.value,
             limit: this.refs.limit.value
           };
-          this.props.browserHistory.replace(this.props.location);
+          this.props.browserHistory.push(this.props.location);
          }
         }>
           search

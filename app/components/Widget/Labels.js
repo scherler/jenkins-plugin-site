@@ -11,8 +11,8 @@ export default class LabelWidget extends PureComponent {
   }
 
   handleClick(data) {
-    this.props.location.query.labelFilter = data;
-    this.props.browserHistory.replace(this.props.location);
+    this.props.location.query = { labelFilter: data };
+    this.props.browserHistory.push(this.props.location);
   }
 
   render() {
@@ -20,6 +20,8 @@ export default class LabelWidget extends PureComponent {
     const { labelFilter = ''} = location.query;
     const sortedLabels = labels.sort(
       (label, nextLabel) => label.key.localeCompare(nextLabel.key));
+
+    if (!sortedLabels.valueSeq) return null;
 
     return (
       <li className="nav-item btn-group">
@@ -32,7 +34,7 @@ export default class LabelWidget extends PureComponent {
           onClick={(e) => {
             e.preventDefault();
             delete location.query.labelFilter;
-            browserHistory.replace(location);
+            browserHistory.push(location);
           }}
           className="glyphicon glyphicon-remove">remove Filter</span>}
         </button>

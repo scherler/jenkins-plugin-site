@@ -1,6 +1,7 @@
 const fs = require('fs');
 const async = require('async');
 const Parser = require('htmlparser2').Parser;
+const _ = require('lodash');
 
 const queryFields = ['excerpt', 'name', 'title'];
 
@@ -15,6 +16,7 @@ function createResponseResults(docs) {
     pages: 1
   };
 }
+
 var extract;
 var parser = new Parser({
     onopentag: function (name, attribs) {
@@ -50,12 +52,36 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
           return excerpt;
         });
 
-
         // Adds various library-specific data handles
         dbStore._filename = filename;
 
         dbStore.latest = () => createResponseResults(
           dbStore.sort((a, b) => a.buildDate.localeCompare(b.buildDate)).slice(0, 10));
+
+        dbStore.labels = () => {
+          const labelMap = _.map(
+            _.groupBy(
+              _.flatten(dbStore.map((a) => a.labels)
+              )
+            ), (array, item) => {
+              return {
+                value: array.length,
+                key: item
+              };
+            }
+          );
+          return {
+            docs: labelMap
+            .sort((a, b) => a.key.localeCompare(b.key))
+            .filter((item) => item.key && item.key !== ''),
+            limit: labelMap.length,
+            total: labelMap.length,
+            end: labelMap.length,
+            start: 0,
+            page: 1,
+            pages: 1
+          };
+        };
 
         dbStore.search = (query, options, caback) => {
           options = options || {};
@@ -104,9 +130,14 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
           }
           if (labelFilter) {
             result = result.filter((item) => {
-              return item.labels && item.labels.some(searchFilter => {
-                return ( labelFilter=== searchFilter);
-              });
+              if (item.labels && item.labels.length === 0 && labelFilter === 'undefined') {
+                return true;
+              } else {
+                return item.labels && item.labels.some(searchFilter => {
+                  return ( labelFilter === searchFilter);
+                });
+              }
+
             });
           }
           result = result.sort((plugin, nextPlugin) => {
@@ -134,6 +165,7 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
             docs: result.slice(start, end),
           });
         };
+
 
         dbStore.getCategories = (options, caback) => {
           if (!caback && typeof options === 'function') {

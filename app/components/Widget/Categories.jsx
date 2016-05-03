@@ -75,14 +75,13 @@ export default class Categories extends PureComponent {
             remove={ (e) => {
                 e.preventDefault();
                 delete location.query.category;
-                browserHistory.replace(location);
+                browserHistory.push(location);
               }
             }
             onClick={()=> {
-                location.query.category =  item.id;
-                delete location.query.page;
+                location.query = {category: item.id};
                 logger.log(location);
-                browserHistory.replace(this.props.location);
+                browserHistory.push(this.props.location);
               }
             }
           />);

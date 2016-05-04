@@ -21,9 +21,11 @@ module.exports = createPluginDb = (destination, cb) => {
         },
         (callback) => {
             if (local.body) {
-                var lines = local.body.split('\n');
+                const lines = local.body.split('\n');
                 if (lines.length >= 1) {
-                    var plugins = JSON.parse(lines[1]).plugins;
+                    lines.shift();
+                    lines.pop();
+                    const plugins = JSON.parse(lines.join('')).plugins;
                     fs.writeFile(destination, JSON.stringify(plugins), (err) => {
                         if (err) {
                             return console.log(err);

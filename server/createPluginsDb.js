@@ -2,8 +2,7 @@ const async = require('async');
 const fs = require('fs');
 const request = require('request');
 
-const host = 'updates.jenkins-ci.org';
-const url = `https://${host}/current/update-center.json`;
+const url = 'http://jucies.github.io/update-center.json';
 /* eslint-disable no-console */ //This is because we are using console log for communications
 
 module.exports = createPluginDb = (destination, cb) => {

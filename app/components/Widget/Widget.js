@@ -47,58 +47,14 @@ export default class Widget extends PureComponent {
       fromRange = (searchOptions.limit) * (Number(searchOptions.page) - 1);
 
     return (
-      <div className={classNames(styles.ItemFinder, view, 'item-finder')} >
-        <div className={classNames(styles.CategoriesBox, 'categories-box col-md-2')} >
-          <Categories
-            browserHistory={browserHistory}
-            location={location}
-            />
-        </div>
-        
-        <div className={classNames(styles.ItemsList, 'items-box col-md-10')}>
-
-          <nav id="cb-grid-toolbar"
-             className="navbar navbar-light bg-faded">
-            <ul className="nav navbar-nav">
-              <li className={`nav-item ${this.state.show === 'featured'?'active':''}`}>
-                <a className="nav-link" onClick={() => {
-                  this.setState({show: 'featured'});
-                  location.query={};
-                  browserHistory.push(location);
-                }}>Featured</a>
-              </li>
-              <li className={`nav-item ${this.state.show === 'new' ? 'active' : ''}`}>
-                <a className="nav-link" onClick={() => {
-                  this.setState({show: 'new'});
-                  location.query= {latest: 'latest'};
-                  browserHistory.push(location);
-                }}>New</a>
-              </li>
-
-              { totalSize > 0 && <LabelWidget
-                browserHistory={browserHistory}
-                location={location}
-                labels={labels}
-                /> }
-            </ul>
-
-            <ul className="pull-xs-right nav navbar-nav">
-              <Sort
-                browserHistory={browserHistory}
-                location={location}
-              />
-              <Views
-                browserHistory={browserHistory}
-                location={location}
-              />
-
-            </ul>
-          </nav>
-          <nav className="page-controls">
-          <ul className="nav navbar-nav">
-            <li className="nav-item filter">
+    <div className={classNames('box')}>
+      <div className={classNames('jumbotron plugins')}>
+        <div className={classNames('container')}>
+        <div className={classNames('row')}>
+          <div className={classNames('col-md-3')}></div>
+          <div className={classNames('col-md-6')}>
               <form
-                className="form-inline pull-xs-right" action="#"
+                action="#"
                 onSubmit={event => {
                   event.preventDefault();
                   location.query.q = event.target[0].value;
@@ -114,32 +70,65 @@ export default class Widget extends PureComponent {
                   location.query.limit = searchOptions.limit;
                   browserHistory.push(location);
                 }}
-                placeholder="Filter..."
+                placeholder="Find plugins..."
               />
-              </form>
-            </li>
-          <li className="nav-item page-picker">
-            {!isFetching && totalSize > 0 &&
-              Number(searchOptions.pages) > 1 && <Pagination
-              browserHistory={browserHistory}
-              location={location}
-              pages={Number(searchOptions.pages)}
-              page={Number(searchOptions.page)}
-            />}
-          </li>
-          <li className="nav-item count">
-            {totalSize > 0 &&
-              <span className="nav-link">
-                {fromRange} to&nbsp;
-                {toRange} of {totalSize}
-              </span>
-            }
-          </li>
+              </form>          
+          </div>
+        </div>
+        </div>
+      </div>
+      <div className={classNames(styles.ItemFinder, view, 'item-finder')} >
+        <div className={classNames(styles.CategoriesBox, 'categories-box col-md-2')} >
+          <Categories
+            browserHistory={browserHistory}
+            location={location}
+            />
+              { totalSize > 0 && location.query.category === 'general' && <LabelWidget
+                browserHistory={browserHistory}
+                location={location}
+                labels={labels}
+                /> }
+        </div>
+        
+        <div className={classNames(styles.ItemsList, 'items-box col-md-10')}>
 
-          </ul>
+          <nav id="cb-grid-toolbar"
+             className="navbar navbar-light bg-faded">
+            <ul className="nav navbar-nav">
+              <li className="nav-item page-picker">
+                {!isFetching && totalSize > 0 &&
+                  Number(searchOptions.pages) > 1 && <Pagination
+                  browserHistory={browserHistory}
+                  location={location}
+                  pages={Number(searchOptions.pages)}
+                  page={Number(searchOptions.page)}
+                />}
+              </li>
+              <li className="nav-item count">
+                {totalSize > 0 &&
+                  <span className="nav-link">
+                    {fromRange} to&nbsp;
+                    {toRange} of {totalSize}
+                  </span>
+                }
+              </li>
 
 
+            </ul>
+
+            <ul className="pull-xs-right nav navbar-nav">
+              <Sort
+                browserHistory={browserHistory}
+                location={location}
+              />
+              <Views
+                browserHistory={browserHistory}
+                location={location}
+              />
+
+            </ul>
           </nav>
+
           <div className="padded-box">
             <div id="cb-item-finder-grid-box" className={classNames(styles.GridBox, 'grid-box')} >
               <div className={classNames(styles.Grid, 'grid')} >
@@ -161,6 +150,7 @@ export default class Widget extends PureComponent {
         </div>
 
       </div>
+    </div>
       );
   }
 

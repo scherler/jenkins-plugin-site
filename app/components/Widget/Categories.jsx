@@ -55,12 +55,12 @@ export class Category extends PureComponent {
 export default class Categories extends PureComponent {
 
   static propTypes = {
-    browserHistory: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired
   };
 
   render() {
-    const {location, browserHistory} = this.props;
+    const {location, router} = this.props;
     return (<ul className="list-group">
       <li className={classNames(styles.title, 'label')}>
         <div className={classNames(styles.li, 'list-group-item')}>Categories</div>
@@ -75,14 +75,14 @@ export default class Categories extends PureComponent {
             remove={ (e) => {
                 e.preventDefault();
                 delete location.query.category;
-                browserHistory.replace(location);
+                router.replace(location);
               }
             }
             onClick={()=> {
                 location.query.category =  item.id;
                 delete location.query.page;
                 logger.log(location);
-                browserHistory.replace(this.props.location);
+                router.replace(this.props.location);
               }
             }
           />);

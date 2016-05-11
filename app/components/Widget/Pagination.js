@@ -5,7 +5,7 @@ import PureComponent from 'react-pure-render/component';
 export default class Pagination extends PureComponent {
 
   static propTypes = {
-    browserHistory: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     pages: PropTypes.number.isRequired,
     page: PropTypes.number.isRequired
@@ -14,7 +14,7 @@ export default class Pagination extends PureComponent {
   handleClick = (data) => {
     this.props.location.query.page = data;
     logger.log(this.props.location);
-    this.props.browserHistory.replace(this.props.location);
+    this.props.router.replace(this.props.location);
   }
 
   render() {

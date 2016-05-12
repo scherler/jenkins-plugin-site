@@ -2,6 +2,7 @@
 const
   express = require('express'),
   schedule = require('node-schedule'),
+  request = require('request'),
   async = require('async');
 
 const flatDb = require('./db');
@@ -71,9 +72,30 @@ rest.get('/latest', (req, res) => {
   res.send(this.dbStore.latest());
 });
 
+rest.get('/plugin/:name', (req, res) => {
+  var name = req.params && req.params.name ? req.params.name : null;
+  setRestHeader(res);
+  const data = this.dbStore.entry(name);
+  res.send(data);
+});
+rest.get('/stats/:name', (req, res) => {
+  var name = req.params && req.params.name ? req.params.name : null;
+  setRestHeader(res);
+  const url = `http://stats.jenkins-ci.org/plugin-installation-trend/${name}.stats.json`;
+  request(url, (error, response, body) => {
+    if (!error && response.statusCode == 200) {
+      res.json(JSON.parse(body));
+    } else if (error) {
+      res.json({error: error});
+    } else if (response.statusCode == 404)  {
+      res.statusCode = 404;
+      res.json({error: `File not found ${url}`});
+    }
+  });
+});
 rest.get('/plugins', (req, res) => {
   setRestHeader(res);
-  var q = req.query && req.query.q ? req.query.q : null;
+  var q = req.params && req.query.q ? req.query.q : null;
   const options = getOptions(req);
   this.dbStore.search(q, options, (err, result) => {
     res.json(result);

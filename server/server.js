@@ -1,7 +1,7 @@
 // Only a couple of es6 feature are supported!!!
 /* eslint-disable no-console */ //This is because we are using console log for communications
 
-require('./rest');
+//require('./rest');
 
 const ip = '0.0.0.0';
 const portClient = 5000;
@@ -21,6 +21,7 @@ new WebpackServer(webpack(config), {
   historyApiFallback: true,
   proxy: {
     '/plugin*': backend,
+    '/stats*': backend,
     '/latest*': backend,
     '/getCategories*': backend
   }

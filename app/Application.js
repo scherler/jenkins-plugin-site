@@ -5,13 +5,15 @@ import {
   isFetching,
   searchOptions,
   filterVisibleList,
-  getVisiblePluginsLabels
+  getVisiblePluginsLabels,
+  createSelector,
+  connect,
 } from './resources';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 import React, { PropTypes, Component } from 'react';
 import Widget from './components/Widget';
 import DevelopmentFooter from './commons/developmentFooter';
+
+const { object, func, any, bool } = PropTypes;
 
 export default class Application extends Component {
 
@@ -29,7 +31,6 @@ export default class Application extends Component {
   render() {
     const {
       filterVisibleList,
-      browserHistory,
       totalSize,
       searchOptions,
       getVisiblePluginsLabels,
@@ -42,7 +43,7 @@ export default class Application extends Component {
       <Widget
         searchOptions={searchOptions}
         location={location}
-        browserHistory={browserHistory}
+        router={this.context.router}
         getVisiblePlugins={filterVisibleList}
         totalSize={totalSize}
         isFetching = {isFetching}
@@ -53,14 +54,13 @@ export default class Application extends Component {
 }
 
 Application.propTypes = {
-  generatePluginData: PropTypes.func.isRequired,
-  browserHistory: PropTypes.object.isRequired,
-  filterVisibleList: PropTypes.any.isRequired,
-  totalSize: PropTypes.any.isRequired,
-  getVisiblePluginsLabels: PropTypes.any.isRequired,
-  searchOptions: PropTypes.any.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  location: PropTypes.object.isRequired,
+  location: object.isRequired,
+  generatePluginData: func.isRequired,
+  filterVisibleList: any,
+  totalSize: any.isRequired,
+  getVisiblePluginsLabels: any.isRequired,
+  searchOptions: any.isRequired,
+  isFetching: bool.isRequired,
 };
 
 const selectors = createSelector(

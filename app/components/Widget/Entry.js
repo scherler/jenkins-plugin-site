@@ -3,6 +3,7 @@ import styles from './Widget.css';
 import {cleanTitle, getMaintainers  } from '../../helper';
 import PureComponent from 'react-pure-render/component';
 import classNames from 'classnames';
+import { Link } from 'react-router';
 
 export class Icon extends PureComponent {
 
@@ -56,7 +57,7 @@ export default class Entry extends PureComponent {
         className={classNames(styles.Item,'Entry-box')}
       >
 
-        <a href={plugin.get('wiki')} className={classNames('item','Entry',styles.Tile)}>
+        <Link to={`/${plugin.name}`} className={classNames('item','Entry',styles.Tile)}>
           <div className={classNames(styles.Icon,'Icon')}>
             <Icon title={plugin.get('title')} />
           </div>
@@ -83,7 +84,7 @@ export default class Entry extends PureComponent {
             {getMaintainers(plugin.get('developers'),plugin.get('sha1'))}
           </div>
 
-        </a>
+        </Link>
       </div>
     );
   }

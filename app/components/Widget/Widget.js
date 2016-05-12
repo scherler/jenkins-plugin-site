@@ -15,15 +15,15 @@ export default class Widget extends PureComponent {
   static propTypes = {
     location: PropTypes.object.isRequired,
     totalSize: PropTypes.any.isRequired,
-    getVisiblePlugins: PropTypes.any.isRequired,
+    getVisiblePlugins: PropTypes.any,
     searchOptions: PropTypes.any.isRequired,
     isFetching: PropTypes.bool.isRequired,
-    getVisiblePluginsLabels: PropTypes.any.isRequired,
+    getVisiblePluginsLabels: PropTypes.any,
   };
 
   state = {
     show: 'featured'
-  };
+  };r
 
   render() {
 
@@ -45,6 +45,7 @@ export default class Widget extends PureComponent {
         searchOptions.limit * Number(searchOptions.page) : Number(searchOptions.total),
       fromRange = (searchOptions.limit) * (Number(searchOptions.page) - 1);
 
+          //<img src="http://stats.jenkins-ci.org/jenkins-stats/svg/total-jenkins.svg" />
     return (
       <div className={classNames(styles.ItemFinder, view, 'item-finder')} >
         <div className={classNames(styles.CategoriesBox, 'categories-box col-md-2')} >

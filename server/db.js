@@ -33,6 +33,31 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
         dbStore.latest = () => createResponseResults(
           dbStore.sort((a, b) => a.buildDate.localeCompare(b.buildDate)).slice(0, 10));
 
+        dbStore.entry = (name) => {
+          var plugin = dbStore.filter(
+            (plugin) => {
+              return plugin.name === name;
+            })[0];
+          if(!plugin) {
+            plugin = {
+              name: '404',
+              title: 'Not Found',
+              buildDate: null,
+              releaseTimestamp: null,
+              version: null,
+              wiki: '',
+              excerpt: '404 Not Found - the plugin you request is not known',
+              iconDom: null,
+              requiredCore: null,
+              developers: [],
+              labels: [],
+              dependencies: []
+            };
+          }
+          return plugin;
+
+        };
+
         dbStore.search = (query, options, caback) => {
           options = options || {};
           var

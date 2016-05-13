@@ -5,7 +5,7 @@ import expect from 'expect';
 import Pagination from '../app/components/Widget/Pagination';
 
 const testElement = (<Pagination
-  browserHistory={{
+  router={{
     replace: (location) => {
       expect(location.query.q).toBe('extrem');
     }}

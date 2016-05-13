@@ -41,13 +41,14 @@ export const State = Immutable.Record({
   plugins: null,
   plugin: Record,
   isFetching: false,
-  searchOptions: SearchOptions,
+  labels: [],
   labelFilter: Immutable.Record({//fixme: that should become label: search, sort: field
     field: 'title',
     searchField: null,
     asc: false,
     search: []
-  })
+  }),
+  searchOptions: SearchOptions,
 });
 
 export const ACTION_TYPES = keymirror({

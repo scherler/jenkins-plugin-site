@@ -26,7 +26,9 @@ const plugin = {
     buildDate: 'Mar 03, 2011',
     dependencies: [0],
     developers: [1],
-    excerpt: 'This (experimental) plug-in exposes the jenkins build extension points (SCM, Build, Publish) to a groovy scripting environment that has   some DSL-style extensions for ease of development.',
+    excerpt: `This (experimental) plug-in exposes the jenkins build extension
+    points (SCM, Build, Publish) to a groovy scripting environment that has
+      some DSL-style extensions for ease of development.`,
     gav: 'jenkins:AdaptivePlugin:0.1',
     labels: ['xxx', 'yyy'],
     name: 'AdaptivePlugin',

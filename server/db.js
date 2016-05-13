@@ -72,8 +72,8 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
           );
           return {
             docs: labelMap
-            .sort((a, b) => a.key.localeCompare(b.key))
-            .filter((item) => item.key && item.key !== ''),
+              .sort((a, b) => a.key.localeCompare(b.key))
+              .filter((item) => item.key && item.key !== ''),
             limit: labelMap.length,
             total: labelMap.length,
             end: labelMap.length,
@@ -81,6 +81,30 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
             page: 1,
             pages: 1
           };
+        };
+
+        dbStore.entry = (name) => {
+          var plugin = dbStore.filter(
+            (plugin) => {
+              return plugin.name === name;
+            })[0];
+          if (!plugin) {
+            plugin = {
+              name: '404',
+              title: 'Not Found',
+              buildDate: null,
+              releaseTimestamp: null,
+              version: null,
+              wiki: '',
+              excerpt: '404 Not Found - the plugin you request is not known',
+              iconDom: null,
+              requiredCore: null,
+              developers: [],
+              labels: [],
+              dependencies: []
+            };
+          }
+          return plugin;
         };
 
         dbStore.search = (query, options, caback) => {
@@ -106,17 +130,17 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
                 return x.id;
               })
               .indexOf(category);
-             if (elementPos > -1) {
-               const pluginsId = categories[elementPos].plugins;
-               result = pluginsId.map((pluginName) => dbStore.filter(
-                 (plugin) => {
-                   return plugin.name === pluginName;
-                 })
-               ).map(key => key[0]);
+            if (elementPos > -1) {
+              const pluginsId = categories[elementPos].plugins;
+              result = pluginsId.map((pluginName) => dbStore.filter(
+                (plugin) => {
+                  return plugin.name === pluginName;
+                })
+              ).map(key => key[0]);
 
-             } else  {
-               result = dbStore;
-             }
+            } else {
+              result = dbStore;
+            }
           } else {
             result = dbStore;
           }
@@ -137,7 +161,6 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
                   return ( labelFilter === searchFilter);
                 });
               }
-
             });
           }
           result = result.sort((plugin, nextPlugin) => {

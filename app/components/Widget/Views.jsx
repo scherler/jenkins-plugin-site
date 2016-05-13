@@ -20,12 +20,12 @@ export class View extends PureComponent {
 export default class Views extends PureComponent {
 
   static propTypes = {
-    browserHistory: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
   };
 
   render() {
-    const {location, browserHistory} = this.props;
+    const {location, router} = this.props;
     const {view = 'Tiles'} = location.query;
     return (<li className="nav-item dropdown">
         <button
@@ -42,7 +42,7 @@ export default class Views extends PureComponent {
                           title={item}
                           onClick={()=> {
              location.query.view = item;
-             browserHistory.push(location);
+             router.replace(location);
             }}/>);
           })}
         </div>

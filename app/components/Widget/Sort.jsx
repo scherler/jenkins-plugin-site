@@ -37,12 +37,12 @@ export class SortItem extends PureComponent {
 export default class Sort extends PureComponent {
 
   static propTypes = {
-    browserHistory: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
   };
 
   render() {
-    const {location, browserHistory} = this.props;
+    const {location, router} = this.props;
     const {asc = false, sort = 'title'} = location.query;
     return (<li className="nav-item btn-group">
       <button
@@ -62,7 +62,7 @@ export default class Sort extends PureComponent {
              location.query.sort = item.id;
              location.query.asc = !(asc === 'true');
              logger.log(location);
-             browserHistory.push(location);
+             router.replace(location);
             }} />);
         })}
 

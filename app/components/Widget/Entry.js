@@ -3,6 +3,7 @@ import styles from './Widget.css';
 import {cleanTitle, getMaintainers  } from '../../helper';
 import PureComponent from 'react-pure-render/component';
 import classNames from 'classnames';
+import { Link } from 'react-router';
 
 export class Icon extends PureComponent {
 
@@ -24,7 +25,8 @@ export class Icon extends PureComponent {
       .replace(' lugin','');
 
     const colors = ['#6D6B6D','#DCD9D8','#D33833','#335061','#81B0C4','#709aaa','#000'];
-    const color = colors[(title.length % 7)]; //pick color based on chars in the name to make semi-random, but fixed color per-plugin
+    //pick color based on chars in the name to make semi-random, but fixed color per-plugin
+    const color = colors[(title.length % 7)];
     const iconClass=`i ${type};
     color = ${color}`;
 
@@ -56,7 +58,7 @@ export default class Entry extends PureComponent {
         className={classNames(styles.Item,'Entry-box')}
       >
 
-        <a href={plugin.get('wiki')} className={classNames('item','Entry',styles.Tile)}>
+        <Link to={`/${plugin.name}`} className={classNames('item','Entry',styles.Tile)}>
           <div className={classNames(styles.Icon,'Icon')}>
             <Icon title={plugin.get('title')} />
           </div>
@@ -83,7 +85,7 @@ export default class Entry extends PureComponent {
             {getMaintainers(plugin.get('developers'),plugin.get('sha1'))}
           </div>
 
-        </a>
+        </Link>
       </div>
     );
   }

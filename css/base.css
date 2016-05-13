@@ -19,7 +19,7 @@ body .item-finder.Tiles .Entry-box{
   display:inline-block;
 }
 .categories-box .list-group{margin-top:-2.75rem;position:relative; z-index:2; box-shadow:0 3px 2px -1px rgba(0,0,0,.1)}
-.categories-box .list-group > .label {    background:rgba(0,0,0,.5); 
+.categories-box .list-group > .label {    background:rgba(0,0,0,.5);
     display: block;
     border: none;
     border-radius: 0;
@@ -124,7 +124,7 @@ body .item-finder.Tiles a.item .Excerpt,
   margin: 0 0 .67rem;
 }
 
-body .item-finder.Tiles a.item .Excerpt p, 
+body .item-finder.Tiles a.item .Excerpt p,
 body .item-finder.Tiles a.item  .Excerpt div,
 .Tile .Excerpt p, .Tile .Excerpt div {
   display: inline;
@@ -181,7 +181,7 @@ body .item-finder.Tiles a.item .Authors>div,
   margin: 100px auto !important;
   overflow:hidden;
   text-indent:999rem;
-  white-space:nowrap;  
+  white-space:nowrap;
 }
 #plugin-spinner {
   color:rgba(0,0,0,.33);
@@ -198,7 +198,7 @@ spinner .double-bounce1, .spinner .double-bounce2 {
   top: 0;
   left: 0;
 
-  
+
   -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
   animation: sk-bounce 2.0s infinite ease-in-out;
 }
@@ -214,10 +214,10 @@ spinner .double-bounce1, .spinner .double-bounce2 {
 }
 
 @keyframes sk-bounce {
-  0%, 100% { 
+  0%, 100% {
     transform: scale(0.0);
     -webkit-transform: scale(0.0);
-  } 50% { 
+  } 50% {
     transform: scale(1.0);
     -webkit-transform: scale(1.0);
   }
@@ -257,8 +257,8 @@ body .item-finder.List a.Entry,
 body .item-finder.List a.Entry .Version,
 .list > .item > .Tile > .Version {margin-bottom:.25rem}
 body .item-finder.List a.Entry .Score,
-body .item-finder.List a.Entry .Icon,    
-.list > .item > .Tile > .Score,    
+body .item-finder.List a.Entry .Icon,
+.list > .item > .Tile > .Score,
 .list > .item > .Tile > .Icon {position:absolute; left:.5rem; width:5rem;}
 body .item-finder.List a.Entry .Score,
 .list > .item > .Tile > .Score {top:4rem;}
@@ -388,4 +388,211 @@ nav form.search .input-group:hover>input.form-control, nav form.search .input-gr
 }
 #footer a {
     color: rgb(255, 255, 255);
+}
+
+
+.cardGroup {
+    /**
+     * Lay out the children of this container with
+     * flexbox, which is horizontal by default.
+     */
+    display: flex;
+
+    overflow: hidden;
+}
+
+.cardGroup__card {
+    /**
+     * The flex property is a short-hand for setting
+     * the flex-shrink, flex-grow, and flex-basis
+     * properties. These properties control how the
+     * element resizes to fill its container.
+     *
+     * We'll set flex-grow to 1 so that it will
+     * expand to fill its container. (The default
+     * default value is 0.)
+     *
+     * We'll also set flex-shrink to 1 so that the
+     * element will shrink as its container gets
+     * smaller. (The default value is 1.)
+     *
+     * Last, we set flex-basis to 0 so that its
+     * size is solely determined by the size of
+     * the container. (The default value
+     * is auto, which would cause the content's
+     * size to also be a factor in this calculation.)
+     *
+     * The net result of these properties is that the
+     * element is a fluid size, and will expand and
+     * shrink with its container and siblings, but
+     * they will all have the same size, even if they
+     * have different amounts of content.
+     *
+     * NOTE: IE11 ignores flex short-hand declarations
+     * with unitless flex-basis values. So we have to
+     * use 0% instead of 0 as a workaround. You can
+     * find more info at:
+     * github.com/philipwalton/flexbugs.
+     */
+    flex: 1 1 0%;
+
+    border: none;
+    border-radius: 0;
+}
+
+.cardGroup__card + .cardGroup__card {
+    border-left: 1px solid #D7DBDD;
+}
+
+.cardGroup__cardDescription {
+    /**
+     * We're doing almost the exact same thing here as
+     * we did above. The difference is that its
+     * flex-basis is auto, so now the size of its content
+     * will affect how large it is.
+     */
+    flex: 1 1 auto;
+}
+
+.card {
+    /**
+     * Lay out the children of this container with
+     * flexbox, which is horizontal by default.
+     */
+    display: flex;
+
+    /**
+     * Rotate the main axis so that the children
+     * are laid out vertically.
+     */
+    flex-direction: column;
+
+    border: 1px solid #CAD0D2;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.card__description {
+    /**
+     * Lay out the children of this container with
+     * flexbox.
+     */
+    display: flex;
+
+    /**
+     * We're going to lay out this element's children
+     * just like in the "Centered prompt" example.
+     * First we'll rotate the main axis so that the
+     * children are laid out vertically.
+     */
+    flex-direction: column;
+
+    /**
+     * Just like in the "Centered prompt" example,
+     * we'll align the children in the center, along
+     * the main axis.
+     */
+    align-items: center;
+
+    /**
+     * And just like in the "Centered prompt", we'll
+     * group the children in the center of their
+     * container.
+     */
+    justify-content: center;
+
+    padding: 15px 0;
+}
+
+.svg-icon{
+    fill: rgb(22, 139, 185);
+}
+
+.card__descriptionIcon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.card__descriptionText {
+    color: #57727C;
+    font-size: 18px;
+    text-align: center;
+    max-width: calc(100% - 30px);
+}
+
+.card__price {
+    text-align: center;
+    color: #57727C;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 15px;
+    border-top: 1px solid #D7DBDD;
+    background-color: #EEF3F5;
+}
+
+.card--fixedWidth {
+    max-width: 120px;
+}
+
+.featureListItem {
+    /**
+     * Lay out the children of this container with
+     * flexbox, which is horizontal by default.
+     */
+    display: flex;
+
+    /**
+     * Align the children in the center, along
+     * the main axis, which is horizontal in this case.
+     */
+    align-items: center;
+
+    padding: 10px;
+}
+
+.featureListItem + .featureListItem {
+    border-top: 1px solid #D7DBDD;
+}
+
+.featureListItem--reverse {
+    /**
+     * We can specify the flex-direction so that
+     * the children elements are displayed in the
+     * reverse order of how they appear in the
+     * markup.
+     */
+    flex-direction: row-reverse;
+}
+
+.featureListItem__icon,
+.featureListItem__description {
+    padding: 5px 15px;
+}
+
+.featureListItem__icon {
+    font-size: 50px;
+    line-height: 0;
+}
+
+.featureListItem__description {
+    color: #000;
+}
+
+.formFooter {
+  /**
+   * Lay out the children of this container with
+   * flexbox, which is horizontal by default.
+   */
+  display: flex;
+  overflow: hidden;
+}
+
+.formFooter__section {
+    flex: 1 1 0%;
+    border: 1px solid #CAD0D2;
+    border-radius: 4px;
+}
+
+.formFooter__item + .formFooter__item {
+    margin-left: 5px;
 }

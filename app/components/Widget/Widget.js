@@ -10,27 +10,25 @@ import Spinner from '../../commons/spinner';
 import classNames from 'classnames';
 import PureComponent from 'react-pure-render/component';
 
-
 export default class Widget extends PureComponent {
 
   static propTypes = {
-    browserHistory: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     totalSize: PropTypes.any.isRequired,
     labels: PropTypes.any.isRequired,
-    getVisiblePlugins: PropTypes.any.isRequired,
+    getVisiblePlugins: PropTypes.any,
     searchOptions: PropTypes.any.isRequired,
     isFetching: PropTypes.bool.isRequired,
+    getVisiblePluginsLabels: PropTypes.any,
   };
 
   state = {
     show: 'featured'
-  };
+  };r
 
   render() {
 
     const {
-      browserHistory,
       totalSize,
       isFetching,
       searchOptions,
@@ -39,6 +37,8 @@ export default class Widget extends PureComponent {
       location
     } = this.props;
 
+    const { router } = this.context;
+
     const {view = 'Tiles'} = location.query;
 
     const
@@ -46,11 +46,12 @@ export default class Widget extends PureComponent {
         searchOptions.limit * Number(searchOptions.page) : Number(searchOptions.total),
       fromRange = (searchOptions.limit) * (Number(searchOptions.page) - 1);
 
+          //<img src="http://stats.jenkins-ci.org/jenkins-stats/svg/total-jenkins.svg" />
     return (
       <div className={classNames(styles.ItemFinder, view, 'item-finder')} >
         <div className={classNames(styles.CategoriesBox, 'categories-box col-md-2')} >
           <Categories
-            browserHistory={browserHistory}
+            router={router}
             location={location}
             />
         </div>
@@ -64,19 +65,19 @@ export default class Widget extends PureComponent {
                 <a className="nav-link" onClick={() => {
                   this.setState({show: 'featured'});
                   location.query={};
-                  browserHistory.push(location);
+                  router.replace(location);
                 }}>Featured</a>
               </li>
               <li className={`nav-item ${this.state.show === 'new' ? 'active' : ''}`}>
                 <a className="nav-link" onClick={() => {
                   this.setState({show: 'new'});
                   location.query= {latest: 'latest'};
-                  browserHistory.push(location);
+                  router.replace(location);
                 }}>New</a>
               </li>
 
               { totalSize > 0 && <LabelWidget
-                browserHistory={browserHistory}
+                router={router}
                 location={location}
                 labels={labels}
                 /> }
@@ -84,11 +85,11 @@ export default class Widget extends PureComponent {
 
             <ul className="pull-xs-right nav navbar-nav">
               <Sort
-                browserHistory={browserHistory}
+                router={router}
                 location={location}
               />
               <Views
-                browserHistory={browserHistory}
+                router={router}
                 location={location}
               />
 
@@ -103,7 +104,7 @@ export default class Widget extends PureComponent {
                   event.preventDefault();
                   location.query.q = event.target[0].value;
                   location.query.limit = searchOptions.limit;
-                  browserHistory.push(location);
+                  router.replace(location);
                 }}
               >
               <input
@@ -112,7 +113,7 @@ export default class Widget extends PureComponent {
                 onChange={event => {
                   location.query.q = event.target.value;
                   location.query.limit = searchOptions.limit;
-                  browserHistory.push(location);
+                  router.replace(location);
                 }}
                 placeholder="Filter..."
               />
@@ -121,7 +122,7 @@ export default class Widget extends PureComponent {
           <li className="nav-item page-picker">
             {!isFetching && totalSize > 0 &&
               Number(searchOptions.pages) > 1 && <Pagination
-              browserHistory={browserHistory}
+              browserHistory={router}
               location={location}
               pages={Number(searchOptions.pages)}
               page={Number(searchOptions.page)}
@@ -165,3 +166,7 @@ export default class Widget extends PureComponent {
   }
 
 }
+
+Widget.contextTypes = {
+  router: PropTypes.object.isRequired,
+};

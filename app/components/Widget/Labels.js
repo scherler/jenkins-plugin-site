@@ -5,18 +5,18 @@ import PureComponent from 'react-pure-render/component';
 export default class LabelWidget extends PureComponent {
 
   static propTypes = {
-    browserHistory: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     labels: PropTypes.any.isRequired,
   }
 
   handleClick(data) {
-    this.props.location.query = { labelFilter: data };
-    this.props.browserHistory.push(this.props.location);
+    this.props.location.query.labelFilter = data;
+    this.props.router.replace(this.props.location);
   }
 
   render() {
-    const { labels, location, browserHistory} = this.props;
+    const { labels, location, router} = this.props;
     const { labelFilter = ''} = location.query;
     const sortedLabels = labels.sort(
       (label, nextLabel) => label.key.localeCompare(nextLabel.key));
@@ -34,7 +34,7 @@ export default class LabelWidget extends PureComponent {
           onClick={(e) => {
             e.preventDefault();
             delete location.query.labelFilter;
-            browserHistory.push(location);
+            router.replace(location);
           }}
           className="glyphicon glyphicon-remove">remove Filter</span>}
         </button>

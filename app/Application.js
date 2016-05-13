@@ -6,12 +6,14 @@ import {
   isFetching,
   searchOptions,
   filterVisibleList,
+  createSelector,
+  connect,
 } from './resources';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 import React, { PropTypes, Component } from 'react';
 import Widget from './components/Widget';
 import DevelopmentFooter from './commons/developmentFooter';
+
+const { object, func, any, bool } = PropTypes;
 
 export default class Application extends Component {
 
@@ -30,7 +32,6 @@ export default class Application extends Component {
   render() {
     const {
       filterVisibleList,
-      browserHistory,
       totalSize,
       searchOptions,
       isFetching,
@@ -44,7 +45,7 @@ export default class Application extends Component {
         labels={labels}
         searchOptions={searchOptions}
         location={location}
-        browserHistory={browserHistory}
+        router={this.context.router}
         getVisiblePlugins={filterVisibleList}
         totalSize={totalSize}
         isFetching = {isFetching}
@@ -54,15 +55,14 @@ export default class Application extends Component {
 }
 
 Application.propTypes = {
-  generatePluginData: PropTypes.func.isRequired,
-  generateLabelData: PropTypes.func.isRequired,
-  browserHistory: PropTypes.object.isRequired,
-  filterVisibleList: PropTypes.any.isRequired,
-  totalSize: PropTypes.any.isRequired,
-  labels: PropTypes.any.isRequired,
-  searchOptions: PropTypes.any.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  location: PropTypes.object.isRequired,
+  location: object.isRequired,
+  generatePluginData: func.isRequired,
+  generateLabelData: func.isRequired,
+  filterVisibleList: any,
+  labels: any.isRequired,
+  totalSize: any.isRequired,
+  searchOptions: any.isRequired,
+  isFetching: bool.isRequired,
 };
 
 const selectors = createSelector(

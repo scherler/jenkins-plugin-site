@@ -95,7 +95,7 @@ rest.get('/stats/:name', (req, res) => {
 });
 rest.get('/plugins', (req, res) => {
   setRestHeader(res);
-  var q = req.params && req.query.q ? req.query.q : null;
+  var q = req.query && req.query.q ? req.query.q : null;
   const options = getOptions(req);
   this.dbStore.search(q, options, (err, result) => {
     res.json(result);

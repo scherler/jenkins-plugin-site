@@ -25,7 +25,7 @@ export class PluginDetail extends PureComponent {
     const {
       context: {
         router,
-        },
+      },
       props: {
         plugin: {
           title,
@@ -35,22 +35,19 @@ export class PluginDetail extends PureComponent {
           stats: {
             installations,
             installationsPerVersion,
-            },
+          },
           wiki,
           requiredCore,
-          },
-        params: {
-          pluginName
-          }
         },
-      } = this;
+      },
+    } = this;
     const afterClose = () => {
       router.goBack();
     };
-    let total  = 0;
+    let total = 0;
     const installationData = Object.keys(installations).map((entry, index) => {
       const installation = installations[entry];
-      total  += installation;
+      total += installation;
       const slice = {x: parseInt(entry) / 1000000000000, y: installation};
       return slice;
     });
@@ -104,13 +101,13 @@ export class PluginDetail extends PureComponent {
       <div>
         <div className="cardGroup">
           { boxes.map((box, index)=> {
-            const assign = Object.assign({}, { key: index }, box);
+            const assign = Object.assign({}, {key: index}, box);
             if (box.url) {
               return (<a
                 key={index}
                 className="card cardGroup__card"
                 target="_blank"
-                href={box.url} >
+                href={box.url}>
                 <Box {...assign} />
               </a>);
             } else {
@@ -118,7 +115,7 @@ export class PluginDetail extends PureComponent {
                 <Box {...assign} />
               </div>);
             }
-          } )}
+          })}
         </div>
         <div className="featureListItem">
           <div className="featureListItem__icon">
@@ -129,7 +126,7 @@ export class PluginDetail extends PureComponent {
           </div>
           <div
             className="featureListItem__description"
-            dangerouslySetInnerHTML={{ __html: excerpt }} />
+            dangerouslySetInnerHTML={{ __html: excerpt }}/>
         </div>
         <div className="formFooter">
           <div className="formFooter__section">

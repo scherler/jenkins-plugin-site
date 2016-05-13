@@ -7,7 +7,7 @@ const Box = ({ icon, label, footer }) => (
   <div >
     <div className="card__description cardGroup__cardDescription">
       <div className="icon fa fa-trophy card__descriptionIcon">
-        <Icon icon={icon} size={50} />
+        <Icon icon={icon} size={50}/>
       </div>
       <div className="card__descriptionText">
         { label }

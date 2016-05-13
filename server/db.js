@@ -38,7 +38,7 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
             (plugin) => {
               return plugin.name === name;
             })[0];
-          if(!plugin) {
+          if (!plugin) {
             plugin = {
               name: '404',
               title: 'Not Found',
@@ -81,17 +81,17 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
                 return x.id;
               })
               .indexOf(category);
-             if (elementPos > -1) {
-               const pluginsId = categories[elementPos].plugins;
-               result = pluginsId.map((pluginName) => dbStore.filter(
-                 (plugin) => {
-                   return plugin.name === pluginName;
-                 })
-               ).map(key => key[0]);
+            if (elementPos > -1) {
+              const pluginsId = categories[elementPos].plugins;
+              result = pluginsId.map((pluginName) => dbStore.filter(
+                (plugin) => {
+                  return plugin.name === pluginName;
+                })
+              ).map(key => key[0]);
 
-             } else  {
-               result = dbStore;
-             }
+            } else {
+              result = dbStore;
+            }
           } else {
             result = dbStore;
           }
@@ -106,8 +106,8 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
           if (labelFilter) {
             result = result.filter((item) => {
               return item.labels && item.labels.some(searchFilter => {
-                return ( labelFilter=== searchFilter);
-              });
+                  return ( labelFilter === searchFilter);
+                });
             });
           }
           result = result.sort((plugin, nextPlugin) => {

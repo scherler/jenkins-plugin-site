@@ -7,7 +7,7 @@ import expect from 'expect';
 
 import PluginDetail from '../app/components/PluginDetail';
 import Box from '../app/components/Box';
-import plugin from '../test-data/plugin'
+import plugin from '../test-data/plugin';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -27,7 +27,7 @@ describe('<PluginDetail />', () => {
       label: 'xxx',
     }} />);
     expect(wrapper.length).toBe(1);
-    const footer = wrapper.find('.card__price')
+    const footer = wrapper.find('.card__price');
     expect(footer.length).toBe(1);
     expect(footer.node.props.children).toBe('Id');
   });

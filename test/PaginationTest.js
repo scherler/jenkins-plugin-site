@@ -15,7 +15,7 @@ const testElement = (<Pagination
   total={100}
   pages={10}
   page={1}
-  />);
+/>);
 
 describe('Test whether pagination renders correctly', () => {
 
@@ -32,7 +32,6 @@ describe('Test whether pagination renders correctly', () => {
     const result = renderer.getRenderOutput();
     result.props.children[0].props.children.props.onClick();
   });
-
 
 
 });

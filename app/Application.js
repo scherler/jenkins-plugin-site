@@ -10,7 +10,7 @@ import {
   connect,
 } from './resources';
 import React, { PropTypes, Component } from 'react';
-import Widget from './components/Widget';
+import Widget from './components/Widget/Widget';
 import DevelopmentFooter from './commons/developmentFooter';
 
 const { object, func, any, bool } = PropTypes;
@@ -49,7 +49,7 @@ export default class Application extends Component {
         getVisiblePlugins={filterVisibleList}
         totalSize={totalSize}
         isFetching = {isFetching}
-        />
+      />
     </div>);
   }
 }

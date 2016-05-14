@@ -78,7 +78,7 @@
     "reselect": "2.5.1",
     "script-loader": "0.7.0",
     "targetenv": "1.0.0",
-    "victory": "^0.6.1"
+    "victory": "^0.7.0"
   },
   "devDependencies": {
     "auto-prefixer": "0.4.2",
@@ -98,15 +98,15 @@
     "cssnext": "1.8.4",
     "cssnext-loader": "1.0.1",
     "enzyme": "^2.3.0",
-    "eslint": "^2.9.0",
+    "eslint": "^2.10.0",
     "eslint-plugin-react": "^5.1.1",
     "estraverse-fb": "^1.3.1",
     "expect": "1.20.1",
     "express": "4.13.4",
     "extract-text-webpack-plugin": "1.0.1",
     "fs": "0.0.2",
-    "html-webpack-plugin": "2.16.1",
-    "ignore-styles": "1.2.0",
+    "html-webpack-plugin": "2.17.0",
+    "ignore-styles": "2.0.0",
     "mocha": "2.4.5",
     "path": "0.12.7",
     "react-addons-test-utils": "15.0.2",

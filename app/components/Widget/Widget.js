@@ -11,23 +11,14 @@ import classNames from 'classnames';
 import PureComponent from 'react-pure-render/component';
 
 export default class Widget extends PureComponent {
-
-  static propTypes = {
-    location: PropTypes.object.isRequired,
-    totalSize: PropTypes.any.isRequired,
-    labels: PropTypes.any.isRequired,
-    getVisiblePlugins: PropTypes.any,
-    searchOptions: PropTypes.any.isRequired,
-    isFetching: PropTypes.bool.isRequired,
-    getVisiblePluginsLabels: PropTypes.any,
-  };
-
-  state = {
-    show: 'featured'
-  };r
+  constructor(properties) {
+    super(properties);
+    this.state  = {
+      show: 'featured'
+    };
+  }
 
   render() {
-
     const {
       totalSize,
       isFetching,
@@ -35,7 +26,7 @@ export default class Widget extends PureComponent {
       getVisiblePlugins,
       labels,
       location
-    } = this.props;
+      } = this.props;
 
     const { router } = this.context;
 
@@ -43,23 +34,23 @@ export default class Widget extends PureComponent {
 
     const
       toRange = searchOptions.limit * Number(searchOptions.page) <= Number(searchOptions.total) ?
-        searchOptions.limit * Number(searchOptions.page) : Number(searchOptions.total),
+      searchOptions.limit * Number(searchOptions.page) : Number(searchOptions.total),
       fromRange = (searchOptions.limit) * (Number(searchOptions.page) - 1);
 
-          //<img src="http://stats.jenkins-ci.org/jenkins-stats/svg/total-jenkins.svg" />
+    //<img src="http://stats.jenkins-ci.org/jenkins-stats/svg/total-jenkins.svg" />
     return (
-      <div className={classNames(styles.ItemFinder, view, 'item-finder')} >
-        <div className={classNames(styles.CategoriesBox, 'categories-box col-md-2')} >
+      <div className={classNames(styles.ItemFinder, view, 'item-finder')}>
+        <div className={classNames(styles.CategoriesBox, 'categories-box col-md-2')}>
           <Categories
             router={router}
             location={location}
-            />
+          />
         </div>
-        
+
         <div className={classNames(styles.ItemsList, 'items-box col-md-10')}>
 
           <nav id="cb-grid-toolbar"
-             className="navbar navbar-light bg-faded">
+               className="navbar navbar-light bg-faded">
             <ul className="nav navbar-nav">
               <li className={`nav-item ${this.state.show === 'featured'?'active':''}`}>
                 <a className="nav-link" onClick={() => {
@@ -80,7 +71,7 @@ export default class Widget extends PureComponent {
                 router={router}
                 location={location}
                 labels={labels}
-                /> }
+              /> }
             </ul>
 
             <ul className="pull-xs-right nav navbar-nav">
@@ -96,62 +87,62 @@ export default class Widget extends PureComponent {
             </ul>
           </nav>
           <nav className="page-controls">
-          <ul className="nav navbar-nav">
-            <li className="nav-item filter">
-              <form
-                className="form-inline pull-xs-right" action="#"
-                onSubmit={event => {
+            <ul className="nav navbar-nav">
+              <li className="nav-item filter">
+                <form
+                  className="form-inline pull-xs-right" action="#"
+                  onSubmit={event => {
                   event.preventDefault();
                   location.query.q = event.target[0].value;
                   location.query.limit = searchOptions.limit;
                   router.replace(location);
                 }}
-              >
-              <input
-                defaultValue={location.query.q}
-                className={classNames(styles.SearchInput, 'form-control nav-link')}
-                onChange={event => {
+                >
+                  <input
+                    defaultValue={location.query.q}
+                    className={classNames(styles.SearchInput, 'form-control nav-link')}
+                    onChange={event => {
                   location.query.q = event.target.value;
                   location.query.limit = searchOptions.limit;
                   router.replace(location);
                 }}
-                placeholder="Filter..."
-              />
-              </form>
-            </li>
-          <li className="nav-item page-picker">
-            {!isFetching && totalSize > 0 &&
-              Number(searchOptions.pages) > 1 && <Pagination
-              browserHistory={router}
-              location={location}
-              pages={Number(searchOptions.pages)}
-              page={Number(searchOptions.page)}
-            />}
-          </li>
-          <li className="nav-item count">
-            {totalSize > 0 &&
-              <span className="nav-link">
+                    placeholder="Filter..."
+                  />
+                </form>
+              </li>
+              <li className="nav-item page-picker">
+                {!isFetching && totalSize > 0 &&
+                Number(searchOptions.pages) > 1 && <Pagination
+                  router={router}
+                  location={location}
+                  pages={Number(searchOptions.pages)}
+                  page={Number(searchOptions.page)}
+                />}
+              </li>
+              <li className="nav-item count">
+                {totalSize > 0 &&
+                <span className="nav-link">
                 {fromRange} to&nbsp;
-                {toRange} of {totalSize}
+                  {toRange} of {totalSize}
               </span>
-            }
-          </li>
+                }
+              </li>
 
-          </ul>
+            </ul>
 
 
           </nav>
           <div className="padded-box">
-            <div id="cb-item-finder-grid-box" className={classNames(styles.GridBox, 'grid-box')} >
-              <div className={classNames(styles.Grid, 'grid')} >
-    
+            <div id="cb-item-finder-grid-box" className={classNames(styles.GridBox, 'grid-box')}>
+              <div className={classNames(styles.Grid, 'grid')}>
+
                 {isFetching && <Spinner>loading</Spinner>}
-    
+
                 {totalSize > 0 && getVisiblePlugins.valueSeq().map(plugin => {
                   return (<Entry
                     className="Entry"
                     key={plugin.name}
-                    plugin={plugin} />);
+                    plugin={plugin}/>);
                 })}
               </div>
             </div>
@@ -162,11 +153,21 @@ export default class Widget extends PureComponent {
         </div>
 
       </div>
-      );
+    );
   }
 
 }
 
 Widget.contextTypes = {
   router: PropTypes.object.isRequired,
+};
+
+Widget.propTypes = {
+  location: PropTypes.object.isRequired,
+  totalSize: PropTypes.any.isRequired,
+  labels: PropTypes.any.isRequired,
+  getVisiblePlugins: PropTypes.any,
+  searchOptions: PropTypes.any.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  getVisiblePluginsLabels: PropTypes.any,
 };

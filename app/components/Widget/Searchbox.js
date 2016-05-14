@@ -2,13 +2,6 @@ import React, { PropTypes } from 'react';
 import PureComponent from 'react-pure-render/component';
 
 export default class Searchbox extends PureComponent {
-
-  static propTypes = {
-    browserHistory: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    limit: PropTypes.number.isRequired
-  }
-
   render() {
     return (
       <div>
@@ -36,3 +29,11 @@ export default class Searchbox extends PureComponent {
       );
   }
 }
+
+Searchbox.propTypes = {
+  browserHistory: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
+  limit: PropTypes.number.isRequired
+};
+
+

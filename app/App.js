@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 
 const { any } = PropTypes;
 
-export default class App extends Component {
+class App extends Component {
   render() {
     return (
       <div>
@@ -15,3 +15,5 @@ export default class App extends Component {
 App.propTypes = {
   children: any,
 };
+
+export default App;

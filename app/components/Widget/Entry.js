@@ -6,14 +6,7 @@ import classNames from 'classnames';
 import { Link } from 'react-router';
 
 export class Icon extends PureComponent {
-
-  static propTypes = {
-    title: PropTypes.any.isRequired,
-    type: PropTypes.any,
-  };
-
-  render() {
-
+   render() {
     const {type = ''} = this.props;
     let { title } = this.props;
 
@@ -44,12 +37,12 @@ export class Icon extends PureComponent {
   }
 }
 
+Icon.propTypes = {
+  title: PropTypes.any.isRequired,
+  type: PropTypes.any,
+};
+
 export default class Entry extends PureComponent {
-
-  static propTypes = {
-    plugin: PropTypes.any.isRequired
-  };
-
   render() {
     const {plugin} = this.props;
     return (
@@ -90,3 +83,7 @@ export default class Entry extends PureComponent {
     );
   }
 }
+
+Entry.propTypes = {
+  plugin: PropTypes.any.isRequired
+};

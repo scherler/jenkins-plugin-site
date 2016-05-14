@@ -3,13 +3,6 @@ import LabelWidgetItem from './LabelWidgetItem';
 import PureComponent from 'react-pure-render/component';
 
 export default class LabelWidget extends PureComponent {
-
-  static propTypes = {
-    router: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    labels: PropTypes.any.isRequired,
-  }
-
   handleClick(data) {
     this.props.location.query.labelFilter = data;
     this.props.router.replace(this.props.location);
@@ -52,3 +45,9 @@ export default class LabelWidget extends PureComponent {
     );
   }
 }
+
+LabelWidget.propTypes = {
+  router: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
+  labels: PropTypes.any.isRequired,
+};

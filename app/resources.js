@@ -66,22 +66,22 @@ export const actionHandlers = {
   [ACTION_TYPES.CLEAR_PLUGIN_DATA](state) {
     return state.set('plugin', null);
   },
-  [ACTION_TYPES.SET_PLUGIN_DATA](state, { payload }): State {
+  [ACTION_TYPES.SET_PLUGIN_DATA](state, { payload }){
     return state.set('plugin', payload);
   },
   [ACTION_TYPES.CLEAR_PLUGINS_DATA](state) {
     return state.set('plugins', Immutable.Map());
   },
-  [ACTION_TYPES.FETCH_PLUGINS_DATA](state, {}): State {
+  [ACTION_TYPES.FETCH_PLUGINS_DATA](state, {}){
     return state.set('isFetching', !state.isFetching);
   },
-  [ACTION_TYPES.SET_PLUGINS_DATA](state, { payload }): State {
+  [ACTION_TYPES.SET_PLUGINS_DATA](state, { payload }){
     return state.set('plugins', payload);
   },
-  [ACTION_TYPES.SET_LABELS](state, { payload }): State {
+  [ACTION_TYPES.SET_LABELS](state, { payload }){
     return state.set('labels', payload);
   },
-  [ACTION_TYPES.SET_QUERY_INFO](state, { payload }): State {
+  [ACTION_TYPES.SET_QUERY_INFO](state, { payload }){
     return state.set('searchOptions', payload);
   }
 };
@@ -210,7 +210,7 @@ export const getVisiblePluginsLabels = createSelector(
   [ filterVisibleList ],
   ( plugins ) => plugins ? groupAndCountLabels(plugins) : new Immutable.List());
 
-export function reducer(state = new State(), action: Object): State {
+export function reducer(state = new State(), action){
   const { type } = action;
   if (type in actionHandlers) {
     return actionHandlers[type](state, action);

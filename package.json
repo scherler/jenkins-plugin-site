@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/server.js",
-    "docker": "NODE_ENV=docker npm start",
+    "docker": "node server/server.js",
     "test": "mocha --require ignore-styles --compilers js:babel-core/register --recursive",
     "test:debug": "npm test -- --debug-brk",
     "test:watch": "npm test -- --watch --reporter min",

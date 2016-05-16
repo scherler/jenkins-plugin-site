@@ -1,20 +1,32 @@
 import { createSelector } from 'reselect';
-import Immutable from 'immutable';
+import Immutable, { Record }from 'immutable';
 import keymirror from 'keymirror';
 import { api, logger } from './commons';
+
+import fetch from 'isomorphic-fetch';
+
+require('es6-promise').polyfill();
 
 api.init({
   latency: 100
 });
 
-export const SearchOptions = Immutable.Record({
+export const SearchOptions = Record({
   limit: 100,
   page: 1,
   pages: 0,
   total: 0
 });
 
-const Record = Immutable.Record({
+export const Stats = Record({
+  installations: null,
+  installationsPerVersion: null,
+  installationsPercentage: null,
+  installationsPercentagePerVersion: null,
+  name: null,
+});
+
+export const Plugin = Record({
   id: null,
   name: null,
   title: null,
@@ -34,15 +46,15 @@ const Record = Immutable.Record({
   developers: [],
   labels: [],
   dependencies: [],
-  stats: null,
+  stats: Stats,
 });
 
-export const State = Immutable.Record({
+export const State = Record({
   plugins: null,
-  plugin: Record,
+  plugin: Plugin,
   isFetching: false,
-  labels: [],
-  labelFilter: Immutable.Record({//fixme: that should become label: search, sort: field
+  labels: null,
+  labelFilter: Record({//fixme: that should become label: search, sort: field
     field: 'title',
     searchField: null,
     asc: false,
@@ -50,6 +62,21 @@ export const State = Immutable.Record({
   }),
   searchOptions: SearchOptions,
 });
+
+// fetch helper
+const fetchOptions = { credentials: 'same-origin' };
+function checkStatus(response) {
+  if (response.status >= 300 || response.status < 200) {
+    const error = new Error(response.statusText);
+    error.response = response;
+    throw error;
+  }
+  return response;
+}
+
+function parseJSON(response) {
+  return response.json();
+}
 
 export const ACTION_TYPES = keymirror({
   CLEAR_PLUGINS_DATA: null,
@@ -66,8 +93,8 @@ export const actionHandlers = {
   [ACTION_TYPES.CLEAR_PLUGIN_DATA](state) {
     return state.set('plugin', null);
   },
-  [ACTION_TYPES.SET_PLUGIN_DATA](state, { payload }){
-    return state.set('plugin', payload);
+  [ACTION_TYPES.SET_PLUGIN_DATA](state, { payload: record }){
+    return state.set('plugin', record);
   },
   [ACTION_TYPES.CLEAR_PLUGINS_DATA](state) {
     return state.set('plugins', Immutable.Map());
@@ -104,32 +131,34 @@ export const actions = {
       const urlStats = `/stats/${name}`;
       if(!plugins || !plugin || plugin.size === 0) {
         const url = `/plugin/${name}`;
-        return api.getJSON(url, (error, data) => {
-          if (data) {
-            return api.getJSON(urlStats, (error, statsData) => {
-              if (statsData) {
-                const stats = {stats: statsData};
+        return fetch(url, fetchOptions)
+          .then(checkStatus)
+          .then(parseJSON)
+          .then(data => {
+            return fetch(urlStats, fetchOptions)
+              .then(checkStatus)
+              .then(parseJSON)
+              .then(statsData => {
+                const stats = new Stats (statsData);
+                const record = new Plugin(data);
                 dispatch({
                   type: ACTION_TYPES.SET_PLUGIN_DATA,
-                  payload: new Record(Object.assign({}, data, stats)),
+                  payload: record.set('stats', stats),
                 });
-
-              }
-            });
-          }
-        });
+              });
+          });
       } else {
-        const js = plugin.toArray()[0];
-        return api.getJSON(urlStats, (error, statsData) => {
-          if (statsData) {
-            const stats = {stats: statsData};
+        const record = plugin.toArray()[0];
+        return fetch(urlStats, fetchOptions)
+          .then(checkStatus)
+          .then(parseJSON)
+          .then(statsData => {
+            const stats = new Stats (statsData);
             dispatch({
               type: ACTION_TYPES.SET_PLUGIN_DATA,
-              payload: new Record(Object.assign({}, js.toJS(), stats)),
+              payload: record.set('stats', stats),
             });
-
-          }
-        });
+          });
       }
     };
   },
@@ -167,7 +196,7 @@ export const actions = {
             total: data.total
           });
 
-          const items = data.docs.map(item => new Record(item));
+          const items = data.docs.map(item => new Plugin(item));
           const recordsMap = Immutable.OrderedSet(items);
           dispatch({
             type: ACTION_TYPES.SET_PLUGINS_DATA,

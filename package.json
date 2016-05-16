@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/server.js",
-    "docker": "node server/server.js",
+    "docker": "NODE_ENV=docker npm start",
     "test": "mocha --require ignore-styles --compilers js:babel-core/register --recursive",
     "test:debug": "npm test -- --debug-brk",
     "test:watch": "npm test -- --watch --reporter min",
@@ -57,6 +57,7 @@
   "dependencies": {
     "async": "2.0.0-rc.4",
     "classnames": "2.2.5",
+    "es6-promise": "^3.2.1",
     "history": "2.1.1",
     "htmlparser2": "^3.9.0",
     "immutable": "3.8.1",

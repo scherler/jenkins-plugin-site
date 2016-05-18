@@ -2,7 +2,7 @@ const fs = require('fs');
 const async = require('async');
 const Parser = require('htmlparser2').Parser;
 const _ = require('lodash');
-
+const getCategory = require('./labelsToCategory');
 const queryFields = ['excerpt', 'name', 'title'];
 
 function createResponseResults(docs) {
@@ -16,7 +16,7 @@ function createResponseResults(docs) {
     pages: 1
   };
 }
-
+// clean excerpt from markup
 var extract;
 var parser = new Parser({
     onopentag: function (name, attribs) {
@@ -33,7 +33,7 @@ var parser = new Parser({
 );
 
 // It instantiates a local database asynchronously.
-module.exports = flatDb = (filename, categoryFile, callback) => {
+module.exports = flatDb = (filename, callback) => {
   var dbStore;
   async.series([
     (cb) => {
@@ -45,11 +45,12 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
         const rawData = JSON.parse(data);
         dbStore = Object.keys(rawData).map(key => {
           extract=[];
-          const excerpt = rawData[key];
-          parser.write(excerpt.excerpt);
+          const plugin = rawData[key];
+          parser.write(plugin.excerpt);
           parser.end();
-          excerpt.excerpt = extract.join(' ');
-          return excerpt;
+          plugin.excerpt = extract.join(' ');
+          plugin.category = getCategory(plugin);
+          return plugin;
         });
 
         // Adds various library-specific data handles
@@ -124,23 +125,7 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
           var result;
 
           if (category) {
-            const categories = dbStore.rawCategories;
-            const elementPos = categories
-              .map((x) => {
-                return x.id;
-              })
-              .indexOf(category);
-            if (elementPos > -1) {
-              const pluginsId = categories[elementPos].plugins;
-              result = pluginsId.map((pluginName) => dbStore.filter(
-                (plugin) => {
-                  return plugin.name === pluginName;
-                })
-              ).map(key => key[0]);
-
-            } else {
-              result = dbStore;
-            }
+            result = dbStore.filter((plugin) => plugin.category === category);
           } else {
             result = dbStore;
           }
@@ -189,56 +174,9 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
           });
         };
 
-
-        dbStore.getCategories = (options, caback) => {
-          if (!caback && typeof options === 'function') {
-            caback = options;
-            options = {};
-          }
-
-          const categories = dbStore.rawCategories;
-
-          if (options.id) {
-            const elementPos = categories
-              .map((x) => {
-                return x.id;
-              })
-              .indexOf(options.id);
-            if (elementPos < 0) {
-              caback('no category with that id found!');
-            }
-            const pluginsId = categories[elementPos].plugins;
-            const result = pluginsId.map((pluginName) => dbStore.filter(
-              (plugin) => {
-                return plugin.name === pluginName;
-              })
-            ).map(key => key[0]);
-            caback(null, createResponseResults(result));
-          } else {
-            var response = {};
-            async.forEach(categories, (category, caback) => {
-              response[category.id] = category.plugins.map(
-                (pluginName) => dbStore.filter(
-                  (plugin) => {
-                    return plugin.name === pluginName;
-                  }));
-              caback();
-            }, (err) => {
-              caback(err, response);
-            });
-          }
-
-        };
-
-
         cb();
 
 
-      });
-    }, (cb) => {
-      fs.readFile(categoryFile, 'utf8', (err, contents) => {
-        dbStore.rawCategories = JSON.parse(contents);
-        cb();
       });
     }
   ], () => {
@@ -259,9 +197,6 @@ module.exports = flatDb = (filename, categoryFile, callback) => {
       'getCategories': {
         enumerable: false
       },
-      'rawCategories': {
-        enumerable: false
-      }
     });
     callback(null, dbStore);
   });

@@ -116,3 +116,9 @@ npm run test:debug
 Then run node-inspector. It will prompt you to open a browser at a debug URL.
 From there, you can set breakpoints and inspect variables in the same way
 you would in the Chrome Dev Tools.
+
+
+### Related resources
+
+https://jenkins-ci.org/releases.rss - release feed of plugins
+http://stats.jenkins-ci.org/ - installation stats around jenkins and plugins

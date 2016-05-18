@@ -9,7 +9,6 @@ const flatDb = require('./db');
 const createPluginDb = require('./createPluginsDb');
 
 const db = '/tmp/plugin-site';
-const categoryFile = `${__dirname}/static/category-plugins.json`;
 
 const
   rest = express(),
@@ -23,7 +22,7 @@ schedule.scheduleJob('1 1 1 * * *', () => {
     if (err) {
       callback(err);
     }
-    flatDb(db, categoryFile, (err, data)=> {
+    flatDb(db, (err, data)=> {
       if (err) {
         callback(err);
       }
@@ -64,13 +63,6 @@ function setRestHeader(res) {
     .header('Last-modified', lastModified)
   ;
 }
-rest.get('/getCategories', (req, res) => {
-  setRestHeader(res);
-  const id = req.query ? req.query.id : '';
-    this.dbStore.getCategories({id: id}, (err, data) => {
-        res.send(err || data);
-    });
-});
 
 rest.get('/latest', (req, res) => {
   setRestHeader(res);
@@ -122,7 +114,7 @@ async.series([
       if (err) {
         callback(err);
       }
-      flatDb(db, categoryFile, (err, data)=> {
+      flatDb(db, (err, data)=> {
         if (err) {
           callback(err);
         }

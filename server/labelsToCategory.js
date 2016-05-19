@@ -17,7 +17,7 @@ const knowLabelsToCategories = {
   'ios': 'mobile',
   'library': 'other',
   'listview-column': 'other',
-  'maven': 'other',
+  'maven': 'build',
   'misc': 'other',
   'must-be-labeled': 'other',
   'notifier': 'other',
@@ -41,7 +41,7 @@ const knowLabelsToCategories = {
   'ui': 'other',
   'undefined': 'other',
   'upload': 'deploy',
-  'user': 'management',
+  'user': 'security',
   'view': 'other',
 };
 

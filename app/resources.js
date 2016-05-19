@@ -42,6 +42,7 @@ export const Plugin = Record({
   wiki: null,
   excerpt: null,
   iconDom: null,
+  category: null,
   requiredCore: null,
   developers: [],
   labels: [],

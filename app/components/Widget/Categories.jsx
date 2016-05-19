@@ -4,7 +4,19 @@ import styles from './Widget.css';
 import { logger } from '../../commons';
 import PureComponent from 'react-pure-render/component';
 
-const categories = {
+const notMatchingCategories = {
+  management: {
+    name: 'Management',
+    description: 'plugins that add management features for administrators to Jenkins'
+  },
+  optimization: {
+    name: 'Optimization',
+    description: `plugins that add advanced functions or improve existing functions’
+      performance in Jenkins`
+  },
+};
+
+export const categories = {
   scm: {
     name: 'Source Code Management',
     description: 'plugins for pulling your code out of source control',
@@ -16,24 +28,15 @@ const categories = {
     name: 'Deployment',
     description: 'plugins that allow users to deploy applications from Jenkins'
   },
-  management: {
-    name: 'Management',
-    description: 'plugins that add management features for administrators to Jenkins'
-  },
   devops: {name: 'DevOps', description: 'plugins that allows to work with container'},
   security: {name: 'Security', description: 'plugins for securing your code and Jenkins itself'},
   pipelines: {name: 'Pipelines', description: 'plugins that enable continuous delivery in Jenkins'},
-  optimization: {
-    name: 'Optimization',
-    description: `plugins that add advanced functions or improve existing functions’
-      performance in Jenkins`
-  },
   agents: {
     name: 'Build Agents',
     description: 'plugins that allow users to connect their build agents to Jenkins'
   },
   mobile: {name: 'Mobile', description: 'plugins around mobile development ios, android, etc.'},
-  other: {name: 'General Purpose', description: 'all other labels not otherwise mentioned above'}
+  other: {name: 'General Purpose', description: 'general purpose plugins'}
 };
 
 export class Category extends PureComponent {

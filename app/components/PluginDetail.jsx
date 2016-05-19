@@ -2,10 +2,13 @@ import PureComponent from 'react-pure-render/component';
 import React, { PropTypes } from 'react';
 import ModalView, {Body, Header} from 'react-header-modal';
 import {Icon} from 'react-material-icons-blue';
-import Chart from './Chart';
 import Box from './Box';
+import { categories } from './Widget/Categories';
+import moment from 'moment';
 import numeral from 'numeral';
 import { actions, plugin as pluginSelector, createSelector, connect } from '../resources';
+
+import { getMaintainersLinked, getLabels, getDependencies } from '../helper';
 
 const { func, object, any, string } = PropTypes;
 
@@ -25,22 +28,32 @@ export class PluginDetail extends PureComponent {
     const {
       context: {
         router,
-      },
+        },
       props: {
         plugin: {
           title,
           name,
           excerpt,
+          developers,
+          sha1,
+          version,
+          scm,
+          previousVersion,
           url,
+          releaseTimestamp,
+          previousTimestamp,
+          category,
+          labels,
+          dependencies,
           stats: {
             installations,
             installationsPerVersion,
-          },
+            },
           wiki,
           requiredCore,
+          },
         },
-      },
-    } = this;
+      } = this;
     const afterClose = () => {
       router.goBack();
     };
@@ -60,8 +73,14 @@ export class PluginDetail extends PureComponent {
     const boxes = [
       {
         icon: 'perm_identity',
-        footer: 'ID',
+        footer: `v. ${version}`,
         label: name,
+      },
+      {
+        url: `http://${scm}/jenkinsci/${name}-plugin`,
+        icon: 'github-circle',
+        footer: 'scm',
+        label: scm,
       },
       {
         url: wiki,
@@ -70,15 +89,23 @@ export class PluginDetail extends PureComponent {
         label: 'Wiki',
       },
       {
+        icon: 'play_install',
+        footer: 'Total Installs',
+        label: formatedTotal,
+      },
+    ];
+
+    const boxesButtons = [
+      {
         url: url,
         icon: 'file_download',
-        footer: 'HPI',
+        footer: `${moment(releaseTimestamp).format('MMM Do YYYY')}`,
         label: 'latest',
       },
       {
         url: `http://updates.jenkins-ci.org/download/plugins/${name}/`,
         icon: 'launch',
-        footer: 'HPI',
+        footer: `${moment(previousTimestamp).fromNow()}: v. ${previousVersion} `,
         label: 'archives',
       },
       {
@@ -87,12 +114,16 @@ export class PluginDetail extends PureComponent {
         footer: 'Required Core',
         label: requiredCore,
       },
-      {
-        icon: 'play_install',
-        footer: 'Total Installs',
-        label: formatedTotal,
-      },
     ];
+    const developerMap = getMaintainersLinked(developers, sha1).map((item, index) => {
+      return (<div className="formFooter__section" key={index}>
+        <div className="formFooter__item">
+          {item}
+        </div>
+      </div>)
+    });
+    const labelMap = getLabels(labels);
+    const dependenciesMap = getDependencies(dependencies);
     return (<ModalView hideOnOverlayClicked isVisible {...{afterClose}}>
       <Header>
         <h2>{title}</h2>
@@ -117,8 +148,47 @@ export class PluginDetail extends PureComponent {
             }
           })}
         </div>
-        <div className="featureListItem">
+        <div className="featureListItem"  title="Category">
           <div className="featureListItem__icon">
+            <Icon
+              size={50}
+              icon="business"// Icon to use
+            />
+          </div>
+          <div className="featureListItem__description">
+            <div className="formFooter" style={{alignItems: 'center'}}>
+              {categories[category].name} - {categories[category].description}
+            </div>
+          </div>
+        </div>
+        <div className="featureListItem featureListItem--reverse" title="Labels">
+          <div className="featureListItem__icon">
+            <Icon
+              size={50}
+              icon="label_outline"// Icon to use
+            />
+          </div>
+          <div className="featureListItem__description">
+            <div className="formFooter" style={{alignItems: 'center'}}>
+              { labelMap }
+            </div>
+          </div>
+        </div>
+        <div className="featureListItem"  title="Maintainer(s)">
+          <div className="featureListItem__icon">
+            <Icon
+              size={50}
+              icon="account_circle"// Icon to use
+            />
+          </div>
+          <div className="featureListItem__description">
+            <div className="formFooter" style={{alignItems: 'center'}}>
+              { developerMap }
+            </div>
+          </div>
+        </div>
+        <div className="featureListItem featureListItem--reverse" title="Description">
+          <div className="featureListItem__icon" >
             <Icon
               size={50}
               icon="subject"// Icon to use
@@ -128,14 +198,38 @@ export class PluginDetail extends PureComponent {
             className="featureListItem__description"
             dangerouslySetInnerHTML={{ __html: excerpt }}/>
         </div>
-        <div className="formFooter">
-          <div className="formFooter__section">
-            <Chart label="Version of plugin" data={versionData}/>
+        <div className="featureListItem" title="Dependencies">
+          <div className="featureListItem__icon">
+            <Icon
+              size={50}
+              icon="bookmark"// Icon to use
+            />
           </div>
-          <div className="formFooter__section">
-            <Chart data={installationData}/>
+          <div className="featureListItem__description">
+            <div className="formFooter" style={{alignItems: 'center'}}>
+              { dependenciesMap }
+            </div>
           </div>
         </div>
+        <div className="cardGroup">
+          { boxesButtons.map((box, index)=> {
+            const assign = Object.assign({}, {key: index}, box);
+            if (box.url) {
+              return (<a
+                key={index}
+                className="card cardGroup__card"
+                target="_blank"
+                href={box.url}>
+                <Box {...assign} />
+              </a>);
+            } else {
+              return (<div key={index} className="card cardGroup__card">
+                <Box {...assign} />
+              </div>);
+            }
+          })}
+        </div>
+
       </div>
       </Body>
     </ModalView>);

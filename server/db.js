@@ -2,7 +2,7 @@ const fs = require('fs');
 const async = require('async');
 const Parser = require('htmlparser2').Parser;
 const _ = require('lodash');
-const getCategory = require('./labelsToCategory');
+const getCategory = require('./categories/categories');
 const queryFields = ['excerpt', 'name', 'title'];
 
 function createResponseResults(docs) {

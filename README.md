@@ -1,11 +1,11 @@
 # Jenkins plugin site
 This is a simple rendering of the plugin list as taken from updates.jenkins-ci.org/current/update-center.json to make
-the information of plugins searchable and filterable.
+the information of plugins searchable and filterable. We introducing categories which we map via two mapping files `knownLabelsToCategory|knownPluginsToCategory.js`. 
 
 # Help wanted
 
 We welcome any enhancements and bugfixes, please see our [guidelines](CONTRIBUTING.md) on how you can 
-[contribute](CONTRIBUTING.md).
+[contribute](CONTRIBUTING.md). We will handle PRs for `./server/categories/knownLabelsToCategory|knownPluginsToCategory.js` extra quick! Available categories can be found in `./app/components/Widget/Categories.jsx#categories`
 
 # Architecture in deploy
 

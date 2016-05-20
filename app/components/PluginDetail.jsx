@@ -80,18 +80,24 @@ export class PluginDetail extends PureComponent {
       return slice;
     });
     const formatedTotal = numeral(total).format('0.0 a');
+    const scmEntry = /github.com$/.test(scm) ? {
+        url: `http://${scm}/jenkinsci/${name}-plugin`,
+        icon: 'github-circle',
+        footer: 'scm',
+        label: scm,
+      } : {
+        url: `http://${scm}`,
+        icon: 'dnd_forwardslash',
+        footer: 'scm',
+        label: scm,
+    };
     const boxes = [
       {
         icon: 'perm_identity',
         footer: `v. ${version}`,
         label: name,
       },
-      {
-        url: `http://${scm}/jenkinsci/${name}-plugin`,
-        icon: 'github-circle',
-        footer: 'scm',
-        label: scm,
-      },
+      scmEntry,
       {
         url: wiki,
         icon: 'help',

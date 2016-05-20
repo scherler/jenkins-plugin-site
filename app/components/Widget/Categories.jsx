@@ -81,7 +81,6 @@ export default class Categories extends PureComponent {
       {Object.keys(categories).map(
         (key, index) => {
           const item = categories[key];
-          console.log(categories[key], index)
           return (<Category
             key={index}
             title={item.name}

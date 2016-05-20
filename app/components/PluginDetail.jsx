@@ -15,10 +15,20 @@ const { func, object, any, string } = PropTypes;
 export class PluginDetail extends PureComponent {
   componentWillMount() {
     if (this.props.params && this.props.params.pluginName) {
-      const name = this.props.params.pluginName;
-      const { getPlugin } = this.props;
-      getPlugin(name);
+      this.getPluginHelper.call(this, this.props.params);
     }
+  }
+
+  componentWillReceiveProps(nextProp) {
+    if (this.props.params.pluginName !== nextProp.params.pluginName) {
+      this.getPluginHelper.call(this, nextProp.params);
+    }
+  }
+
+  getPluginHelper(params) {
+    const { pluginName: name } = params;
+    const { getPlugin } = this.props;
+    getPlugin(name);
   }
 
   render() {

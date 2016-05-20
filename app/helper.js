@@ -64,7 +64,7 @@ export function getDependencies(rawdependencies) {
     .map((item, index) => {
     return (<div key={index}>
       {item.optional ? <Icon icon="bookmark_outline"/> : <Icon icon="bookmark"/> }
-      {item.name} v.{item.version}
+       <Link to={`/${item.name}`} >{item.name} v.{item.version}</Link>
     </div>);
   });
   if(!dependencies || dependencies.length === 0) {

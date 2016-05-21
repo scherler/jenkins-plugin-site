@@ -2,6 +2,8 @@ const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
 const poly = require('babel-polyfill');
 const stylusLoader = ExtractTextPlugin.extract('style-loader', 'css-loader!stylus-loader');
 const entryDirectory = 'app';
@@ -48,7 +50,11 @@ function getLoader(dirname) {
     }
   ];
 }
-
+const locals = {
+  paths: [
+    '/'
+  ]
+};
 const
   plugins = {
     production: [
@@ -65,7 +71,8 @@ const
         compress: {
           warnings: false
         }
-      })
+      }),
+      new StaticSiteGeneratorPlugin('bundle.js', locals.paths, locals)
     ],
     development: [
       new webpack.DefinePlugin({

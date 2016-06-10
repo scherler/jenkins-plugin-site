@@ -15,7 +15,7 @@ const consoleLogger = {
   },
 
   _output: function (type, args) {
-    if (window.console && window.console[type]) {
+    if (window && window.console && window.console[type]) {
       window.console[type].apply(window.console, Array.prototype.slice.call(args));
     }
   }

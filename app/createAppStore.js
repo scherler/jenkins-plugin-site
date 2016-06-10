@@ -6,7 +6,7 @@ import thunk from 'redux-thunk';
 export default function createAppStore() {
   const finalCreateStore = compose(
     applyMiddleware(thunk),
-    window.devToolsExtension ? window.devToolsExtension() : f => f
+    window && window.devToolsExtension ? window.devToolsExtension() : f => f
   )(createStore);
 
   const rootReducer = combineReducers({

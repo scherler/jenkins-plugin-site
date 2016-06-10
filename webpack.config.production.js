@@ -41,10 +41,17 @@
 /* eslint-disable no-var */
 const webpack = require('webpack');
 const path = require('path');
+//var ejs = require('ejs');
+//var fs = require('fs');
+
+const StaticSitePlugin = require('react-static-webpack-plugin');
+
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const stylusLoader = ExtractTextPlugin.extract('style-loader', 'css-loader!stylus-loader');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-require('babel-polyfill');
+//var StaticSiteGeneratorPlugin = require('static-render-webpack-plugin');
+// new StaticSiteGeneratorPlugin('bundle.js', ['/'], temp)
+//var template = ejs.compile(fs.readFileSync(__dirname + '/template.ejs', 'utf-8'))
+//const temp = { template: template };
 
 const GLOBALS = {
   'process.env.NODE_ENV': JSON.stringify('production'),
@@ -52,15 +59,20 @@ const GLOBALS = {
 };
 
 module.exports = {
-  target:  "web",
+  compress: true,
+  target:  'web',
   cache:   false,
   context: __dirname,
-  debug:   false,
+  debug:   true,
   devtool: false,
-  entry: ['./app/index' ],
+  entry: {
+    main: [ './app/index' ]
+  },
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
+    libraryTarget: 'umd',
+    publicPath: '/',
 		chunkFilename: "[name].[id].js",
   },
   node: {
@@ -82,7 +94,12 @@ module.exports = {
       compress: {
         warnings: false
       }
-    })
+    }),
+    new StaticSitePlugin({
+      src: 'main',             // Chunk or file name
+      bundle: '/bundle.js',      // Path to JS bundle
+      stylesheet: '/css/base.css', // Path to stylesheet (if any)
+    }),
   ],
   module: {
     noParse: /\.min\.js/,

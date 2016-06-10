@@ -65,7 +65,10 @@ export class PluginDetail extends PureComponent {
         },
       } = this;
     const afterClose = () => {
-      router.goBack();
+      // fix for static export
+      if (typeof document !== 'undefined') {
+        router.goBack();
+      }
     };
     let total = 0;
     const installationData = Object.keys(installations).map((entry, index) => {

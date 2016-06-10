@@ -59,7 +59,7 @@ Application.propTypes = {
   generatePluginData: func.isRequired,
   generateLabelData: func.isRequired,
   filterVisibleList: any,
-  labels: any.isRequired,
+  labels: any,
   totalSize: any.isRequired,
   searchOptions: any.isRequired,
   isFetching: bool.isRequired,
